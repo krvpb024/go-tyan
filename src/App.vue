@@ -13,6 +13,7 @@ export default {}
 :root {
   --mainColor: #aa6da3;
   --titleColor: #f9f8f8;
+  --subtitleColor: #bbb5bd;
   --textColor: #bbb5bd;
 }
 </style>

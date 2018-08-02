@@ -25,9 +25,6 @@ export default {
       type: Boolean,
       required: true
     }
-  },
-  created () {
-    console.log(this.position)
   }
 }
 </script>

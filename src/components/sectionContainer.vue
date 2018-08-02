@@ -1,0 +1,11 @@
+<template>
+  <section class="container">
+    <slot></slot>
+  </section>
+</template>
+
+<style scoped>
+.container {
+  margin-top: 70px;
+}
+</style>
