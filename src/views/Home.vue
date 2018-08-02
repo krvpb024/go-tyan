@@ -1,18 +1,21 @@
 <template>
-  <div class="home">
-    <img src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+  <section-header>
+    <h1>選擇模式</h1>
+    <sectionHeaderBtn slot="right" position="right" tag="button" :show="true">
+      <img src="../assets/image/info.svg" alt="info">
+    </sectionHeaderBtn>
+  </section-header>
 </template>
 
 <script>
 // @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+import sectionHeader from '@/components/sectionHeader.vue'
+import sectionHeaderBtn from '@/components/sectionHeaderBtn.vue'
 
 export default {
-  name: 'home',
   components: {
-    HelloWorld
+    sectionHeader,
+    sectionHeaderBtn
   }
 }
 </script>
