@@ -2,11 +2,21 @@
   <header class="home-section-title">
     <div class="header-nav">
       <slot name="left">
-        <sectionHeaderBtn slot="left" position="left" tag="a" :show="false"></sectionHeaderBtn>
+        <sectionHeaderBtn
+          slot="left"
+          position="left"
+          tag="a"
+          :show="false"
+        ></sectionHeaderBtn>
       </slot>
-      <slot></slot>
+      <h1 class="header-nav-title"><slot></slot></h1>
       <slot name="right">
-        <sectionHeaderBtn slot="right" position="right" tag="a" :show="false"></sectionHeaderBtn>
+        <sectionHeaderBtn
+          slot="right"
+          position="right"
+          tag="a"
+          :show="false"
+        ></sectionHeaderBtn>
       </slot>
     </div>
   </header>
@@ -38,11 +48,11 @@ export default {
   flex: 1;
   display: flex;
   justify-content: space-between;
-  & h1 {
-    color: var(--titleColor);
-    font-size: 1.6rem;
-    font-weight: normal;
-    margin: 0;
-  }
+}
+.header-nav-title {
+  color: var(--titleColor);
+  font-size: 1.6rem;
+  font-weight: normal;
+  margin: 0;
 }
 </style>

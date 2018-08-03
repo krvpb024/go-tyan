@@ -1,8 +1,11 @@
 <template>
   <div class="header-nav-btn" :class="position">
-    <router-link :to="toUrl" :tag="tag" v-if="show" class="header-nav-btn-item">
-      <slot></slot>
+    <router-link :to="toUrl" v-if="show && tag === 'a'" class="header-nav-btn-item">
+      <img class="header-nav-btn-item-img" v-if="insideType === 'img'" :src="insideSrc" :alt="insideAlt">
     </router-link>
+    <button :tag="tag" v-if="show && tag === 'button'" class="header-nav-btn-item">
+      <img class="header-nav-btn-item-img" v-if="insideType === 'img'" :src="insideSrc" :alt="insideAlt">
+    </button>
   </div>
 </template>
 
@@ -24,12 +27,22 @@ export default {
     show: {
       type: Boolean,
       required: true
+    },
+    insideType: {
+      type: String,
+      default: 'text'
+    },
+    insideSrc: {
+      type: String
+    },
+    insideAlt: {
+      type: String
     }
   }
 }
 </script>
 
-<style>
+<style scoped>
 .header-nav-btn {
   align-items: center;
   color: var(--titleColor);
@@ -39,27 +52,21 @@ export default {
   line-height: 1rem;
   width: 50px;
   white-space: nowrap;
-  &.left {
-    margin-left: 4%;
-  }
-  &.right {
-    margin-right: 4%;
-  }
-  & .header-nav-btn-item {
-    align-items: center;
-    background-color: transparent;
-    border: none;
-    color: inherit;
-    display: flex;
-    font-size: 1.2rem;
-    justify-content: center;
-    padding: 15%;
-    text-decoration: none;
-    width: 100%;
-    & img {
-      height: 100%;
-      width: 100%;
-    }
-  }
+}
+.header-nav-btn-item {
+  align-items: center;
+  background-color: transparent;
+  border: none;
+  color: inherit;
+  display: flex;
+  font-size: 1.2rem;
+  justify-content: center;
+  padding: 15%;
+  text-decoration: none;
+  width: 100%;
+}
+.header-nav-btn-item-img {
+  height: 100%;
+  width: 100%;
 }
 </style>

@@ -1,15 +1,22 @@
 <template>
   <section-container>
     <section-header>
-      <h1>選擇模式</h1>
-      <section-header-btn slot="right" position="right" tag="button" :show="true">
-        <img src="../assets/image/info.svg" alt="info">
+      選擇模式
+      <section-header-btn
+        slot="right"
+        position="right"
+        tag="button"
+        :show="true"
+        insideType="img"
+        :insideSrc="require('@/assets/image/info.svg')"
+        insideAlt="info"
+      >
       </section-header-btn>
     </section-header>
     <mode-group>
       <h2>五十音 -> 拼音</h2>
-      <mode-link>平假名</mode-link>
-      <mode-link>片假名</mode-link>
+      <mode-link to="/gtop/hiragana">平假名</mode-link>
+      <mode-link to="/gtop/katakana">片假名</mode-link>
     </mode-group>
     <mode-group>
       <h2>拼音 -> 五十音</h2>
@@ -39,7 +46,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 h2 {
   color: var(--mainColor);
 }

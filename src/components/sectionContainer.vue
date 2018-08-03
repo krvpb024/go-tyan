@@ -7,5 +7,6 @@
 <style scoped>
 .container {
   margin-top: 70px;
+  padding-bottom: 40px;
 }
 </style>
