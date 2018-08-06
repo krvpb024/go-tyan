@@ -102,9 +102,13 @@ export default {
         this.showHelpTrigger = true
         return
       }
-      this.helpAnswer = this.currentExam[this.cursor][1]
-      this.userAnswer = ''
-      this.showHelpTrigger = false
+      // some input method need to click enter to complete input
+      // to ignore that, by checking whether helpAnswer is empty or not
+      if (!this.helpAnswer) {
+        this.helpAnswer = this.currentExam[this.cursor][1]
+        this.userAnswer = ''
+        this.showHelpTrigger = false
+      }
     },
     clearAnswer () {
       this.helpAnswer = ''
