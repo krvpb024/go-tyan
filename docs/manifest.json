@@ -1,0 +1,41 @@
+{
+  "name": "gojuon 五十音練習",
+  "short_name": "gojuon",
+  "description": "提供五十音轉拼音、拼音轉五十音、平假名片假名相互轉換，三種抽背模式。利用零碎的通勤時間也能加強五十音的記憶。",
+  "icons": [{
+      "src": "icon/48.png",
+      "type": "image/png",
+      "sizes": "48x48"
+    },
+    {
+      "src": "icon/48@2x.png",
+      "type": "image/png",
+      "sizes": "96X96"
+    },
+    {
+      "src": "icon/48@4x.png",
+      "type": "image/png",
+      "sizes": "208x208"
+    },
+    {
+      "src": "icon/48@6x.png",
+      "type": "image/png",
+      "sizes": "312x312"
+    },
+    {
+      "src": "icon/48@11x.png",
+      "type": "image/png",
+      "sizes": "572x572"
+    },
+    {
+      "src": "icon/48@13x.png",
+      "type": "image/png",
+      "sizes": "676x676"
+    }
+  ],
+  "display": "standalone",
+  "scope": "/gojuon/",
+  "start_url": "./",
+  "background_color": "#f9f8f8",
+  "theme_color": "#aa6da3"
+}

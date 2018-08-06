@@ -55,6 +55,12 @@ export default {
   width: 50px;
   white-space: nowrap;
 }
+.header-nav-btn.right {
+  margin-right: 3%;
+}
+.header-nav-btn.left {
+  margin-left: 3%;
+}
 .header-nav-btn-item {
   align-items: center;
   background-color: transparent;

@@ -4,6 +4,7 @@ import modeSelect from './views/modeSelect.vue'
 import gtop from './views/gtop.vue'
 import ptog from './views/ptog.vue'
 import hisk from './views/hisk.vue'
+import about from './views/about.vue'
 
 Vue.use(Router)
 
@@ -28,6 +29,11 @@ export default new Router({
       path: '/hisk/:gType',
       name: 'hiskMode',
       component: hisk
+    },
+    {
+      path: '/about',
+      name: 'about',
+      component: about
     }
   ]
 })

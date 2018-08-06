@@ -5,11 +5,12 @@
       <section-header-btn
         slot="right"
         position="right"
-        tag="button"
+        tag="a"
         :show="true"
         insideType="img"
         :insideSrc="require('@/assets/image/info.svg')"
         insideAlt="info"
+        toUrl="/about"
       >
       </section-header-btn>
     </section-header>

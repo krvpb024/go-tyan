@@ -50,6 +50,13 @@ export default {
         ['わ', 'ワ'], ['を', 'ヲ'], ['ん', 'ン']
       ]))
     }
+  },
+  data () {
+    return {
+      animationActive: '',
+      animationLeave: '',
+      animationMode: ''
+    }
   }
 }
 </script>
