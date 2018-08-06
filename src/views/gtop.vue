@@ -66,7 +66,7 @@ export default {
     return {
       hiragana: JSON.parse(localStorage.getItem('hiragana')),
       katakana: JSON.parse(localStorage.getItem('katakana')),
-      cursor: 44,
+      cursor: 0,
       userAnswer: '',
       helpAnswer: '',
       showHelpTrigger: false,
