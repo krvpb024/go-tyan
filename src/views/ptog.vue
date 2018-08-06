@@ -8,7 +8,7 @@
         :show="true"
         insideType="img"
         :insideSrc="require('@/assets/image/arrow_back.svg')"
-        alt="back"
+        insideAlt="back"
       >
       </section-header-btn>
       {{title}}
@@ -19,7 +19,7 @@
         :show="true"
         insideType="img"
         :insideSrc="require('@/assets/image/ihelp.svg')"
-        alt="back"
+        insideAlt="help"
         @click.native="showModal"
       >
         <transition
