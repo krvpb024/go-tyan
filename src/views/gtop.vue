@@ -20,11 +20,20 @@
         insideType="img"
         :insideSrc="require('@/assets/image/ihelp.svg')"
         alt="back"
-        @click.native="showHelp"
+        @click.native="showModal"
       >
+        <transition
+          slot="modal"
+          enter-active-class="animated fadeIn"
+          leave-active-class="animated fadeOut"
+        >
+          <div class="gtop-modal" v-show="triggerModal">
+            <p>點擊兩次換行鍵(enter)可以獲得提示</p>
+          </div>
+        </transition>
       </section-header-btn>
     </section-header>
-    <div class="exam-container">
+    <form class="exam-container" @submit.prevent="showHelp">
       <div class="exam-container-title">
         <transition
           appear
@@ -32,18 +41,15 @@
           leave-active-class="animated fadeOut posA"
           v-on:after-leave="clearAnswer"
         >
-          <h2 class="exam-container-title-h2" key="even" v-if="cursor % 2 === 0">{{currentMode[cursor][0]}}</h2>
-          <h2 class="exam-container-title-h2" key="odd" v-else>{{currentMode[cursor][0]}}</h2>
+          <label class="exam-container-title-label" for="exam-container-input" key="even" v-if="cursor % 2 === 0">{{currentExam[cursor][0]}}</label>
+          <label class="exam-container-title-label" for="exam-container-input" key="odd" v-else>{{currentExam[cursor][0]}}</label>
         </transition>
-        <!-- <button class="exam-container-title-help" type="button" @click="showHelp">
-          <img src="../assets/image/help.svg" alt="help">
-        </button> -->
       </div>
-      <form class="exam-container-form" @submit.prevent="">
-        <input type="text" class="exam-container-input" v-focus v-model="userAnswer" :placeholder="helpAnswer">
-        <p>{{cursor + 1}}/{{currentMode.length}}</p>
-      </form>
-    </div>
+      <div class="exam-container-div">
+        <input type="text" class="exam-container-input" id="exam-container-input" v-focus v-model="userAnswer" :placeholder="helpAnswer">
+        <p>{{cursor + 1}}/{{currentExam.length}}</p>
+      </div>
+    </form>
   </section-container>
 </template>
 
@@ -60,10 +66,16 @@ export default {
     return {
       hiragana: JSON.parse(localStorage.getItem('hiragana')),
       katakana: JSON.parse(localStorage.getItem('katakana')),
-      cursor: 0,
+      cursor: 44,
       userAnswer: '',
-      helpAnswer: ''
+      helpAnswer: '',
+      showHelpTrigger: false,
+      triggerModal: false,
+      currentExam: []
     }
+  },
+  created () {
+    this.currentExam = this.generateExam()
   },
   computed: {
     gType () {
@@ -71,32 +83,33 @@ export default {
     },
     title () {
       return this.gType === 'hiragana' ? '平假名' : '片假名'
-    },
-    currentMode () {
-      return this.shuffle(this.$data[this.gType])
-    },
-    correctness () {
-      return this.currentMode[this.cursor][1] === this.userAnswer.toLowerCase()
     }
   },
   watch: {
-    correctness (newAnswer) {
-      if (newAnswer === true) {
+    userAnswer (newAnswer) {
+      if (this.currentExam[this.cursor][1] === newAnswer.toLowerCase()) {
         this.cursor += 1
-        if (this.cursor === this.currentMode.length) {
+        if (this.cursor === this.currentExam.length) {
           this.cursor = 0
+          this.currentExam = this.generateExam()
         }
       }
     }
   },
   methods: {
     showHelp () {
-      this.helpAnswer = this.currentMode[this.cursor][1]
+      if (!this.showHelpTrigger) {
+        this.showHelpTrigger = true
+        return
+      }
+      this.helpAnswer = this.currentExam[this.cursor][1]
       this.userAnswer = ''
+      this.showHelpTrigger = false
     },
     clearAnswer () {
       this.helpAnswer = ''
       this.userAnswer = ''
+      this.showHelpTrigger = false
     },
     shuffle (array) {
       let m = array.length
@@ -109,6 +122,19 @@ export default {
         array[i] = t
       }
       return array
+    },
+    showModal () {
+      if (this.triggerModal) {
+        this.triggerModal = false
+      } else {
+        this.triggerModal = true
+        setTimeout(() => {
+          this.triggerModal = false
+        }, 3000)
+      }
+    },
+    generateExam () {
+      return this.shuffle(this.$data[this.gType])
     }
   },
   directives: {
@@ -140,11 +166,12 @@ export default {
   height: 200px;
   position: relative;
 }
-.exam-container-title-h2 {
+.exam-container-title-label {
   animation-duration: 0.5s;
   color: #7c5077;
   display: inline-block;
   font-size: 10rem;
+  font-weight: bold;
   margin: 0;
   margin-right: 30px;
 }
@@ -172,10 +199,23 @@ export default {
     color: black;
   }
 }
-.exam-container-form {
+.exam-container-div {
   display: inline-block;
 }
 .posA {
   position: absolute;
+}
+.gtop-modal {
+  animation-duration: 0.3s;
+  background-color: var(--subtitleColor);
+  bottom: 0;
+  border-radius: 50px;
+  margin-right: 5px;
+  position: absolute;
+  transform: translateY(100%);
+  right: 0;
+}
+.gtop-modal p {
+  margin: 10px;
 }
 </style>

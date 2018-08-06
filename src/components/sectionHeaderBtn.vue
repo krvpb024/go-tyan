@@ -6,6 +6,7 @@
     <button :tag="tag" v-if="show && tag === 'button'" class="header-nav-btn-item">
       <img class="header-nav-btn-item-img" v-if="insideType === 'img'" :src="insideSrc" :alt="insideAlt">
     </button>
+    <slot name="modal"></slot>
   </div>
 </template>
 
@@ -50,6 +51,7 @@ export default {
   font-size: 1rem;
   height: 50px;
   line-height: 1rem;
+  position: relative;
   width: 50px;
   white-space: nowrap;
 }
