@@ -41,8 +41,8 @@
           leave-active-class="animated fadeOut posA"
           v-on:after-leave="clearAnswer"
         >
-          <label class="exam-container-title-label" for="exam-container-input" key="even" v-if="cursor % 2 === 0">{{currentExam[cursor][0]}}</label>
-          <label class="exam-container-title-label" for="exam-container-input" key="odd" v-else>{{currentExam[cursor][0]}}</label>
+          <label class="exam-container-title-label" for="exam-container-input" key="even" v-if="cursor % 2 === 0">{{currentExam[cursor][1]}}</label>
+          <label class="exam-container-title-label" for="exam-container-input" key="odd" v-else>{{currentExam[cursor][1]}}</label>
         </transition>
       </div>
       <div class="exam-container-div">
@@ -87,7 +87,7 @@ export default {
   },
   watch: {
     userAnswer (newAnswer) {
-      if (this.currentExam[this.cursor][1] === newAnswer.toLowerCase()) {
+      if (this.currentExam[this.cursor][0] === newAnswer.toLowerCase()) {
         this.cursor += 1
         if (this.cursor === this.currentExam.length) {
           this.cursor = 0
@@ -108,7 +108,7 @@ export default {
       // some input method need to click enter to complete input
       // to ignore that, by checking whether helpAnswer is empty or not
       if (!this.helpAnswer) {
-        this.helpAnswer = this.currentExam[this.cursor][1]
+        this.helpAnswer = this.currentExam[this.cursor][0]
         this.userAnswer = ''
         this.showHelpTrigger = false
       }
@@ -159,70 +159,3 @@ export default {
   }
 }
 </script>
-
-<style>
-.exam-container {
-  align-items: center;
-  display: flex;
-  justify-content: center;
-  text-align: center;
-  padding: 20px 0;
-}
-.exam-container-title {
-  display: inline-block;
-  flex-basis: 70%;
-  height: 200px;
-  position: relative;
-}
-.exam-container-title-label {
-  animation-duration: 0.5s;
-  color: #7c5077;
-  display: inline-block;
-  font-size: 10rem;
-  font-weight: bold;
-  margin: 0;
-}
-.exam-container-title-help {
-  background-color: transparent;
-  border: none;
-  bottom: 0;
-  height: 30px;
-  padding: 0;
-  position: absolute;
-  transform: translateX(100%);
-  right: 0;
-  width: 30px;
-}
-.exam-container-input {
-  display: inline-block;
-  border: 1px solid var(--subtitleColor);
-  font-size: 2rem;
-  height: 50px;
-  margin: 0;
-  padding: 0;
-  text-align: center;
-  width: 50px;
-  &::placeholder {
-    color: black;
-  }
-}
-.exam-container-div {
-  display: inline-block;
-}
-.posA {
-  position: absolute;
-}
-.gtop-modal {
-  animation-duration: 0.3s;
-  background-color: var(--subtitleColor);
-  bottom: 0;
-  border-radius: 50px;
-  margin-right: 5px;
-  position: absolute;
-  transform: translateY(100%);
-  right: 0;
-}
-.gtop-modal p {
-  margin: 10px;
-}
-</style>

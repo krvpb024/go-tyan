@@ -2,6 +2,8 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import modeSelect from './views/modeSelect.vue'
 import gtop from './views/gtop.vue'
+import ptog from './views/ptog.vue'
+import hisk from './views/hisk.vue'
 
 Vue.use(Router)
 
@@ -16,14 +18,16 @@ export default new Router({
       path: '/gtop/:gType',
       name: 'gtopMode',
       component: gtop
+    },
+    {
+      path: '/ptog/:gType',
+      name: 'ptogMode',
+      component: ptog
+    },
+    {
+      path: '/hisk/:gType',
+      name: 'hiskMode',
+      component: hisk
     }
-    // {
-    // path: '/about',
-    // name: 'about',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    // component: () => import(/* webpackChunkName: "about" */ './views/About.vue')
-    // }
   ]
 })

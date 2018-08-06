@@ -20,9 +20,13 @@
     </mode-group>
     <mode-group>
       <h2>拼音 -> 五十音</h2>
-      <mode-link>平假名</mode-link>
-      <mode-link>片假名</mode-link>
-      <mode-link>平、片假名</mode-link>
+      <mode-link to="/ptog/hiragana">平假名</mode-link>
+      <mode-link to="/ptog/katakana">片假名</mode-link>
+    </mode-group>
+    <mode-group>
+      <h2>平假名 &lt;-&gt; 片假名</h2>
+      <mode-link to="/hisk/hiragana">平假名 -> 片假名</mode-link>
+      <mode-link to="/hisk/katakana">片假名 -> 平假名</mode-link>
     </mode-group>
   </section-container>
 </template>
