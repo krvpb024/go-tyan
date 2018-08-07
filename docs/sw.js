@@ -2,8 +2,8 @@
 importScripts('https://storage.googleapis.com/workbox-cdn/releases/3.0.0-beta.1/workbox-sw.js')
 workbox.precaching.precacheAndRoute([
   {
-    "url": "app.fb7e22ce.css",
-    "revision": "59dd6ac5373fca4fcdf6e597a0663f5f"
+    "url": "app.33ada3e7.css",
+    "revision": "ab318c50da7c8159cd0a808e3a7eea51"
   },
   {
     "url": "chunk-vendors.28d0a6b8.css",
@@ -63,11 +63,11 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "index.html",
-    "revision": "5e6b275219937d4fe9a41f232150db43"
+    "revision": "07443d45c4d6f0464135a1b82866cd48"
   },
   {
-    "url": "js/app.90e3a602.js",
-    "revision": "502e0010e2ba56a404eec78f8fe12919"
+    "url": "js/app.af5889df.js",
+    "revision": "039e3e1e9a149de36119a51247fa0934"
   },
   {
     "url": "js/chunk-vendors.a216e312.js",

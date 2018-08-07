@@ -214,6 +214,11 @@ export default {
   text-align: center;
   padding: 20px 0;
 }
+@media (min-width: 768px) {
+  .exam-container {
+    flex-direction: column;
+  }
+}
 .exam-container-title {
   align-items: center;
   display: flex;

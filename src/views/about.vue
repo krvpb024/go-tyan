@@ -22,7 +22,7 @@
       </article>
       <article>
         <h2>作者</h2>
-        <p>我是<strong>吃什麼</strong>的作者Chen Yi-Chen，如果發現這個App有bug可以到<a href="https://github.com/krvpb024/what-to-eat" target="_blank" rel="noopener">github</a>發issue給我。或是有任何意見也可以直接發信給我</p>
+        <p>我是<strong>吃什麼</strong>的作者Chen Yi-Chen，如果發現這個App有bug可以到<a href="https://github.com/krvpb024/gojuon" target="_blank" rel="noopener">github</a>發issue給我。或是有任何意見也可以直接發信給我</p>
         <address><a href="mailto:krvpb024@protonmail.com">krvpb024@protonmail.com</a> </address>
       </article>
     </section>
@@ -50,7 +50,9 @@ h2 {
   text-align: center;
 }
 .about-container {
-  padding: 20px 10%;
+  margin: 0 auto;
+  max-width: 700px;
+  width: 70%;
 }
 .about-container p {
   line-height: 1.3rem;
