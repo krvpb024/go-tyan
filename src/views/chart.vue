@@ -72,8 +72,10 @@ export default {
 
 <style>
 .table-container {
+  align-items: center;
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   margin: 0 auto;
   width: 85%;
 }
