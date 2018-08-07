@@ -4,6 +4,7 @@ import modeSelect from './views/modeSelect.vue'
 import gtop from './views/gtop.vue'
 import hisk from './views/hisk.vue'
 import about from './views/about.vue'
+import chart from './views/chart.vue'
 
 Vue.use(Router)
 
@@ -33,6 +34,11 @@ export default new Router({
       path: '/about',
       name: 'about',
       component: about
+    },
+    {
+      path: '/chart',
+      name: 'chart',
+      component: chart
     }
   ]
 })

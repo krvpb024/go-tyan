@@ -29,6 +29,10 @@
       <mode-link to="/hisk/hiragana">平假名 -> 片假名</mode-link>
       <mode-link to="/hisk/katakana">片假名 -> 平假名</mode-link>
     </mode-group>
+    <mode-group>
+      <h2>五十音表</h2>
+      <mode-link to="/chart">平、片假名</mode-link>
+    </mode-group>
   </section-container>
 </template>
 
