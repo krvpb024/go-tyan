@@ -28,7 +28,7 @@
           leave-active-class="animated fadeOut"
         >
           <div class="gtop-modal" v-show="triggerModal">
-            <p>點擊兩次換行鍵(enter)可以獲得提示</p>
+            <p>{{modalText}}</p>
           </div>
         </transition>
       </section-header-btn>
@@ -41,8 +41,8 @@
           leave-active-class="animated fadeOut posA"
           v-on:after-leave="clearAnswer"
         >
-          <label class="exam-container-title-label" for="exam-container-input" key="even" v-if="cursor % 2 === 0">{{currentExam[cursor][0]}}</label>
-          <label class="exam-container-title-label" for="exam-container-input" key="odd" v-else>{{currentExam[cursor][0]}}</label>
+          <label class="exam-container-title-label" :class="{ small: currentExam[cursor][quanstionIndex].length === 2 ? true : false }" for="exam-container-input" key="even" v-if="cursor % 2 === 0">{{currentExam[cursor][quanstionIndex]}}</label>
+          <label class="exam-container-title-label" :class="{ small: currentExam[cursor][quanstionIndex].length === 2 ? true : false }" for="exam-container-input" key="odd" v-else>{{currentExam[cursor][quanstionIndex]}}</label>
         </transition>
       </div>
       <div class="exam-container-div">
@@ -64,8 +64,6 @@ import 'animate.css'
 export default {
   data () {
     return {
-      hiragana: JSON.parse(localStorage.getItem('hiragana')),
-      katakana: JSON.parse(localStorage.getItem('katakana')),
       cursor: 0,
       userAnswer: '',
       helpAnswer: '',
@@ -75,19 +73,67 @@ export default {
     }
   },
   created () {
-    this.currentExam = this.generateExam()
+    this.currentExam = this.generateExam(this.gojuonArray)
+  },
+  mounted () {
+    switch (this.$route.name) {
+      case 'gtopMode': {
+        if (!JSON.parse(localStorage.getItem('modalGtop'))) {
+          this.showModal()
+          localStorage.setItem('modalGtop', 'true')
+        }
+        break
+      }
+      case 'ptogMode': {
+        if (!JSON.parse(localStorage.getItem('modalPtog'))) {
+          this.showModal()
+          localStorage.setItem('modalPtog', 'true')
+        }
+        break
+      }
+    }
   },
   computed: {
-    gType () {
-      return this.$route.params.gType
+    modalText () {
+      switch (this.$route.name) {
+        case 'gtopMode': {
+          return '點擊兩次換行鍵(enter)可以獲得提示'
+        }
+        case 'ptogMode': {
+          return '點擊兩次換行鍵(enter)可以獲得提示，此模式下建議使用手寫輸入法'
+        }
+      }
+    },
+    gojuonArray () {
+      switch (this.$route.params.gType) {
+        case 'hiragana': {
+          return JSON.parse(localStorage.getItem('hiragana'))
+        }
+        case 'katakana': {
+          return JSON.parse(localStorage.getItem('katakana'))
+        }
+      }
+    },
+    quanstionIndex () {
+      switch (this.$route.name) {
+        case 'gtopMode': {
+          return 0
+        }
+        case 'ptogMode': {
+          return 1
+        }
+      }
+    },
+    answerIndex () {
+      return this.quanstionIndex === 0 ? 1 : 0
     },
     title () {
-      return this.gType === 'hiragana' ? '平假名' : '片假名'
+      return this.$route.params.gType === 'hiragana' ? '平假名' : '片假名'
     }
   },
   watch: {
     userAnswer (newAnswer) {
-      if (this.currentExam[this.cursor][1] === newAnswer.toLowerCase()) {
+      if (this.currentExam[this.cursor][this.answerIndex] === newAnswer.toLowerCase()) {
         this.cursor += 1
         if (this.cursor === this.currentExam.length) {
           this.cursor = 0
@@ -108,7 +154,7 @@ export default {
       // some input method need to click enter to complete input
       // to ignore that, by checking whether helpAnswer is empty or not
       if (!this.helpAnswer) {
-        this.helpAnswer = this.currentExam[this.cursor][1]
+        this.helpAnswer = this.currentExam[this.cursor][this.answerIndex]
         this.userAnswer = ''
         this.showHelpTrigger = false
       }
@@ -137,11 +183,11 @@ export default {
         this.triggerModal = true
         setTimeout(() => {
           this.triggerModal = false
-        }, 3000)
+        }, 5000)
       }
     },
-    generateExam () {
-      return this.shuffle(this.$data[this.gType])
+    generateExam (gojuonArray) {
+      return this.shuffle(gojuonArray)
     }
   },
   directives: {
@@ -169,8 +215,10 @@ export default {
   padding: 20px 0;
 }
 .exam-container-title {
-  display: inline-block;
+  align-items: center;
+  display: flex;
   flex-basis: 70%;
+  justify-content: center;
   height: 200px;
   position: relative;
 }
@@ -181,6 +229,9 @@ export default {
   font-size: 10rem;
   font-weight: bold;
   margin: 0;
+}
+.exam-container-title-label.small {
+  font-size: 7rem;
 }
 .exam-container-title-help {
   background-color: transparent;
@@ -196,14 +247,15 @@ export default {
 .exam-container-input {
   display: inline-block;
   border: 1px solid var(--subtitleColor);
-  font-size: 2rem;
-  height: 50px;
+  font-size: 1.5rem;
+  height: 60px;
   margin: 0;
   padding: 0;
   text-align: center;
-  width: 50px;
+  width: 60px;
   &::placeholder {
     color: black;
+    font-size: 1.5rem;
   }
 }
 .exam-container-div {
@@ -216,13 +268,18 @@ export default {
   animation-duration: 0.3s;
   background-color: var(--subtitleColor);
   bottom: 0;
-  border-radius: 50px;
+  border-radius: 30px;
   margin-right: 5px;
+  padding: 10px 20px;
   position: absolute;
-  transform: translateY(100%);
   right: 0;
+  transform: translateY(100%);
+  white-space: normal;
+  min-width: 50vw;
+  max-width: 80vw;
 }
 .gtop-modal p {
-  margin: 10px;
+  line-height: 1.3rem;
+  margin: 0;
 }
 </style>

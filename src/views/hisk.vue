@@ -28,7 +28,7 @@
           leave-active-class="animated fadeOut"
         >
           <div class="gtop-modal" v-show="triggerModal">
-            <p>點擊兩次換行鍵(enter)可以獲得提示</p>
+            <p>{{modalText}}</p>
           </div>
         </transition>
       </section-header-btn>
@@ -41,8 +41,8 @@
           leave-active-class="animated fadeOut posA"
           v-on:after-leave="clearAnswer"
         >
-          <label class="exam-container-title-label" for="exam-container-input" key="even" v-if="cursor % 2 === 0">{{currentExam[cursor][gType === 'hiragana' ? 0 : 1]}}</label>
-          <label class="exam-container-title-label" for="exam-container-input" key="odd" v-else>{{currentExam[cursor][gType === 'hiragana' ? 0 : 1]}}</label>
+          <label class="exam-container-title-label" :class="{ small: currentExam[cursor][gType === 'hiragana' ? 0 : 1].length === 2 ? true : false }" for="exam-container-input" key="even" v-if="cursor % 2 === 0">{{currentExam[cursor][gType === 'hiragana' ? 0 : 1]}}</label>
+          <label class="exam-container-title-label" :class="{ small: currentExam[cursor][gType === 'hiragana' ? 0 : 1].length === 2 ? true : false }" for="exam-container-input" key="odd" v-else>{{currentExam[cursor][gType === 'hiragana' ? 0 : 1]}}</label>
         </transition>
       </div>
       <div class="exam-container-div">
@@ -78,7 +78,16 @@ export default {
   created () {
     this.currentExam = this.generateExam()
   },
+  mounted () {
+    if (!JSON.parse(localStorage.getItem('modalHisk'))) {
+      this.showModal()
+      localStorage.setItem('modalHisk', 'true')
+    }
+  },
   computed: {
+    modalText () {
+      return '點擊兩次換行鍵(enter)可以獲得提示，此模式下建議使用手寫輸入法'
+    },
     gType () {
       return this.$route.params.gType
     },
@@ -109,7 +118,7 @@ export default {
       // some input method need to click enter to complete input
       // to ignore that, by checking whether helpAnswer is empty or not
       if (!this.helpAnswer) {
-        this.helpAnswer = this.currentExam[this.cursor][0]
+        this.helpAnswer = this.currentExam[this.cursor][this.gType === 'hiragana' ? 1 : 0]
         this.userAnswer = ''
         this.showHelpTrigger = false
       }
@@ -138,7 +147,7 @@ export default {
         this.triggerModal = true
         setTimeout(() => {
           this.triggerModal = false
-        }, 3000)
+        }, 5000)
       }
     },
     generateExam () {
