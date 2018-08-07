@@ -254,7 +254,7 @@ export default {
   text-align: center;
   width: 60px;
   &::placeholder {
-    color: black;
+    color: rgba(0, 0, 0, 50%);
     font-size: 1.5rem;
   }
 }
