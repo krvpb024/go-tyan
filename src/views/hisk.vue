@@ -145,9 +145,6 @@ export default {
         this.triggerModal = false
       } else {
         this.triggerModal = true
-        setTimeout(() => {
-          this.triggerModal = false
-        }, 5000)
       }
     },
     generateExam () {

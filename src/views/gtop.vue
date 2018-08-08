@@ -181,9 +181,6 @@ export default {
         this.triggerModal = false
       } else {
         this.triggerModal = true
-        setTimeout(() => {
-          this.triggerModal = false
-        }, 5000)
       }
     },
     generateExam (gojuonArray) {
@@ -273,18 +270,30 @@ export default {
   animation-duration: 0.3s;
   background-color: var(--subtitleColor);
   bottom: 0;
-  border-radius: 30px;
-  margin-right: 5px;
+  border-radius: 20px;
   padding: 10px 20px;
   position: absolute;
   right: 0;
   transform: translateY(100%);
   white-space: normal;
-  min-width: 50vw;
   max-width: 80vw;
+  min-width: 250px;
+}
+.gtop-modal::after {
+  background-color: var(--subtitleColor);
+  content: '';
+  height: 30px;
+  position: absolute;
+  right: 10px;
+  top: 0;
+  transform: rotate(45deg);
+  width: 30px;
+  z-index: 90;
 }
 .gtop-modal p {
   line-height: 1.3rem;
   margin: 0;
+  position: relative;
+  z-index: 100;
 }
 </style>
