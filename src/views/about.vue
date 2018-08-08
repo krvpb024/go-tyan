@@ -22,7 +22,7 @@
       </article>
       <article>
         <h2>作者</h2>
-        <p>我是<strong>吃什麼</strong>的作者Chen Yi-Chen，如果發現這個App有bug可以到<a href="https://github.com/krvpb024/gojuon" target="_blank" rel="noopener">github</a>發issue給我。或是有任何意見也可以直接發信給我</p>
+        <p>我是<strong>gojuon</strong>的作者Chen Yi-Chen，如果發現這個App有bug可以到<a href="https://github.com/krvpb024/gojuon" target="_blank" rel="noopener">github</a>發issue給我。或是有任何意見也可以直接發信給我</p>
         <address><a href="mailto:krvpb024@protonmail.com">krvpb024@protonmail.com</a> </address>
       </article>
     </section>
