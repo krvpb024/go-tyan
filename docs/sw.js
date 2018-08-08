@@ -63,11 +63,11 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "index.html",
-    "revision": "78ac2435b7a0f414e2fbda04f82a4401"
+    "revision": "445b0d8a21cb7f49200978978634d3c3"
   },
   {
-    "url": "js/app.8f952f27.js",
-    "revision": "493c925b4d5117df12253f646d2dcc26"
+    "url": "js/app.0207cd2b.js",
+    "revision": "405dae78d3035114ac2452ea3ed7988f"
   },
   {
     "url": "js/chunk-vendors.a02c9a92.js",
