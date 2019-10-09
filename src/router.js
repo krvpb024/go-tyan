@@ -1,47 +1,25 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import modeSelect from './views/modeSelect.vue'
-import gtop from './views/gtop.vue'
-import hisk from './views/hisk.vue'
-import about from './views/about.vue'
-import chart from './views/chart.vue'
+import Home from './views/Home.vue'
 
 Vue.use(Router)
 
 export default new Router({
-  scrollBehavior (to, from, savedPosition) {
-    return { x: 0, y: 0 }
-  },
+  mode: 'history',
+  base: process.env.BASE_URL,
   routes: [
     {
       path: '/',
-      name: 'modeSelect',
-      component: modeSelect
-    },
-    {
-      path: '/gtop/:gType',
-      name: 'gtopMode',
-      component: gtop
-    },
-    {
-      path: '/ptog/:gType',
-      name: 'ptogMode',
-      component: gtop
-    },
-    {
-      path: '/hisk/:gType',
-      name: 'hiskMode',
-      component: hisk
+      name: 'home',
+      component: Home
     },
     {
       path: '/about',
       name: 'about',
-      component: about
-    },
-    {
-      path: '/chart',
-      name: 'chart',
-      component: chart
+      // route level code-splitting
+      // this generates a separate chunk (about.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import(/* webpackChunkName: "about" */ './views/About.vue')
     }
   ]
 })
