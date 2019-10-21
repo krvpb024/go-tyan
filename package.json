@@ -1,27 +1,44 @@
 {
   "name": "gojuon",
-  "version": "0.1.0",
-  "private": true,
+  "version": "1.0.0",
+  "description": "gojuon app",
+  "main": "dist/index.html",
   "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build && workbox injectManifest workbox-config.js",
-    "lint": "vue-cli-service lint"
+    "prune": "rm -rf dist/",
+    "start": "npm run prune && parcel src/index.html src/app/index.html",
+    "build": "npm run prune && parcel build src/index.html"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/krvpb024/gojuon.git"
+  },
+  "author": "krvpb024",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/krvpb024/gojuon/issues"
+  },
+  "homepage": "https://github.com/krvpb024/gojuon#readme",
+  "staticFiles": {
+    "staticPath": "public",
+    "watcherGlob": "**"
   },
   "dependencies": {
-    "animate.css": "^3.7.0",
-    "normalize.css": "^8.0.0",
-    "vue": "^2.5.16",
-    "vue-router": "^3.0.1"
+    "@webcomponents/webcomponentsjs": "^2.3.0",
+    "core-js": "^3.3.2",
+    "hybrids": "^4.0.2",
+    "navigo": "^7.1.2",
+    "normalize.css": "^8.0.1",
+    "xstate": "^4.6.7"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^3.0.0-rc.10",
-    "@vue/cli-plugin-eslint": "^3.0.0-rc.10",
-    "@vue/cli-service": "^3.0.0-rc.10",
-    "@vue/eslint-config-standard": "^3.0.0-rc.10",
-    "postcss-preset-env": "^5.3.0",
-    "vue-template-compiler": "^2.5.16"
-  },
-  "browserslist": [
-    "defaults"
-  ]
+    "@babel/core": "^7.6.4",
+    "eslint": "^6.5.1",
+    "eslint-config-standard": "^14.1.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-node": "^10.0.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1",
+    "parcel-bundler": "^1.12.4",
+    "parcel-plugin-static-files-copy": "^2.2.1"
+  }
 }
