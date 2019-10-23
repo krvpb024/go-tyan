@@ -1,5 +1,9 @@
 import Navigo from 'navigo'
-const router = new Navigo()
+
+const root = null
+const useHash = true
+const hash = '#'
+const router = new Navigo(root, useHash, hash)
 
 router
   .on({

@@ -34,7 +34,7 @@ function setRouter (host, event) {
       aTag.addEventListener('click', function attatchRouter (event) {
         event.preventDefault()
         const location = aTag.getAttribute('href')
-        router.navigate(`/${location}`)
+        router.navigate(`${location}`)
       })
       return aTag
     })
