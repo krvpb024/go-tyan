@@ -2,7 +2,8 @@ import { html, define } from 'hybrids'
 import { router } from '../../route.js'
 
 export const modeSelect = {
-  render: ({ count }) => html`
+  render: function renderModeSelect () {
+    return html`
     <style>
     .link-container {
       display: flex;
@@ -15,6 +16,7 @@ export const modeSelect = {
       <slot onslotchange="${setRouter}"></slot>
     </div>
   `
+  }
 }
 
 define('mode-select', modeSelect)
