@@ -5,7 +5,6 @@ function serviceFactory (machine) {
     connect: function serviceConnect (host, key, invalidate) {
       const service = interpret(machine)
         .onTransition(function serviceTransition (state) {
-          console.log(service)
           host.current = state
         })
         .start()

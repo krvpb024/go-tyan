@@ -1,8 +1,8 @@
 import { html, define } from 'hybrids'
 import { router } from '../../route.js'
 
-export const modeSelect = {
-  render: function renderModeSelect () {
+export const viewSelect = {
+  render: function renderviewSelect () {
     return html`
     <style>
     .link-container {
@@ -19,7 +19,7 @@ export const modeSelect = {
   }
 }
 
-define('mode-select', modeSelect)
+define('view-select', viewSelect)
 
 // functions
 function setRouter (host, event) {
