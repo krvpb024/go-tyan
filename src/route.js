@@ -8,13 +8,13 @@ const router = new Navigo(root, useHash, hash)
 router
   .on({
     table () {
-      rerenderView('table')
+      changeView('table')
     },
     exam () {
-      rerenderView('exam')
+      changeView('exam')
     },
     '' () {
-      rerenderView('home')
+      changeView('home')
     },
     '*' () {
       console.log('404')
@@ -26,7 +26,7 @@ export {
   router
 }
 
-function rerenderView (viewName) {
-  const appElement = document.getElementsByTagName('app-element')[0]
+function changeView (viewName) {
+  const [appElement] = document.getElementsByTagName('app-element')
   appElement.service && appElement.service.send({ type: 'UPDATE_VIEW', data: viewName })
 }

@@ -1,12 +1,18 @@
 function mutateByData (key) {
   return function mutateValueByKey (context, { data }) {
-    console.log(data)
     return {
       [key]: data
     }
   }
 }
 
+function checkDataIs (value) {
+  return function guardHandler (context, { data }) {
+    return data === value
+  }
+}
+
 export {
-  mutateByData
+  mutateByData,
+  checkDataIs
 }

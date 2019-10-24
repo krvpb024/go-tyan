@@ -1,5 +1,5 @@
-import './components/viewSelect.js'
 import { html, define, render } from 'hybrids'
+import './components/homeViewSelect.js'
 import { serviceFactory } from '../../factories/index.js'
 import { machine } from './appElementState.js'
 
@@ -24,22 +24,17 @@ export const appElement = {
         </style>
 
         <div class="root">
-          <div class="root__home${current.matches('idle.home') ? '' : ' root__home--hide'}">
-            <h1>App</h1>
+          ${current.matches('idle.home') && html.resolve(import('./views/homeView.js').then(function renderHomeView () {
+            return html`<home-view></home-view>`
+          }))}
 
-            <view-select>
-              <a href="/table">五十音表格</a>
-              <a href="/exam">五十音測驗</a>
-            </view-select>
-          </div>
+          ${current.matches('idle.table') && html.resolve(import('./views/tableView.js').then(function renderHomeView () {
+            return html`<table-view></table-view>`
+          }))}
 
-          <div class="root__table${current.matches('idle.table') ? '' : ' root__table--hide'}">
-            <h1>table</h1>
-          </div>
-
-          <div class="root__exam${current.matches('idle.exam') ? '' : ' root__exam--hide'}">
-            <h1>exam</h1>
-          </div>
+          ${current.matches('idle.exam') && html.resolve(import('./views/examView.js').then(function renderHomeView () {
+            return html`<exam-view></exam-view>`
+          }))}
         </div>
       `
     },

@@ -24,16 +24,16 @@
   },
   "dependencies": {
     "@webcomponents/webcomponentsjs": "^2.3.0",
-    "core-js": "^3.3.2",
+    "core-js": "^2.6.10",
     "hybrids": "^4.0.2",
     "navigo": "^7.1.2",
     "xstate": "^4.6.7"
   },
   "devDependencies": {
     "@babel/core": "^7.6.4",
+    "babel-eslint": "^10.0.3",
     "eslint": "^6.5.1",
     "eslint-config-standard": "^14.1.0",
-    "eslint-plugin-import": "^2.18.2",
     "eslint-plugin-node": "^10.0.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",

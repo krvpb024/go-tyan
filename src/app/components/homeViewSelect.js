@@ -4,22 +4,22 @@ import { router } from '../../route.js'
 export const viewSelect = {
   render: function renderviewSelect () {
     return html`
-    <style>
-    .link-container {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-    }
-    </style>
+      <style>
+      .link-container {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      </style>
 
-    <div class="link-container">
-      <slot onslotchange="${setRouter}"></slot>
-    </div>
-  `
+      <div class="link-container">
+        <slot onslotchange="${setRouter}"></slot>
+      </div>
+    `
   }
 }
 
-define('view-select', viewSelect)
+define('home-view-select', viewSelect)
 
 // functions
 function setRouter (host, event) {

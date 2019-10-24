@@ -1,4 +1,5 @@
 import { Machine } from 'xstate'
+import { checkDataIs } from '../../helpers/state.js'
 
 const machine = Machine({
   id: 'appElement',
@@ -32,15 +33,9 @@ const machine = Machine({
 },
 {
   guards: {
-    isHome (context, { data }) {
-      return data === 'home'
-    },
-    isTable (context, { data }) {
-      return data === 'table'
-    },
-    isExam (context, { data }) {
-      return data === 'exam'
-    }
+    isHome: checkDataIs('home'),
+    isTable: checkDataIs('table'),
+    isExam: checkDataIs('exam')
   }
 })
 
