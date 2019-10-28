@@ -5,16 +5,14 @@ export const viewSelect = {
   render: function renderviewSelect () {
     return html`
       <style>
-      .link-container {
+      :host {
         display: flex;
         flex-direction: column;
         align-items: flex-start;
       }
       </style>
 
-      <div class="link-container">
-        <slot onslotchange="${setRouter}"></slot>
-      </div>
+      <slot onslotchange="${setRouter}"></slot>
     `
   }
 }

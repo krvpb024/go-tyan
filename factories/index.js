@@ -17,6 +17,15 @@ function serviceFactory (machine) {
   }
 }
 
+function currentFactory (machine) {
+  return {
+    connect (host, key) {
+      host[key] = machine.initialState
+    }
+  }
+}
+
 export {
-  serviceFactory
+  serviceFactory,
+  currentFactory
 }
