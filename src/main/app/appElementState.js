@@ -11,32 +11,32 @@ const machine = Machine({
         UPDATE_VIEW: [
           {
             target: '.home',
-            cond: 'isHome'
+            cond: 'isHome',
           },
           {
             target: '.table',
-            cond: 'isTable'
+            cond: 'isTable',
           },
           {
             target: '.exam',
-            cond: 'isExam'
-          }
-        ]
+            cond: 'isExam',
+          },
+        ],
       },
       states: {
         home: {},
         table: {},
-        exam: {}
-      }
-    }
-  }
+        exam: {},
+      },
+    },
+  },
 },
 {
   guards: {
     isHome: checkDataIs('home'),
     isTable: checkDataIs('table'),
-    isExam: checkDataIs('exam')
-  }
+    isExam: checkDataIs('exam'),
+  },
 })
 
 export { machine }

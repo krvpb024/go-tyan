@@ -13,7 +13,7 @@ function serviceFactory (machine) {
       return function serviceDisconnect () {
         service.stop()
       }
-    }
+    },
   }
 }
 
@@ -21,11 +21,11 @@ function currentFactory (machine) {
   return {
     connect (host, key) {
       host[key] = machine.initialState
-    }
+    },
   }
 }
 
 export {
   serviceFactory,
-  currentFactory
+  currentFactory,
 }

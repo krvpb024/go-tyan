@@ -18,12 +18,12 @@ router
     },
     '*' () {
       console.log('404')
-    }
+    },
   })
   .resolve()
 
 export {
-  router
+  router,
 }
 
 function changeView (viewName) {

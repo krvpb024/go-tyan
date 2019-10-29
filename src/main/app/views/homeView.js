@@ -1,4 +1,4 @@
-import '../components/homeViewSelect.js'
+import '../components/homeSelect.js'
 import { html, define, render } from 'hybrids'
 
 const homeView = {
@@ -6,13 +6,13 @@ const homeView = {
     return html`
       <h1>App</h1>
 
-      <home-view-select>
+      <home-select>
         <a href="/table">五十音表格</a>
         <a href="/exam">五十音測驗</a>
-      </home-view-select>
+      </home-select>
     `
-  }, { shadowRoot: false }
-  )
+  }, { shadowRoot: false },
+  ),
 }
 
 define('home-view', homeView)

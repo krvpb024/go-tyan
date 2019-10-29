@@ -14,10 +14,10 @@ export const viewSelect = {
 
       <slot onslotchange="${setRouter}"></slot>
     `
-  }
+  },
 }
 
-define('home-view-select', viewSelect)
+define('home-select', viewSelect)
 
 // functions
 function setRouter (host, event) {

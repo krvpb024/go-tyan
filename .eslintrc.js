@@ -16,6 +16,7 @@ module.exports = {
     sourceType: 'module'
   },
   rules: {
-    'comma-dangle': ["error", "always-multiline"]
+    'comma-dangle': ["error", "always-multiline"],
+    eqeqeq: 'off'
   }
 }

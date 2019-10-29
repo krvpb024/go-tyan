@@ -1,7 +1,7 @@
 function mutateByData (key) {
   return function mutateValueByKey (context, { data }) {
     return {
-      [key]: data
+      [key]: data,
     }
   }
 }
@@ -14,5 +14,5 @@ function checkDataIs (value) {
 
 export {
   mutateByData,
-  checkDataIs
+  checkDataIs,
 }

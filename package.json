@@ -4,9 +4,9 @@
   "description": "gojuon app",
   "main": "dist/index.html",
   "scripts": {
-    "prune": "rm -rf dist/",
-    "start": "npm run prune && parcel src/index.html src/app/index.html",
-    "build": "npm run prune && parcel build src/index.html"
+    "clean": "rm -rf dist/ .cache/",
+    "start": "parcel src/main/index.html src/main/app/index.html",
+    "build": "parcel build src/main/index.html"
   },
   "repository": {
     "type": "git",
@@ -30,12 +30,13 @@
     "core-js": "^3.3.3",
     "hybrids": "^4.0.2",
     "navigo": "^7.1.2",
+    "normalize.css": "^8.0.1",
     "xstate": "^4.6.7"
   },
   "devDependencies": {
     "@babel/core": "^7.6.4",
     "babel-eslint": "^10.0.3",
-    "eslint": "^6.5.1",
+    "eslint": "^6.6.0",
     "eslint-config-standard": "^14.1.0",
     "eslint-plugin-import": "^2.18.2",
     "eslint-plugin-node": "^10.0.0",

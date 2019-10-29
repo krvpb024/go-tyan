@@ -1,13 +1,13 @@
 function inputValueHelper (type) {
   return function inputValueHelperWithType (host, {
     target: {
-      value
-    } = {}
+      value,
+    } = {},
   }) {
     host.service.send({ type, data: value })
   }
 }
 
 export {
-  inputValueHelper
+  inputValueHelper,
 }

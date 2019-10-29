@@ -1,4 +1,4 @@
-import '../components/homeViewSelect.js'
+import '../components/homeSelect.js'
 import { html, define, render } from 'hybrids'
 
 const examView = {
@@ -6,7 +6,7 @@ const examView = {
     return html`
       <h1>Exam</h1>
     `
-  }, { shadowRoot: false })
+  }, { shadowRoot: false }),
 }
 
 define('exam-view', examView)
