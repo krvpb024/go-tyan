@@ -3627,11 +3627,6 @@ natural-compare@^1.4.0:
   resolved "https://registry.yarnpkg.com/natural-compare/-/natural-compare-1.4.0.tgz#4abebfeed7541f2c27acfb29bdbbd15c8d5ba4f7"
   integrity sha1-Sr6/7tdUHywnrPspvbvRXI1bpPc=
 
-navigo@^7.1.2:
-  version "7.1.2"
-  resolved "https://registry.yarnpkg.com/navigo/-/navigo-7.1.2.tgz#f543098ae5cbc5763b926742b5047ffb68a187e2"
-  integrity sha512-OlhxHxhLM62X0Sjbkp5wlm1V6GpOIKShFu7dS/fDS3cVqzMHYS880LT5tu6JjGkrSYQbtCNDADmRIP47MoVGlA==
-
 needle@^2.2.1:
   version "2.4.0"
   resolved "https://registry.yarnpkg.com/needle/-/needle-2.4.0.tgz#6833e74975c444642590e15a750288c5f939b57c"
@@ -3970,6 +3965,13 @@ p-try@^1.0.0:
   resolved "https://registry.yarnpkg.com/p-try/-/p-try-1.0.0.tgz#cbc79cdbaf8fd4228e13f621f2b1a237c1b207b3"
   integrity sha1-y8ec26+P1CKOE/Yh8rGiN8GyB7M=
 
+page@^1.11.5:
+  version "1.11.5"
+  resolved "https://registry.yarnpkg.com/page/-/page-1.11.5.tgz#0cfc8608be337f26f4377f31df0787aef0ca1af7"
+  integrity sha512-0JXUHc7Y8p1cPJQbhZSwaKO3p+bU3Rgny+OM5gJMKHWHvJKan/fsE5RUzEjRQolv9DzPOSVWfSOHz0lLxK19eA==
+  dependencies:
+    path-to-regexp "~1.2.1"
+
 pako@^0.2.5:
   version "0.2.9"
   resolved "https://registry.yarnpkg.com/pako/-/pako-0.2.9.tgz#f3f7522f4ef782348da8161bad9ecfd51bf83a75"
@@ -4132,6 +4134,13 @@ path-parse@^1.0.6:
   version "1.0.6"
   resolved "https://registry.yarnpkg.com/path-parse/-/path-parse-1.0.6.tgz#d62dbb5679405d72c4737ec58600e9ddcf06d24c"
   integrity sha512-GSmOT2EbHrINBf9SR7CDELwlJ8AENk3Qn7OikK4nFYAu3Ote2+JYNVvkpAEQm3/TLNEJFD/xZJjzyxg3KBWOzw==
+
+path-to-regexp@~1.2.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/path-to-regexp/-/path-to-regexp-1.2.1.tgz#b33705c140234d873c8721c7b9fd8b541ed3aff9"
+  integrity sha1-szcFwUAjTYc8hyHHuf2LVB7Tr/k=
+  dependencies:
+    isarray "0.0.1"
 
 path-type@^2.0.0:
   version "2.0.0"

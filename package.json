@@ -29,8 +29,8 @@
     "@webcomponents/webcomponentsjs": "^2.3.0",
     "core-js": "^3.3.3",
     "hybrids": "^4.0.2",
-    "navigo": "^7.1.2",
     "normalize.css": "^8.0.1",
+    "page": "^1.11.5",
     "xstate": "^4.6.7"
   },
   "devDependencies": {

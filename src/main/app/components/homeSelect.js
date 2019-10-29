@@ -1,5 +1,5 @@
 import { html, define } from 'hybrids'
-import { router } from '../../route.js'
+import { page } from '../../route.js'
 
 export const viewSelect = {
   render: function renderviewSelect () {
@@ -32,7 +32,7 @@ function setRouter (host, event) {
       aTag.addEventListener('click', function attatchRouter (event) {
         event.preventDefault()
         const location = aTag.getAttribute('href')
-        router.navigate(`${location}`)
+        page(`${location}`)
       })
       return aTag
     })

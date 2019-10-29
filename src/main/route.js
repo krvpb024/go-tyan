@@ -1,32 +1,19 @@
-import Navigo from 'navigo'
+import page from 'page'
 
-const root = null
-const useHash = true
-const hash = '#'
-const router = new Navigo(root, useHash, hash)
+page({ window })
+page.base('/app')
 
-router
-  .on({
-    table () {
-      changeView('table')
-    },
-    exam () {
-      changeView('exam')
-    },
-    '' () {
-      changeView('home')
-    },
-    '*' () {
-      console.log('404')
-    },
-  })
-  .resolve()
+page('/table', changeView('table'))
+page('/exam', changeView('exam'))
+page('*', changeView('home'))
 
 export {
-  router,
+  page,
 }
 
 function changeView (viewName) {
-  const [appElement] = document.getElementsByTagName('app-element')
-  appElement.service && appElement.service.send({ type: 'UPDATE_VIEW', data: viewName })
+  return function changeViewWithName () {
+    const [appElement] = document.getElementsByTagName('app-element')
+    appElement.service && appElement.service.send({ type: 'UPDATE_VIEW', data: viewName })
+  }
 }
