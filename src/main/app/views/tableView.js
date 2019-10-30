@@ -1,9 +1,8 @@
-import '../components/homeSelect.js'
-import '../components/tableElement.js'
-import '../components/tableItem.js'
 import { html, define, render } from 'hybrids'
 import { machine } from './tableViewState.js'
 import { serviceFactory, currentFactory } from '../../../factories/index.js'
+import { tableElement } from '../components/tableElement.js'
+import { tableItem } from '../components/tableItem.js'
 
 const tableView = {
   service: serviceFactory(machine),
@@ -21,7 +20,7 @@ const tableView = {
           `
         })}
       </table-element>
-    `
+    `.define({ tableElement, tableItem })
   }, { shadowRoot: false }),
 }
 

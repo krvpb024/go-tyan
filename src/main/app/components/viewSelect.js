@@ -1,4 +1,4 @@
-import { html, define } from 'hybrids'
+import { html } from 'hybrids'
 import { page } from '../../route.js'
 
 export const viewSelect = {
@@ -16,8 +16,6 @@ export const viewSelect = {
     `
   },
 }
-
-define('home-select', viewSelect)
 
 // functions
 function setRouter (host, event) {

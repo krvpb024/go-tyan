@@ -1,6 +1,6 @@
-import { html, define, render } from 'hybrids'
+import { html, render } from 'hybrids'
 
-const tableItem = {
+export const tableItem = {
   render: render(function renderTableItem (host) {
     return html`
       <style>
@@ -35,5 +35,3 @@ const tableItem = {
     `
   }),
 }
-
-define('table-item', tableItem)

@@ -1,5 +1,4 @@
 import { html, define, render } from 'hybrids'
-import './components/homeSelect.js'
 import { serviceFactory, currentFactory } from '../../factories/index.js'
 import { machine } from './appElementState.js'
 

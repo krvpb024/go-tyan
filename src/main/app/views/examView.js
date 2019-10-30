@@ -1,4 +1,3 @@
-import '../components/homeSelect.js'
 import { html, define, render } from 'hybrids'
 
 const examView = {

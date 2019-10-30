@@ -1,4 +1,4 @@
-import '../components/homeSelect.js'
+import { viewSelect } from '../components/viewSelect.js'
 import { html, define, render } from 'hybrids'
 
 const homeView = {
@@ -6,11 +6,11 @@ const homeView = {
     return html`
       <h1>App</h1>
 
-      <home-select>
+      <view-select>
         <a href="/table">五十音表格</a>
         <a href="/exam">五十音測驗</a>
-      </home-select>
-    `
+      </view-select>
+    `.define({ viewSelect })
   }, { shadowRoot: false },
   ),
 }
