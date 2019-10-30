@@ -7,24 +7,57 @@ import { tableItem } from '../components/tableItem.js'
 const tableView = {
   service: serviceFactory(machine),
   current: currentFactory(machine),
-  render: render(function renderTableView (host) {
+  gojuonTuple ({
+    current: {
+      context: {
+        gojuon = {},
+      } = {},
+    } = {},
+  }) {
+    return Object.entries(gojuon)
+  },
+  render: render(function renderTableView ({ gojuonTuple }) {
     return html`
-      <h1 class="table__h1">五十音表格</h1>
-
-      <table-element>
-        ${host.current.context.gojuon.map(function renderTableItem (gojuon) {
-          return html`
-            <table-item data-column="${generateColumnNumber(gojuon)}">
-              <button type="button">${gojuon}</button>
-            </table-item>
-          `
-        })}
-      </table-element>
-    `.define({ tableElement, tableItem })
+      <section>
+        <h1 class="table__h1">五十音表格</h1>
+          ${gojuonTuple.map(function renderGojuonTuple ([groupName, groupItems]) {
+            return html`
+              <section>
+                <h2>${generateTitle(groupName)}</h2>
+                <table-element>
+                ${groupItems.map(function functionName (gojuon) {
+                  return html`
+                    <table-item data-column="${generateColumnNumber(gojuon)}">
+                      <button type="button">${gojuon}</button>
+                    </table-item>
+                  `.define({ tableElement, tableItem })
+                })}
+                </table-element>
+              </section>
+            `
+          })}
+      </section>
+    `
   }, { shadowRoot: false }),
 }
 
 define('table-view', tableView)
+
+// functions
+function generateTitle (groupName) {
+  switch (groupName) {
+    case 'seion':
+      return '清音'
+    case 'dakion':
+      return '濁音'
+    case 'handakuon':
+      return '半濁音'
+    case 'yoon':
+      return '拗音'
+    default:
+      return ''
+  }
+}
 
 function generateColumnNumber ([hiragana]) {
   if (hiragana == 'ん') {
