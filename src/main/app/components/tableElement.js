@@ -6,15 +6,11 @@ export const tableElement = {
       <style>
       :host {
         width: 800px;
-        display: flex;
-        flex-wrap: wrap;
       }
 
-      ::slotted() {
-        box-sizing: border-box;
-        width: 50px;
-        height: 50px;
-        padding: 3px;
+      ::slotted([role="rowgroup"]) {
+        display: flex;
+        justify-content: space-between;
       }
       </style>
 

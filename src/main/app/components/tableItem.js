@@ -7,22 +7,7 @@ export const tableItem = {
       :host {
         box-sizing: border-box;
         padding: 3px;
-      }
-
-      :host([data-column="1"]) {
-        width: 100%;
-      }
-
-      :host([data-column="2"]) {
-        width: 50%;
-      }
-
-      :host([data-column="3"]) {
-        width: calc(100% / 3);
-      }
-
-      :host([data-column="5"]) {
-        width: 20%;
+        flex-basis: 20%;
       }
 
       ::slotted(button) {
