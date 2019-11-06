@@ -1,28 +1,40 @@
-import { html, define, render } from 'hybrids'
-import { serviceFactory, currentFactory } from '../../factories/index.js'
+import { interpret } from 'xstate'
+import { bind, wire } from 'hyperhtml'
 import { machine } from './appElementState.js'
 
-export const appElement = {
-  service: serviceFactory(machine),
-  current: currentFactory(machine),
-  render: render(
-    function renderAppElement ({ current }) {
-      return html`
-        ${current.matches('idle.home') && html.resolve(import('./views/homeView.js').then(function showHomeView () {
-          return html`<home-view></home-view>`
-        }))}
+class AppElement extends HTMLElement {
+  constructor () {
+    super()
 
-        ${current.matches('idle.table') && html.resolve(import('./views/tableView.js').then(function showHomeView () {
-          return html`<table-view></table-view>`
-        }))}
+    this.service = interpret(machine)
+      .onTransition(state => {
+        bind(this)`
+          ${state.matches('idle.home')
+            ? import('./views/homeView').then(function renderHomeView () {
+                return wire()`<div is="home-view"></div>`
+              })
+            : ''}
 
-        ${current.matches('idle.exam') && html.resolve(import('./views/examView.js').then(function showHomeView () {
-          return html`<exam-view></exam-view>`
-        }))}
-      `
-    },
-    { shadowRoot: false },
-  ),
+          ${state.matches('idle.table')
+            ? import('./views/TableView/index.js').then(function renderTableView () {
+                return wire()`
+                  <div is="table-view"></div>
+                `
+            })
+          : ''}
+
+          ${state.matches('idle.exam')
+            ? import('./views/ExamView.js').then(function renderExamView () {
+                return wire()`
+                  <div is="exam-view"></div>
+                `
+              })
+            : ''
+          }
+        `
+      })
+      .start()
+  }
 }
 
-define('app-element', appElement)
+customElements.define('app-element', AppElement, { extends: 'section' })

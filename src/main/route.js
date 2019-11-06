@@ -13,7 +13,7 @@ export {
 
 function changeView (viewName) {
   return function changeViewWithName () {
-    const [appElement] = document.getElementsByTagName('app-element')
+    const appElement = document.getElementById('app-element')
     appElement.service && appElement.service.send({ type: 'UPDATE_VIEW', data: viewName })
   }
 }

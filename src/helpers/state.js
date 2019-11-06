@@ -8,7 +8,7 @@ function mutateByData (key) {
 
 function checkDataIs (value) {
   return function guardHandler (context, { data }) {
-    return data === value
+    return data == value
   }
 }
 
