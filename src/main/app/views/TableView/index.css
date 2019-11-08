@@ -1,0 +1,18 @@
+.table-form {
+  position: sticky;
+  top: 0;
+  background-color: gray;
+  padding: 10px;
+}
+
+.canvas-button[aria-pressed="true"] {
+  background-color: red;
+  color: #fff;
+}
+
+.drawing-board-container {
+  position: sticky;
+  bottom: 0;
+  background-color: red;
+  margin-top: 10px;
+}

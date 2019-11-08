@@ -31,10 +31,13 @@
     "hyperhtml": "^2.31.1",
     "normalize.css": "^8.0.1",
     "page": "^1.11.5",
+    "regenerator-runtime": "^0.13.3",
+    "tesseract.js": "^2.0.0-beta.2",
     "xstate": "^4.6.7"
   },
   "devDependencies": {
     "@babel/core": "^7.7.0",
+    "autoprefixer": "^9.7.1",
     "babel-eslint": "^10.0.3",
     "eslint": "^6.6.0",
     "eslint-config-standard": "^14.1.0",
@@ -43,6 +46,7 @@
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
     "parcel-bundler": "^1.12.4",
-    "parcel-plugin-static-files-copy": "^2.2.1"
+    "parcel-plugin-static-files-copy": "^2.2.1",
+    "postcss-modules": "^1.4.1"
   }
 }
