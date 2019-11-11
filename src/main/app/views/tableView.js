@@ -20,13 +20,15 @@ const tableView = {
     return {
       hiragana: current.matches('table.hiragana.show'),
       katakana: current.matches('table.katakana.show'),
-      drawingBoard: current.matches('drawingBoard.show'),
     }
   },
   render: render(function renderTableView ({ current, gojuonTuple, displayValue }) {
     return html`
       <section>
-        <table-display-control ontoggledisplay="${toggleDislayHandler}" displayValue="${displayValue}"></table-display-control>
+        <table-display-control
+          ontoggledisplay="${toggleDislayHandler}"
+          displayValue="${displayValue}"
+        ></table-display-control>
 
         <h1 class="table__h1">五十音表格</h1>
           ${gojuonTuple.map(function renderGojuonTuple ([groupName, groupRows]) {
@@ -69,7 +71,7 @@ const tableView = {
             `
           })}
 
-        ${displayValue.drawingBoard && html.resolve(import('./../components/drawingBoard.js').then(function showDrawingBoard () {
+        ${current.matches('drawingBoard.show') && html.resolve(import('./../components/drawingBoard.js').then(function showDrawingBoard () {
           return html`<drawing-board width="300" height="200"></drawing-board>`
         }))}
       </section>

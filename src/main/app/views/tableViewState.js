@@ -15,9 +15,17 @@ const machine = Machine({
     table: {
       type: 'parallel',
       on: {
-        UPDATE_CURSOR: {
-          actions: 'updateCursor',
-        },
+        UPDATE_CURSOR: [
+          {
+            cond: 'isNotMove',
+            actions: 'clearCursor',
+            target: 'drawingBoard.hide',
+          },
+          {
+            actions: 'updateCursor',
+            target: 'drawingBoard.show',
+          },
+        ],
       },
       states: {
         hiragana: {
@@ -60,17 +68,6 @@ const machine = Machine({
     },
     drawingBoard: {
       initial: 'hide',
-      on: {
-        DRAWING_BOARD_TOGGLE_DISPLAY: [
-          {
-            cond: 'isShow',
-            target: '.show',
-          },
-          {
-            target: '.hide',
-          },
-        ],
-      },
       states: {
         show: {},
         hide: {},
@@ -82,8 +79,24 @@ const machine = Machine({
     isShow (context, { data }) {
       return data
     },
+    isNotMove (context, {
+      data: {
+        groupName,
+        row,
+        column,
+      },
+    }) {
+      return context.groupName == groupName &&
+      context.row == row &&
+      context.column == column
+    },
   },
   actions: {
+    clearCursor: assign({
+      groupName: null,
+      row: null,
+      column: null,
+    }),
     updateCursor: assign(function mutateCursorContext (context, {
       data: {
         groupName,

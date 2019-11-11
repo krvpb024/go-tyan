@@ -4,7 +4,6 @@ export const tableDisplayControl = {
   displayValue: {
     hiragana: false,
     katakana: false,
-    drawingBoard: false,
   },
   render: render(function renderTableDisplayControl ({ displayValue }) {
     return html`
@@ -35,14 +34,6 @@ export const tableDisplayControl = {
             checked="${displayValue.katakana}"
           >
           <label for="katakana">katakana</label>
-        </div>
-        <div class="field">
-          <input
-            type="checkbox" id="drawing-board"
-            oninput="${toggle('DRAWING_BOARD_TOGGLE_DISPLAY')}"
-            checked="${displayValue.drawingBoard}"
-          >
-          <label for="drawing-board">drawingBoard</label>
         </div>
       </div>
     `
