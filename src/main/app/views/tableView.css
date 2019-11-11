@@ -1,0 +1,3 @@
+.table-button[aria-pressed="true"] {
+  background-color: red;
+}

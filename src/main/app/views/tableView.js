@@ -2,6 +2,7 @@ import { html, define, render } from 'hybrids'
 import { machine } from './tableViewState.js'
 import { serviceFactory, currentFactory } from '../../../factories/index.js'
 import { tableDisplayControl } from './../components/tableDisplayControl.js'
+import style from './tableView.css'
 
 const tableView = {
   service: serviceFactory(machine),
@@ -31,9 +32,9 @@ const tableView = {
           ${gojuonTuple.map(function renderGojuonTuple ([groupName, groupRows]) {
             return html`
               <section>
-                <h2 id="${groupName}-group-title">${generateTitle(groupName)}</h2>
+                <h2 id="${groupName}-title">${generateTitle(groupName)}</h2>
                 <table
-                  id="${groupName}-group" role="grid" aria-labelledby="${groupName}-group-title"
+                  id="${groupName}" role="grid" aria-labelledby="${groupName}-title"
                   aria-rowcount="${groupRows.length}" aria-colcount="5"
                 >
                 ${groupRows.map(function renderRows (row, rowIndex) {
@@ -42,9 +43,16 @@ const tableView = {
                       ${row.map(function renderGojuonColumn (gojuon, columnIndex) {
                         return html`
                           <td role="gridcell" aria-colindex="${columnIndex + 1}">
-                            <button 
+                            <button
+                              class="${style['table-button']}"
                               tabindex="${columnIndex == 0 && rowIndex == 0 ? '0' : '-1'}"
                               onkeydown="${setFocusToTargetButton}"
+                              onclick="${updateCursor}"
+                              aria-pressed="${
+                                (current.context.groupName == groupName &&
+                                current.context.row == rowIndex + 1 &&
+                                current.context.column == columnIndex + 1).toString()
+                              }"
                             >
                               <span id="hiragana" hidden="${!displayValue.hiragana}">${gojuon[0]}</span>
                               <span id="katakana" hidden="${!displayValue.katakana}">${gojuon[1]}</span>
@@ -91,16 +99,11 @@ function setFocusToTargetButton (host, event) {
   if (['ArrowDown', 'ArrowUp', 'ArrowLeft', 'ArrowRight'].includes(event.code)) {
     event.preventDefault()
 
-    var currentButton = event.target
-
-    var currentTd = currentButton.parentElement
-    var currentColumnNumber = Number(currentTd.getAttribute('aria-colindex'))
-
-    var currentTr = currentTd.parentElement
-    var currentRowNumber = Number(currentTr.getAttribute('aria-rowindex'))
-
-    var currentTable = currentTr.parentElement
-    var currentTableName = currentTable.id
+    var {
+      currentColumnNumber,
+      currentRowNumber,
+      currentTableName,
+    } = getButtonInformation(event.currentTarget)
 
     const target = findTargetBy(event.code)
     if (target) target.focus()
@@ -124,4 +127,34 @@ function setFocusToTargetButton (host, event) {
 function toggleDislayHandler (host, event) {
   const { type, checked } = event.detail
   host.service.send({ type, data: checked })
+}
+
+function updateCursor (host) {
+  const {
+    currentColumnNumber: column,
+    currentRowNumber: row,
+    currentTableName: groupName,
+  } = getButtonInformation(event.currentTarget)
+
+  host.service.send({
+    type: 'UPDATE_CURSOR',
+    data: {
+      groupName,
+      row,
+      column,
+    },
+  })
+}
+
+function getButtonInformation (button) {
+  var currentTd = button.parentElement
+  var currentColumnNumber = Number(currentTd.getAttribute('aria-colindex'))
+
+  var currentTr = currentTd.parentElement
+  var currentRowNumber = Number(currentTr.getAttribute('aria-rowindex'))
+
+  var currentTable = currentTr.parentElement
+  var currentTableName = currentTable.id
+
+  return { currentColumnNumber, currentRowNumber, currentTableName }
 }

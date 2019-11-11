@@ -1,4 +1,4 @@
-import { Machine } from 'xstate'
+import { Machine, assign } from 'xstate'
 // import { mutateByData, checkDataIs } from '../../../helpers/state.js'
 import { gojuon } from '../../../helpers/gojuon.js'
 
@@ -14,6 +14,11 @@ const machine = Machine({
   states: {
     table: {
       type: 'parallel',
+      on: {
+        UPDATE_CURSOR: {
+          actions: 'updateCursor',
+        },
+      },
       states: {
         hiragana: {
           initial: 'show',
@@ -77,6 +82,21 @@ const machine = Machine({
     isShow (context, { data }) {
       return data
     },
+  },
+  actions: {
+    updateCursor: assign(function mutateCursorContext (context, {
+      data: {
+        groupName,
+        row,
+        column,
+      },
+    }) {
+      return {
+        groupName,
+        row,
+        column,
+      }
+    }),
   },
 })
 
