@@ -1,12 +1,19 @@
-import { html, render, define } from 'hybrids'
+import { html, render, define, dispatch } from 'hybrids'
 
 const drawingBoard = {
+  // props
+  displayValue: {
+    hiragana: false,
+    katakana: false,
+  },
+  // data
   ctx: null,
   width: 200,
   height: 200,
   lastX: 0,
   lastY: 0,
-  render: render(function renderDrawingBoard ({ width, height }) {
+  keypressed: false,
+  render: render(function renderDrawingBoard ({ width, height, displayValue }) {
     return html`
       <style>
         :host {
@@ -18,7 +25,7 @@ const drawingBoard = {
           background-color: red;
         }
 
-        .clear-button {
+        button {
           display: block;
         }
 
@@ -30,7 +37,39 @@ const drawingBoard = {
       <div class="root">
         <h1>手寫板</h1>
 
-        <button class="clear-button" onclick="${clearCavnas}">清除</button>
+        <button class="clear-button" onclick="${clearCavnas}">
+          清除
+        </button>
+
+        <button class="clear-button" onclick="${closeDrawingPanel}">
+          關閉
+        </button>
+
+        ${!displayValue.hiragana
+          ? html`
+            <button
+              class="peek-button" id="hiragana"
+              onmousedown="${sendParent('peek')}" ontouchstart="${sendParent('peek')}" onkeypress=${sendParent('peek')}
+              onmouseup="${sendParent('cover')}" ontouchend="${sendParent('cover')}" onkeyup="${sendParent('cover')}"
+            >
+              偷看平假名
+            </button>
+          `
+          : ''
+        }
+
+        ${!displayValue.katakana
+          ? html`
+            <button
+              class="peek-button" id="katakana"
+              onmousedown="${sendParent('peek')}" ontouchstart="${sendParent('peek')}" onkeypress=${sendParent('peek')}
+              onmouseup="${sendParent('cover')}" ontouchend="${sendParent('cover')}" onkeyup="${sendParent('cover')}"
+            >
+              偷看片假名
+            </button>
+          `
+          : ''
+        }
 
         <canvas
           width="${width}" height="${height}"
@@ -50,6 +89,8 @@ export {
 }
 
 // functions
+
+// canvas
 function startDrawing (host, { clientX, clientY, target }) {
   if (!host.canvas) host.canvas = target
   if (!host.ctx) {
@@ -82,6 +123,7 @@ function stopDrawing (host) {
 }
 
 function clearCavnas (host) {
+  if (!host.ctx) return
   host.ctx.clearRect(0, 0, host.width, host.height)
 }
 
@@ -90,4 +132,36 @@ function getMousePosition (canvas, clientX, clientY) {
   const x = clientX - left
   const y = clientY - top
   return [x, y]
+}
+
+// buttons
+function sendParent (eventName) {
+  return function sendpeekEventToParent (host, { type: DOMEventType, code, currentTarget }) {
+    if (
+      ['mousedown', 'touchstart', 'mouseup', 'touchend'].includes(DOMEventType) ||
+      (['keypress', 'keyup'].includes(DOMEventType) && code == 'Space')
+    ) {
+      if (DOMEventType == 'keypress' && host.keypressed == true) return
+
+      switch (DOMEventType) {
+        case 'keypress':
+          host.keypressed = true
+          break
+        case 'keyup':
+          host.keypressed = false
+          break
+        default:
+      }
+
+      dispatch(host, eventName, {
+        detail: {
+          type: `${eventName.toUpperCase()}_${currentTarget.id.toUpperCase()}`,
+        },
+      })
+    }
+  }
+}
+
+function closeDrawingPanel (host, event) {
+  dispatch(host, 'closeboard')
 }

@@ -22,16 +22,24 @@ const tableView = {
       katakana: current.matches('table.katakana.show'),
     }
   },
-  render: render(function renderTableView ({ current, gojuonTuple, displayValue }) {
+  isCursorPosition: {
+    get (host) {
+      return function receiveComparison (groupName, rowIndex, columnIndex) {
+        return host.current.context.groupName == groupName &&
+        host.current.context.row == rowIndex + 1 &&
+        host.current.context.column == columnIndex + 1
+      }
+    },
+  },
+  render: render(function renderTableView (host) {
     return html`
       <section>
         <table-display-control
           ontoggledisplay="${toggleDislayHandler}"
-          displayValue="${displayValue}"
+          displayValue="${host.displayValue}"
         ></table-display-control>
-
         <h1 class="table__h1">五十音表格</h1>
-          ${gojuonTuple.map(function renderGojuonTuple ([groupName, groupRows]) {
+          ${host.gojuonTuple.map(function renderGojuonTuple ([groupName, groupRows]) {
             return html`
               <section>
                 <h2 id="${groupName}-title">${generateTitle(groupName)}</h2>
@@ -51,13 +59,48 @@ const tableView = {
                               onkeydown="${setFocusToTargetButton}"
                               onclick="${updateCursor}"
                               aria-pressed="${
-                                (current.context.groupName == groupName &&
-                                current.context.row == rowIndex + 1 &&
-                                current.context.column == columnIndex + 1).toString()
+                                host.isCursorPosition(groupName, rowIndex, columnIndex).toString()
                               }"
                             >
-                              <span id="hiragana" hidden="${!displayValue.hiragana}">${gojuon[0]}</span>
-                              <span id="katakana" hidden="${!displayValue.katakana}">${gojuon[1]}</span>
+                              <span
+                                id="hiragana"
+                                hidden="${
+                                  (() => {
+                                    if (!host.displayValue.hiragana) {
+                                      if (
+                                        host.isCursorPosition(groupName, rowIndex, columnIndex) &&
+                                        host.current.matches('table.hiragana.hide.peek')
+                                      ) {
+                                        return false
+                                      }
+                                      return true
+                                    }
+                                    return false
+                                  })()
+                                }"
+                              >
+                                ${gojuon[0]}
+                              </span>
+                              <span
+                                id="katakana"
+                                hidden="${
+                                  (() => {
+                                    if (!host.displayValue.katakana) {
+                                      if (
+                                        host.isCursorPosition(groupName, rowIndex, columnIndex) &&
+                                        host.current.matches('table.katakana.hide.peek')
+                                      ) {
+                                        return false
+                                      }
+                                      return true
+                                    }
+                                    return false
+                                  })()
+                                }"
+                              >
+
+                                ${gojuon[1]}
+                              </span>
                               <span>${gojuon[2]}</span>
                             </button>
                           </td>
@@ -71,8 +114,14 @@ const tableView = {
             `
           })}
 
-        ${current.matches('drawingBoard.show') && html.resolve(import('./../components/drawingBoard.js').then(function showDrawingBoard () {
-          return html`<drawing-board width="300" height="200"></drawing-board>`
+        ${host.current.matches('drawingBoard.show') && html.resolve(import('./../components/drawingBoard.js').then(function showDrawingBoard () {
+          return html`
+            <drawing-board
+              width="300" height="200" displayValue="${host.displayValue}"
+              onpeek="${peek}" oncover="${cover}"
+              oncloseboard="${closeBoard}"
+            ></drawing-board>
+          `
         }))}
       </section>
     `.define({ tableDisplayControl })
@@ -159,4 +208,17 @@ function getButtonInformation (button) {
   var currentTableName = currentTable.id
 
   return { currentColumnNumber, currentRowNumber, currentTableName }
+}
+
+function peek (host, { detail: { type } }) {
+  console.log(type)
+  host.service.send({ type })
+}
+
+function cover (host, { detail: { type } }) {
+  host.service.send({ type })
+}
+
+function closeBoard (host) {
+  host.service.send({ type: 'CLEAR_CURSOR' })
 }

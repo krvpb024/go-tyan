@@ -26,6 +26,10 @@ const machine = Machine({
             target: 'drawingBoard.show',
           },
         ],
+        CLEAR_CURSOR: {
+          actions: 'clearCursor',
+          target: 'drawingBoard.hide',
+        },
       },
       states: {
         hiragana: {
@@ -43,7 +47,17 @@ const machine = Machine({
           },
           states: {
             show: {},
-            hide: {},
+            hide: {
+              initial: 'cover',
+              on: {
+                PEEK_HIRAGANA: '.peek',
+                COVER_HIRAGANA: '.cover',
+              },
+              states: {
+                cover: {},
+                peek: {},
+              },
+            },
           },
         },
         katakana: {
@@ -61,7 +75,17 @@ const machine = Machine({
           },
           states: {
             show: {},
-            hide: {},
+            hide: {
+              initial: 'cover',
+              on: {
+                PEEK_KATAKANA: '.peek',
+                COVER_KATAKANA: '.cover',
+              },
+              states: {
+                cover: {},
+                peek: {},
+              },
+            },
           },
         },
       },
@@ -84,7 +108,7 @@ const machine = Machine({
         groupName,
         row,
         column,
-      },
+      } = {},
     }) {
       return context.groupName == groupName &&
       context.row == row &&
