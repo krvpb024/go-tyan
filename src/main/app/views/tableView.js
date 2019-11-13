@@ -33,7 +33,7 @@ const tableView = {
   },
   render: render(function renderTableView (host) {
     return html`
-      <section>
+      <section id="table-view">
         <table-display-control
           ontoggledisplay="${toggleDislayHandler}"
           displayValue="${host.displayValue}"
@@ -45,6 +45,7 @@ const tableView = {
                 <h2 id="${groupName}-title">${generateTitle(groupName)}</h2>
                 <table
                   id="${groupName}" role="grid" aria-labelledby="${groupName}-title"
+                  data-wrap-cols="true" data-wrap-rows="false"
                   aria-rowcount="${groupRows.length}" aria-colcount="5"
                 >
                 ${groupRows.map(function renderRows (row, rowIndex) {
@@ -58,47 +59,24 @@ const tableView = {
                               tabindex="${columnIndex == 0 && rowIndex == 0 ? '0' : '-1'}"
                               onkeydown="${setFocusToTargetButton}"
                               onclick="${updateCursor}"
-                              aria-pressed="${
-                                host.isCursorPosition(groupName, rowIndex, columnIndex).toString()
-                              }"
+                              aria-pressed="${host.isCursorPosition(groupName, rowIndex, columnIndex).toString()}"
                             >
-                              <span
-                                id="hiragana"
-                                hidden="${
+                              <span id="hiragana" hidden="${
                                   (() => {
-                                    if (!host.displayValue.hiragana) {
-                                      if (
-                                        host.isCursorPosition(groupName, rowIndex, columnIndex) &&
-                                        host.current.matches('table.hiragana.hide.peek')
-                                      ) {
-                                        return false
-                                      }
-                                      return true
-                                    }
+                                    if (!host.displayValue.hiragana && host.isCursorPosition(groupName, rowIndex, columnIndex) && host.current.matches('table.hiragana.hide.peek')) return false
+                                    else if (!host.displayValue.hiragana) return true
                                     return false
-                                  })()
-                                }"
+                                  })()}"
                               >
                                 ${gojuon[0]}
                               </span>
-                              <span
-                                id="katakana"
-                                hidden="${
+                              <span id="katakana" hidden="${
                                   (() => {
-                                    if (!host.displayValue.katakana) {
-                                      if (
-                                        host.isCursorPosition(groupName, rowIndex, columnIndex) &&
-                                        host.current.matches('table.katakana.hide.peek')
-                                      ) {
-                                        return false
-                                      }
-                                      return true
-                                    }
+                                    if (!host.displayValue.katakana && host.isCursorPosition(groupName, rowIndex, columnIndex) && host.current.matches('table.katakana.hide.peek')) return false
+                                    else if (!host.displayValue.katakana) return true
                                     return false
-                                  })()
-                                }"
+                                  })()}"
                               >
-
                                 ${gojuon[1]}
                               </span>
                               <span>${gojuon[2]}</span>
@@ -117,9 +95,11 @@ const tableView = {
         ${host.current.matches('drawingBoard.show') && html.resolve(import('./../components/drawingBoard.js').then(function showDrawingBoard () {
           return html`
             <drawing-board
+              role="dialog" tabindex="0"
               width="300" height="200" displayValue="${host.displayValue}"
               onpeek="${peek}" oncover="${cover}"
               oncloseboard="${closeBoard}"
+              oncursortoprevious="${cursorToPrevious}" oncursortonext="${cursorToNext}"
             ></drawing-board>
           `
         }))}
@@ -167,9 +147,11 @@ function setFocusToTargetButton (host, event) {
       case 'ArrowDown':
         return document.querySelector(`#${currentTableName} tr[aria-rowindex="${currentRowNumber + 1}"] td[aria-colindex="1"] button`)
       case 'ArrowLeft':
-        return document.querySelector(`#${currentTableName} tr[aria-rowindex="${currentRowNumber}"] td[aria-colindex="${currentColumnNumber - 1}"] button`)
+        return document.querySelector(`#${currentTableName} tr[aria-rowindex="${currentRowNumber}"] td[aria-colindex="${currentColumnNumber - 1}"] button`) ||
+        document.querySelector(`#${currentTableName} tr[aria-rowindex="${currentRowNumber - 1}"] td[aria-colindex="${(host.current.context.gojuon[currentTableName][currentRowNumber - 2] || {}).length}"] button`)
       case 'ArrowRight':
-        return document.querySelector(`#${currentTableName} tr[aria-rowindex="${currentRowNumber}"] td[aria-colindex="${currentColumnNumber + 1}"] button`)
+        return document.querySelector(`#${currentTableName} tr[aria-rowindex="${currentRowNumber}"] td[aria-colindex="${currentColumnNumber + 1}"] button`) ||
+        document.querySelector(`#${currentTableName} tr[aria-rowindex="${currentRowNumber + 1}"] td[aria-colindex="1"] button`)
       default:
     }
   }
@@ -195,6 +177,22 @@ function updateCursor (host) {
       column,
     },
   })
+
+  const targetNode = document.getElementById('table-view')
+  const config = { childList: true }
+
+  const observer = new MutationObserver(function focusOnDrawingBoard (mutationsList, observer) {
+    const [drawingBoard] = Array.from(mutationsList)
+      .map(function remainNode ({ addedNodes: [addedNode] }) {
+        return addedNode
+      })
+      .filter(function remainDrawingBoard ({ tagName } = {}) {
+        return tagName == 'drawing-board'.toUpperCase()
+      })
+    drawingBoard && drawingBoard.focus({ preventScroll: true })
+    observer.disconnect()
+  })
+  observer.observe(targetNode, config)
 }
 
 function getButtonInformation (button) {
@@ -211,7 +209,6 @@ function getButtonInformation (button) {
 }
 
 function peek (host, { detail: { type } }) {
-  console.log(type)
   host.service.send({ type })
 }
 
@@ -220,5 +217,15 @@ function cover (host, { detail: { type } }) {
 }
 
 function closeBoard (host) {
+  const lastCursorButton = document.querySelector(`#${host.current.context.groupName} tr[aria-rowindex="${host.current.context.row}"] td[aria-colindex="${host.current.context.column}"] button`)
+  lastCursorButton && lastCursorButton.focus()
   host.service.send({ type: 'CLEAR_CURSOR' })
+}
+
+function cursorToPrevious (host) {
+  host.service.send({ type: 'CURSOR_TO_PREVIOUS' })
+}
+
+function cursorToNext (host) {
+  host.service.send({ type: 'CURSOR_TO_NEXT' })
 }

@@ -8,6 +8,7 @@ const machine = Machine({
   context: {
     gojuon,
     groupName: null,
+    // row and column start from 1 because of aria attribute
     row: null,
     column: null,
   },
@@ -29,6 +30,12 @@ const machine = Machine({
         CLEAR_CURSOR: {
           actions: 'clearCursor',
           target: 'drawingBoard.hide',
+        },
+        CURSOR_TO_PREVIOUS: {
+          actions: 'cursorToPrevious',
+        },
+        CURSOR_TO_NEXT: {
+          actions: 'cursorToNext',
         },
       },
       states: {
@@ -132,6 +139,56 @@ const machine = Machine({
         groupName,
         row,
         column,
+      }
+    }),
+    cursorToPrevious: assign(function mutateCursorToPrevious ({
+      gojuon,
+      groupName,
+      row,
+      column,
+    }) {
+      // beware of context row and column start from 1 when look up in gojuon array
+      const target = gojuon[groupName][row - 1][column - 2]
+      const previousRow = gojuon[groupName][row - 2]
+
+      if (target) {
+        return {
+          column: column - 1,
+        }
+      } else if (previousRow) {
+        return {
+          row: row - 1,
+          column: previousRow.length,
+        }
+      }
+      return {
+        row: 1,
+        column: 1,
+      }
+    }),
+    cursorToNext: assign(function mutateCursorToNext ({
+      gojuon,
+      groupName,
+      row,
+      column,
+    }) {
+      // beware of context row and column start from 1 when look up in gojuon array
+      const target = gojuon[groupName][row - 1][column]
+      const nextRow = gojuon[groupName][row]
+
+      if (target) {
+        return {
+          column: column + 1,
+        }
+      } else if (nextRow) {
+        return {
+          row: row + 1,
+          column: 1,
+        }
+      }
+      return {
+        row: gojuon[groupName].length,
+        column: gojuon[groupName][row - 1].length,
       }
     }),
   },

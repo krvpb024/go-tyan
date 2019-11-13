@@ -22,10 +22,14 @@ const drawingBoard = {
         }
 
         .root {
-          background-color: red;
+          background-color: #f99;
         }
 
-        button {
+        button:focus {
+          border: 2px black solid;
+        }
+
+        .block-button {
           display: block;
         }
 
@@ -37,38 +41,46 @@ const drawingBoard = {
       <div class="root">
         <h1>手寫板</h1>
 
-        <button class="clear-button" onclick="${clearCavnas}">
+        <button class="block-button" onclick="${clearCavnas}">
           清除
         </button>
 
-        <button class="clear-button" onclick="${closeDrawingPanel}">
+        <button class="block-button" onclick="${closeDrawingBoard}">
           關閉
         </button>
 
+        <div>
+          <button onclick="${cursorToPrevious}">
+            ←
+          </button>
+
+          <button onclick="${cursorToNext}">
+            →
+          </button>
+        </div>
+
         ${!displayValue.hiragana
-          ? html`
-            <button
-              class="peek-button" id="hiragana"
-              onmousedown="${sendParent('peek')}" ontouchstart="${sendParent('peek')}" onkeypress=${sendParent('peek')}
-              onmouseup="${sendParent('cover')}" ontouchend="${sendParent('cover')}" onkeyup="${sendParent('cover')}"
-            >
-              偷看平假名
-            </button>
-          `
-          : ''
+        ? html`
+        <button
+          id="hiragana" class="block-button"
+          onmousedown="${sendParent('peek')}" ontouchstart="${sendParent('peek')}" onkeypress=${sendParent('peek')}
+          onmouseup="${sendParent('cover')}" ontouchend="${sendParent('cover')}" onkeyup="${sendParent('cover')}"
+        >
+          偷看平假名
+        </button>`
+        : ''
         }
 
         ${!displayValue.katakana
-          ? html`
-            <button
-              class="peek-button" id="katakana"
-              onmousedown="${sendParent('peek')}" ontouchstart="${sendParent('peek')}" onkeypress=${sendParent('peek')}
-              onmouseup="${sendParent('cover')}" ontouchend="${sendParent('cover')}" onkeyup="${sendParent('cover')}"
-            >
-              偷看片假名
-            </button>
-          `
-          : ''
+        ? html`
+        <button
+          id="katakana" class="block-button"
+          onmousedown="${sendParent('peek')}" ontouchstart="${sendParent('peek')}" onkeypress=${sendParent('peek')}
+          onmouseup="${sendParent('cover')}" ontouchend="${sendParent('cover')}" onkeyup="${sendParent('cover')}"
+        >
+          偷看片假名
+        </button>`
+        : ''
         }
 
         <canvas
@@ -162,6 +174,14 @@ function sendParent (eventName) {
   }
 }
 
-function closeDrawingPanel (host, event) {
+function closeDrawingBoard (host, event) {
   dispatch(host, 'closeboard')
+}
+
+function cursorToPrevious (host) {
+  dispatch(host, 'cursortoprevious')
+}
+
+function cursorToNext (host) {
+  dispatch(host, 'cursortonext')
 }
