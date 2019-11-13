@@ -22,6 +22,9 @@ const tableView = {
       katakana: current.matches('table.katakana.show'),
     }
   },
+  cursor ({ current: { context: { gojuon, groupName, row, column } } }) {
+    return ((gojuon[groupName] || {})[row] || {})[column]
+  },
   isCursorPosition: {
     get (host) {
       return function receiveComparison (groupName, rowIndex, columnIndex) {
@@ -96,7 +99,8 @@ const tableView = {
           return html`
             <drawing-board
               role="dialog" tabindex="0"
-              width="300" height="200" displayValue="${host.displayValue}"
+              width="300" height="200"
+              displayValue="${host.displayValue}" cursor="${host.cursor}"
               onpeek="${peek}" oncover="${cover}"
               oncloseboard="${closeBoard}"
               oncursortoprevious="${cursorToPrevious}" oncursortonext="${cursorToNext}"

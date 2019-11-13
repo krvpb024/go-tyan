@@ -6,6 +6,11 @@ const drawingBoard = {
     hiragana: false,
     katakana: false,
   },
+  cursor: {
+    observe (host, value, lastValue) {
+      clearCavnas(host)
+    },
+  },
   // data
   ctx: null,
   width: 200,
@@ -179,9 +184,11 @@ function closeDrawingBoard (host, event) {
 }
 
 function cursorToPrevious (host) {
+  clearCavnas(host)
   dispatch(host, 'cursortoprevious')
 }
 
 function cursorToNext (host) {
+  clearCavnas(host)
   dispatch(host, 'cursortonext')
 }
