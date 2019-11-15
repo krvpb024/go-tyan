@@ -10,9 +10,11 @@
   "dependencies": {
     "@vue/composition-api": "^0.3.2",
     "core-js": "^2.6.5",
+    "normalize.css": "^8.0.1",
     "register-service-worker": "^1.6.2",
     "vue": "^2.6.10",
-    "vue-router": "^3.0.3"
+    "vue-router": "^3.0.3",
+    "xstate": "^4.6.7"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.11.0",
