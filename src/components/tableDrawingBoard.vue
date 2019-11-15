@@ -159,6 +159,7 @@ export default {
     }
 
     function closeDrawingBoard (host, event) {
+      clearCavnas()
       context.emit('closeboard')
     }
 

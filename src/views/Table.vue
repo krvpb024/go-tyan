@@ -51,14 +51,15 @@
         </tr>
       </table>
     </section>
-
-    <table-drawing-board
-      v-if="current.matches('drawingBoard.show')"
-      :hiraganaDisplay="hiraganaDisplay"
-      :katakanaDisplay="katakanaDisplay"
-      @peek="peek" @closeboard="closeBoard"
-      @cursortoprevious="cursorToPrevious" @cursortonext="cursorToNext"
-    ></table-drawing-board>
+    <keep-alive>
+      <table-drawing-board
+        v-if="current.matches('drawingBoard.show')"
+        :hiraganaDisplay="hiraganaDisplay"
+        :katakanaDisplay="katakanaDisplay"
+        @peek="peek" @closeboard="closeBoard"
+        @cursortoprevious="cursorToPrevious" @cursortonext="cursorToNext"
+      ></table-drawing-board>
+    </keep-alive>
   </section>
 </template>
 
