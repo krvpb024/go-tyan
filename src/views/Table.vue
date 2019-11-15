@@ -1,5 +1,12 @@
 <template>
   <section class="table-view">
+    <table-display-control
+      hiraganaDisplay=""
+      katakanaDisplay=""
+      @toggleHiragana="toggleHiragana"
+      @toggleKatakana="toggleKatakana"
+    ></table-display-control>
+
     <h1 class="table__h1">五十音表格</h1>
 
     <section v-for="([groupName, rows]) in gojuonTuples" :key="groupName">
@@ -45,31 +52,38 @@
 import { computed } from '@vue/composition-api'
 import { machine } from '@/states/tableState.js'
 import { useMachine } from '@/utils/useMachine.js'
+import tableDisplayControl from '@/components/tableDisplayControl.vue'
 
 export default {
+  components: {
+    tableDisplayControl,
+  },
   setup () {
     const { service, current } = useMachine(machine)
 
     const gojuonTuples = computed(function getGojuonTuples () {
       return Object.entries(current.value.context.gojuon)
     })
-    const displayValue = computed(function getDislayValue () {
-      return {
-        hiragana: current.value.matches('table.hiragana.show'),
-        katakana: current.value.matches('table.katakana.show'),
-      }
+    const hiraganaDisplay = computed(function getHiraganaDisplay () {
+      return current.value.matches('table.hiragana.show')
+    })
+    const katakanaDisplay = computed(function getKatakanaDisplay () {
+      return current.value.matches('table.katakana.show')
     })
 
     return {
       current,
       gojuonTuples,
-      displayValue,
+      hiraganaDisplay,
+      katakanaDisplay,
       // methods
       generateTitle,
       isCursorPosition,
       toggleDislayHandler,
       setFocusToTargetButton,
       updateCursor,
+      toggleHiragana,
+      toggleKatakana,
     }
 
     function generateTitle (groupName) {
@@ -157,6 +171,13 @@ export default {
       const currentTableName = currentTable.id
 
       return { currentColumnNumber, currentRowNumber, currentTableName }
+    }
+
+    function toggleHiragana (checked) {
+      service.value.send({ type: 'HIRAGANA_TOGGLE_DISPLAY', data: checked })
+    }
+    function toggleKatakana (checked) {
+      service.value.send({ type: 'KATAKANA_TOGGLE_DISPLAY', data: checked })
     }
   },
 }
