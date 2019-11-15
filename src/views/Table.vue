@@ -1,8 +1,8 @@
 <template>
   <section class="table-view">
     <table-display-control
-      hiraganaDisplay=""
-      katakanaDisplay=""
+      :hiraganaDisplay="hiraganaDisplay"
+      :katakanaDisplay="katakanaDisplay"
       @toggleHiragana="toggleHiragana"
       @toggleKatakana="toggleKatakana"
     ></table-display-control>
@@ -33,10 +33,16 @@
               :aria-pressed="isCursorPosition(groupName, rowIndex, columnIndex).toString()"
               @keydown="setFocusToTargetButton" @click="updateCursor"
             >
-              <span id="hiragana">
+              <span
+                id="hiragana"
+                v-show="checkDisplayAndPeek('hiragana', groupName, rowIndex, columnIndex)"
+              >
                 {{ hiragana }}
               </span>
-              <span id="katakana">
+              <span
+                id="katakana"
+                v-show="checkDisplayAndPeek('katakana', groupName, rowIndex, columnIndex)"
+              >
                 {{katakana}}
               </span>
               <span>{{ pinyin }}</span>
@@ -45,6 +51,14 @@
         </tr>
       </table>
     </section>
+
+    <table-drawing-board
+      v-if="current.matches('drawingBoard.show')"
+      :hiraganaDisplay="hiraganaDisplay"
+      :katakanaDisplay="katakanaDisplay"
+      @peek="peek" @closeboard="closeBoard"
+      @cursortoprevious="cursorToPrevious" @cursortonext="cursorToNext"
+    ></table-drawing-board>
   </section>
 </template>
 
@@ -52,11 +66,11 @@
 import { computed } from '@vue/composition-api'
 import { machine } from '@/states/tableState.js'
 import { useMachine } from '@/utils/useMachine.js'
-import tableDisplayControl from '@/components/tableDisplayControl.vue'
 
 export default {
   components: {
-    tableDisplayControl,
+    tableDisplayControl: () => import(/* webpackChunkName: "tableDisplayControl" */ '@/components/tableDisplayControl.vue'),
+    tableDrawingBoard: () => import(/* webpackChunkName: "tableDrawingBoard" */ '@/components/tableDrawingBoard.vue'),
   },
   setup () {
     const { service, current } = useMachine(machine)
@@ -84,6 +98,11 @@ export default {
       updateCursor,
       toggleHiragana,
       toggleKatakana,
+      peek,
+      closeBoard,
+      cursorToPrevious,
+      cursorToNext,
+      checkDisplayAndPeek,
     }
 
     function generateTitle (groupName) {
@@ -179,10 +198,40 @@ export default {
     function toggleKatakana (checked) {
       service.value.send({ type: 'KATAKANA_TOGGLE_DISPLAY', data: checked })
     }
+
+    function peek (type) {
+      service.value.send({ type })
+    }
+
+    function closeBoard () {
+      const lastCursorButton = document.querySelector(`#${current.value.context.groupName} tr[aria-rowindex="${current.value.context.row}"] td[aria-colindex="${current.value.context.column}"] button`)
+      lastCursorButton && lastCursorButton.focus()
+      service.value.send({ type: 'CLEAR_CURSOR' })
+    }
+
+    function cursorToPrevious () {
+      service.value.send({ type: 'CURSOR_TO_PREVIOUS' })
+    }
+
+    function cursorToNext () {
+      service.value.send({ type: 'CURSOR_TO_NEXT' })
+    }
+
+    function checkDisplayAndPeek (hiraganaOrKatakana, groupName, rowIndex, columnIndex) {
+      const targetDisplay = hiraganaOrKatakana == 'hiragana'
+        ? hiraganaDisplay.value
+        : katakanaDisplay.value
+
+      if (!targetDisplay && isCursorPosition(groupName, rowIndex, columnIndex) && current.value.matches(`table.${hiraganaOrKatakana}.hide.peek`)) return true
+      else if (!targetDisplay) return false
+      return true
+    }
   },
 }
 </script>
 
-<style>
-
+<style scoped>
+.table-button[aria-pressed="true"] {
+  background-color: red;
+}
 </style>
