@@ -8,6 +8,12 @@ Vue.use(VueCompositionApi)
 
 Vue.config.productionTip = false
 
+Vue.directive('focus', {
+  inserted: function (el) {
+    el.focus()
+  },
+})
+
 new Vue({
   router,
   render: h => h(App),

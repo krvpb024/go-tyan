@@ -1,35 +1,35 @@
 <template>
-  <div class="root">
-    <h1>手寫板</h1>
+  <div ref="modal" class="modal">
+    <slot name="title"></slot>
+
+    <button class="block-button" @click="closeDrawingBoard" ref="autoFocusButton">
+      關閉
+    </button>
 
     <button class="block-button" @click="clearCavnas">
       清除
     </button>
 
-    <button class="block-button" @click="closeDrawingBoard">
-      關閉
-    </button>
-
     <div>
-      <button @click="cursorToPrevious">
+      <button @click="cursorToPrevious" aria-label="往上一個儲存格">
         ←
       </button>
-      <button @click="cursorToNext">
+      <button @click="cursorToNext" aria-label="往下一個儲存格">
         →
       </button>
     </div>
 
     <button
-      v-show="!hiraganaDisplay" id="hiragana" class="block-button"
-      @mousedown="peek(true, $event)" @touchstart="peek(true, $event)" @keypress="peek(true, $event)"
+      id="hiragana" class="block-button" :class="{ 'control-hidden': hiraganaDisplay }"
+      @mousedown="peek(true, $event)" @touchstart="peek(true, $event)" @keydown="peek(true, $event)"
       @mouseup="peek(false, $event)" @touchend="peek(false, $event)" @keyup="peek(false, $event)"
     >
       偷看平假名
     </button>
 
     <button
-      v-show="!katakanaDisplay" id="katakana" class="block-button"
-      @mousedown="peek(true, $event)" @touchstart="peek(true, $event)" @keypress="peek(true, $event)"
+      id="katakana" class="block-button" :class="{ 'control-hidden': katakanaDisplay }"
+      @mousedown="peek(true, $event)" @touchstart="peek(true, $event)" @keydown="peek(true, $event)"
       @mouseup="peek(false, $event)" @touchend="peek(false, $event)" @keyup="peek(false, $event)"
     >
       偷看片假名
@@ -46,9 +46,11 @@
 </template>
 
 <script>
-import { ref, onMounted } from '@vue/composition-api'
+import { ref, onMounted, onUpdated } from '@vue/composition-api'
+import { useModalNavigation } from '@/utils/useModalNavigation.js'
 
 export default {
+  name: 'tableDrawingBoard',
   props: {
     hiraganaDisplay: {
       type: Boolean,
@@ -66,23 +68,53 @@ export default {
       type: Number,
       default: 200,
     },
+    groupName: {
+      type: String,
+      default: null,
+    },
+    row: {
+      type: Number,
+      default: null,
+    },
+    column: {
+      type: Number,
+      default: null,
+    },
   },
   setup (props, context) {
+    const autoFocusButton = ref(null)
+    const modal = ref(null)
+    const clearNavigation = ref(null)
+
     const canvas = ref(null)
     const ctx = ref(null)
     const lastX = ref(0)
     const lastY = ref(0)
+
     const canDraw = ref(false)
     const keypressed = ref(false)
 
-    onMounted(function tableDrawingBoardOnMounted (params) {
+    onMounted(function tableDrawingBoardOnMounted () {
+      const modalButtons = modal.value.querySelectorAll('button:not(.control-hidden)')
+      const { removeListener } = useModalNavigation(modalButtons)
+      clearNavigation.value = removeListener
+
       ctx.value = canvas.value.getContext('2d')
       ctx.value.lineWidth = 15
       ctx.value.lineJoin = 'round'
       ctx.value.lineCap = 'round'
     })
 
+    onUpdated(function tableDrawingBoardOnUpdated () {
+      clearNavigation.value()
+
+      const modalButtons = modal.value.querySelectorAll('button:not(.control-hidden)')
+      useModalNavigation(modalButtons)
+    })
+
     return {
+      autoFocusButton,
+      modal,
       canvas,
       ctx,
       lastX,
@@ -137,12 +169,12 @@ export default {
     function peek (isPeek, { type: DOMEventType, code, currentTarget }) {
       if (
         ['mousedown', 'touchstart', 'mouseup', 'touchend'].includes(DOMEventType) ||
-      (['keypress', 'keyup'].includes(DOMEventType) && code == 'Space')
+      (['keydown', 'keyup'].includes(DOMEventType) && code == 'Space')
       ) {
-        if (DOMEventType == 'keypress' && keypressed.value == true) return
+        if (DOMEventType == 'keydown' && keypressed.value == true) return
 
         switch (DOMEventType) {
-          case 'keypress':
+          case 'keydown':
             keypressed.value = true
             break
           case 'keyup':
@@ -177,7 +209,7 @@ export default {
 </script>
 
 <style scoped>
-.root {
+.modal {
   background-color: #f99;
   position: sticky;
   bottom: 0;
@@ -189,6 +221,10 @@ button:focus {
 
 .block-button {
   display: block;
+}
+
+.control-hidden {
+  display: none;
 }
 
 canvas {

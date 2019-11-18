@@ -12,6 +12,7 @@
     "core-js": "^2.6.5",
     "normalize.css": "^8.0.1",
     "register-service-worker": "^1.6.2",
+    "smoothscroll-polyfill": "^0.4.4",
     "vue": "^2.6.10",
     "vue-router": "^3.0.3",
     "xstate": "^4.6.7"
