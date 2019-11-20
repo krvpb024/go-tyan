@@ -50,44 +50,23 @@ const machine = Machine({
       handakuon,
       yoon,
     },
-    groupName: null,
-    // row and column start from 1 because of aria attribute
-    row: null,
-    column: null,
+    focusGroupName: null,
+    focusRow: null,
+    focusColumn: null,
+    activeGroupName: null,
+    activeRow: null,
+    activeColumn: null,
   },
   states: {
-    table: {
+    displayPanel: {
       type: 'parallel',
-      on: {
-        UPDATE_CURSOR: [
-          {
-            cond: 'isNotMove',
-            actions: 'clearCursor',
-            target: 'drawingBoard.hide',
-          },
-          {
-            actions: 'updateCursor',
-            target: 'drawingBoard.show',
-          },
-        ],
-        CLEAR_CURSOR: {
-          actions: 'clearCursor',
-          target: 'drawingBoard.hide',
-        },
-        CURSOR_TO_PREVIOUS: {
-          actions: 'cursorToPrevious',
-        },
-        CURSOR_TO_NEXT: {
-          actions: 'cursorToNext',
-        },
-      },
       states: {
         hiragana: {
           initial: 'show',
           on: {
             HIRAGANA_TOGGLE_DISPLAY: [
               {
-                cond: 'isShow',
+                cond: 'toggleOn',
                 target: '.show',
               },
               {
@@ -115,7 +94,7 @@ const machine = Machine({
           on: {
             KATAKANA_TOGGLE_DISPLAY: [
               {
-                cond: 'isShow',
+                cond: 'toggleOn',
                 target: '.show',
               },
               {
@@ -140,6 +119,75 @@ const machine = Machine({
         },
       },
     },
+    table: {
+      type: 'parallel',
+      states: {
+        cellFocus: {
+          initial: 'blur',
+          on: {
+            UPDATE_FOCUS_CURSOR: {
+              actions: 'updateFocusCursor',
+              target: '.focus',
+            },
+            BLUR_FOCUS: '.blur',
+          },
+          states: {
+            blur: {
+              entry: 'clearFocusCursor',
+            },
+            focus: {
+              on: {
+                FOCUS_COUSOR_UP: {
+                  actions: 'focusCursorUp',
+                },
+                FOCUS_COUSOR_DOWN: {
+                  actions: 'focusCursorDown',
+                },
+                FOCUS_COUSOR_RIGHT: {
+                  actions: 'focusCursorRight',
+                },
+                FOCUS_COUSOR_LEFT: {
+                  actions: 'focusCursorLeft',
+                },
+              },
+            },
+          },
+        },
+        cellActive: {
+          initial: 'idle',
+          on: {
+            UPDATE_ACTIVE_CURSOR: [
+              {
+                cond: 'isNotChange',
+                target: ['.idle', '#table.drawingBoard.hide'],
+              },
+              {
+                actions: 'updateActiveCursor',
+                target: ['.active', '#table.drawingBoard.show'],
+              },
+            ],
+            CLEAR_ACTIVE_CURSOR: {
+              target: ['.idle', '#table.drawingBoard.hide', '.idle'],
+            },
+          },
+          states: {
+            idle: {
+              entry: 'clearActiveCursor',
+            },
+            active: {
+              on: {
+                ACTIVE_CURSOR_TO_PREVIOUS: {
+                  actions: 'activeCursorToPrevious',
+                },
+                ACTIVE_CURSOR_TO_NEXT: {
+                  actions: 'activeCursorToNext',
+                },
+              },
+            },
+          },
+        },
+      },
+    },
     drawingBoard: {
       initial: 'hide',
       states: {
@@ -150,90 +198,158 @@ const machine = Machine({
   },
 }, {
   guards: {
-    isShow (context, { data }) {
+    toggleOn (context, { data }) {
       return data
     },
-    isNotMove (context, {
+    isNotChange (context, {
       data: {
-        groupName,
-        row,
-        column,
+        activeGroupName,
+        activeRow,
+        activeColumn,
       } = {},
     }) {
-      return context.groupName == groupName &&
-      context.row == row &&
-      context.column == column
+      return context.activeGroupName == activeGroupName &&
+      context.activeRow == activeRow &&
+      context.activeColumn == activeColumn
     },
   },
   actions: {
-    clearCursor: assign({
-      groupName: null,
-      row: null,
-      column: null,
+    updateFocusCursor: assign(function mutateFocusCursor (
+      context, {
+        data: {
+          focusGroupName, focusRow, focusColumn,
+        },
+      }
+    ) {
+      return {
+        focusGroupName, focusRow, focusColumn,
+      }
     }),
-    updateCursor: assign(function mutateCursorContext (context, {
-      data: {
-        groupName,
-        row,
-        column,
+    clearFocusCursor: assign({
+      focusGroupName: null,
+      focusRow: null,
+      focusColumn: null,
+    }),
+    focusCursorUp: assign({
+      focusRow ({ gojuon, focusGroupName, focusRow }) {
+        const previousRow = focusRow - 1
+        return ((gojuon || {})[focusGroupName] || {})[previousRow]
+          ? previousRow
+          : focusRow
       },
-    }) {
-      return {
-        groupName,
-        row,
-        column,
-      }
     }),
-    cursorToPrevious: assign(function mutateCursorToPrevious ({
-      gojuon,
-      groupName,
-      row,
-      column,
-    }) {
-      // beware of context row and column start from 1 when look up in gojuon array
-      const target = gojuon[groupName][row - 1][column - 2]
-      const previousRow = gojuon[groupName][row - 2]
+    focusCursorDown: assign({
+      focusRow ({ gojuon, focusGroupName, focusRow }) {
+        const NextRow = focusRow + 1
+        return ((gojuon || {})[focusGroupName] || {})[NextRow]
+          ? NextRow
+          : focusRow
+      },
+    }),
+    focusCursorRight: assign(
+      function mutateCursorFocusRight ({ gojuon, focusGroupName, focusRow, focusColumn }) {
+        const nextColumnIndex = focusColumn + 1
+        const targetColumn = (((gojuon || {})[focusGroupName] || {})[focusRow] || {})[nextColumnIndex]
+        const nextRowIndex = focusRow + 1
+        const nextRow = ((gojuon || {})[focusGroupName] || {})[nextRowIndex]
 
-      if (target) {
-        return {
-          column: column - 1,
+        if (!targetColumn && nextRow) {
+          return {
+            focusRow: nextRowIndex,
+            focusColumn: 0,
+          }
+        } else if (!targetColumn && !nextRow) {
+          return {
+            focusColumn,
+          }
         }
-      } else if (previousRow) {
         return {
-          row: row - 1,
-          column: previousRow.length,
+          focusColumn: nextColumnIndex,
         }
-      }
-      return {
-        row: 1,
-        column: 1,
-      }
-    }),
-    cursorToNext: assign(function mutateCursorToNext ({
-      gojuon,
-      groupName,
-      row,
-      column,
-    }) {
-      // beware of context row and column start from 1 when look up in gojuon array
-      const target = gojuon[groupName][row - 1][column]
-      const nextRow = gojuon[groupName][row]
+      },
+    ),
+    focusCursorLeft: assign(
+      function mutateCursorFocusLeft ({ gojuon, focusGroupName, focusRow, focusColumn }) {
+        const previousColumnIndex = focusColumn - 1
+        const targetColumn = (((gojuon || {})[focusGroupName] || {})[focusRow] || {})[previousColumnIndex]
+        const previousRowIndex = focusRow - 1
+        const previousRow = ((gojuon || {})[focusGroupName] || {})[previousRowIndex]
 
-      if (target) {
-        return {
-          column: column + 1,
+        if (!targetColumn && previousRow) {
+          return {
+            focusRow: previousRowIndex,
+            focusColumn: previousRow.length - 1,
+          }
+        } else if (!targetColumn && !previousRow) {
+          return {
+            focusColumn: focusColumn,
+          }
         }
-      } else if (nextRow) {
         return {
-          row: row + 1,
-          column: 1,
+          focusColumn: previousColumnIndex,
         }
       }
+    ),
+    updateActiveCursor: assign(function mutateActiveCursor (
+      context, {
+        data: {
+          activeGroupName, activeRow, activeColumn,
+        },
+      }
+    ) {
       return {
-        row: gojuon[groupName].length,
-        column: gojuon[groupName][row - 1].length,
+        activeGroupName, activeRow, activeColumn,
       }
     }),
+    clearActiveCursor: assign({
+      activeGroupName: null,
+      activeRow: null,
+      activeColumn: null,
+    }),
+    activeCursorToPrevious: assign(
+      function mutateCursorActivePrevious ({ gojuon, activeGroupName, activeRow, activeColumn }) {
+        const previousColumnIndex = activeColumn - 1
+        const targetColumn = (((gojuon || {})[activeGroupName] || {})[activeRow] || {})[previousColumnIndex]
+        const previousRowIndex = activeRow - 1
+        const previousRow = ((gojuon || {})[activeGroupName] || {})[previousRowIndex]
+
+        if (!targetColumn && previousRow) {
+          return {
+            activeRow: previousRowIndex,
+            activeColumn: previousRow.length - 1,
+          }
+        } else if (!targetColumn && !previousRow) {
+          return {
+            activeColumn: activeColumn,
+          }
+        }
+        return {
+          activeColumn: previousColumnIndex,
+        }
+      }
+    ),
+    activeCursorToNext: assign(
+      function mutateCursorActiveNext ({ gojuon, activeGroupName, activeRow, activeColumn }) {
+        const nextColumnIndex = activeColumn + 1
+        const targetColumn = (((gojuon || {})[activeGroupName] || {})[activeRow] || {})[nextColumnIndex]
+        const nextRowIndex = activeRow + 1
+        const nextRow = ((gojuon || {})[activeGroupName] || {})[nextRowIndex]
+
+        if (!targetColumn && nextRow) {
+          return {
+            activeRow: nextRowIndex,
+            activeColumn: 0,
+          }
+        } else if (!targetColumn && !nextRow) {
+          return {
+            activeColumn,
+          }
+        }
+        return {
+          activeColumn: nextColumnIndex,
+        }
+      },
+    ),
   },
 })
 

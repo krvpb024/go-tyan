@@ -2,7 +2,7 @@
   <div ref="modal" class="modal">
     <slot name="title"></slot>
 
-    <button class="block-button" @click="closeDrawingBoard" ref="autoFocusButton">
+    <button class="block-button" @click="service.send('CLEAR_ACTIVE_CURSOR')" ref="autoFoucusButton">
       關閉
     </button>
 
@@ -11,26 +11,26 @@
     </button>
 
     <div>
-      <button @click="cursorToPrevious" aria-label="往上一個儲存格">
+      <button @click="service.send('ACTIVE_CURSOR_TO_PREVIOUS')" aria-label="往上一個儲存格">
         ←
       </button>
-      <button @click="cursorToNext" aria-label="往下一個儲存格">
+      <button @click="service.send('ACTIVE_CURSOR_TO_NEXT')" aria-label="往下一個儲存格">
         →
       </button>
     </div>
 
     <button
-      id="hiragana" class="block-button" :class="{ 'control-hidden': hiraganaDisplay }"
-      @mousedown="peek(true, $event)" @touchstart="peek(true, $event)" @keydown="peek(true, $event)"
-      @mouseup="peek(false, $event)" @touchend="peek(false, $event)" @keyup="peek(false, $event)"
+      class="block-button" :class="{ 'control-hidden': current.matches('displayPanel.hiragana.show') }"
+      @mousedown="service.send('PEEK_HIRAGANA')" @touchstart="service.send('PEEK_HIRAGANA')" @keydown.space="service.send('PEEK_HIRAGANA')"
+      @mouseup="service.send('COVER_HIRAGANA')" @touchend="service.send('COVER_HIRAGANA')" @keyup.space="service.send('COVER_HIRAGANA')"
     >
       偷看平假名
     </button>
 
     <button
-      id="katakana" class="block-button" :class="{ 'control-hidden': katakanaDisplay }"
-      @mousedown="peek(true, $event)" @touchstart="peek(true, $event)" @keydown="peek(true, $event)"
-      @mouseup="peek(false, $event)" @touchend="peek(false, $event)" @keyup="peek(false, $event)"
+      class="block-button" :class="{ 'control-hidden': current.matches('displayPanel.katakana.show') }"
+      @mousedown="service.send('PEEK_KATAKANA')" @touchstart="service.send('PEEK_KATAKANA')" @keydown.space="service.send('PEEK_KATAKANA')"
+      @mouseup="service.send('COVER_KATAKANA')" @touchend="service.send('COVER_KATAKANA')" @keyup.space="service.send('COVER_KATAKANA')"
     >
       偷看片假名
     </button>
@@ -46,19 +46,19 @@
 </template>
 
 <script>
-import { ref, onMounted, onUpdated } from '@vue/composition-api'
+import { ref, watch, onMounted, onUpdated } from '@vue/composition-api'
 import { useModalNavigation } from '@/utils/useModalNavigation.js'
 
 export default {
   name: 'tableDrawingBoard',
   props: {
-    hiraganaDisplay: {
-      type: Boolean,
-      default: true,
+    service: {
+      type: Object,
+      required: true,
     },
-    katakanaDisplay: {
-      type: Boolean,
-      default: true,
+    current: {
+      type: Object,
+      required: true,
     },
     width: {
       type: Number,
@@ -68,23 +68,22 @@ export default {
       type: Number,
       default: 200,
     },
-    groupName: {
+    activeGroupName: {
       type: String,
       default: null,
     },
-    row: {
+    activeRow: {
       type: Number,
       default: null,
     },
-    column: {
+    activeColumn: {
       type: Number,
       default: null,
     },
   },
   setup (props, context) {
-    const autoFocusButton = ref(null)
+    const autoFoucusButton = ref(null)
     const modal = ref(null)
-    const clearNavigation = ref(null)
 
     const canvas = ref(null)
     const ctx = ref(null)
@@ -94,26 +93,41 @@ export default {
     const canDraw = ref(false)
     const keypressed = ref(false)
 
-    onMounted(function tableDrawingBoardOnMounted () {
-      const modalButtons = modal.value.querySelectorAll('button:not(.control-hidden)')
-      const { removeListener } = useModalNavigation(modalButtons)
-      clearNavigation.value = removeListener
+    const modalButtons = ref(null)
 
+    useModalNavigation(modalButtons, props.current)
+
+    watch([
+      // watch current object prop will cause watcher trigger twice, so use the primitive prop value
+      () => props.activeGroupName,
+      () => props.activeRow,
+      () => props.activeColumn,
+    ], function activeCursorWatcher (
+      [groupName, row, column] = [],
+      [previousGroupName, previousRow, previousColumn] = []
+    ) {
+      if (
+        props.current.matches('drawingBoard.show') &&
+        props.current.history.matches('drawingBoard.hide')
+      ) {
+        autoFoucusButton.value && autoFoucusButton.value.focus()
+      }
+    })
+
+    onMounted(function tableDrawingBoardOnMounted () {
+      modalButtons.value = modal.value.querySelectorAll('button:not(.control-hidden)')
       ctx.value = canvas.value.getContext('2d')
       ctx.value.lineWidth = 15
       ctx.value.lineJoin = 'round'
       ctx.value.lineCap = 'round'
     })
 
-    onUpdated(function tableDrawingBoardOnUpdated () {
-      clearNavigation.value()
-
-      const modalButtons = modal.value.querySelectorAll('button:not(.control-hidden)')
-      useModalNavigation(modalButtons)
+    onUpdated(function tableDrawingBoardOUpdate () {
+      modalButtons.value = modal.value.querySelectorAll('button:not(.control-hidden)')
     })
 
     return {
-      autoFocusButton,
+      autoFoucusButton,
       modal,
       canvas,
       ctx,
@@ -125,10 +139,6 @@ export default {
       drawLine,
       stopDrawing,
       clearCavnas,
-      peek,
-      closeDrawingBoard,
-      cursorToPrevious,
-      cursorToNext,
     }
 
     function startDrawing ({ clientX, clientY, target }) {
@@ -164,45 +174,6 @@ export default {
       const x = clientX - left
       const y = clientY - top
       return [x, y]
-    }
-
-    function peek (isPeek, { type: DOMEventType, code, currentTarget }) {
-      if (
-        ['mousedown', 'touchstart', 'mouseup', 'touchend'].includes(DOMEventType) ||
-      (['keydown', 'keyup'].includes(DOMEventType) && code == 'Space')
-      ) {
-        if (DOMEventType == 'keydown' && keypressed.value == true) return
-
-        switch (DOMEventType) {
-          case 'keydown':
-            keypressed.value = true
-            break
-          case 'keyup':
-            keypressed.value = false
-            break
-          default:
-        }
-
-        context.emit(
-          'peek',
-          `${(isPeek ? 'peek' : 'cover').toUpperCase()}_${currentTarget.id.toUpperCase()}`
-        )
-      }
-    }
-
-    function closeDrawingBoard (host, event) {
-      clearCavnas()
-      context.emit('closeboard')
-    }
-
-    function cursorToPrevious (host) {
-      clearCavnas()
-      context.emit('cursortoprevious')
-    }
-
-    function cursorToNext (host) {
-      clearCavnas()
-      context.emit('cursortonext')
     }
   },
 }

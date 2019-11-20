@@ -2,9 +2,7 @@
   <main>
     <section class="table-view">
       <table-display-control
-        ref="tableDisplayControl"
-        :hiraganaDisplay="hiraganaDisplay" :katakanaDisplay="katakanaDisplay"
-        @toggleHiragana="toggleHiragana" @toggleKatakana="toggleKatakana"
+        ref="tableDisplayControl" :service="service" :current="current"
       ></table-display-control>
 
       <h1 class="table__h1">五十音表格</h1>
@@ -40,18 +38,36 @@
             >
               <button
                 :tabindex="columnIndex == 0 && rowIndex == 0 ? '0' : '-1'"
+                :id="`${groupName}-${rowIndex}-${columnIndex}`"
                 class="table-button" :class="{'empty-button': gojuon == 'empty'}"
                 :aria-pressed="isCursorPosition(groupName, rowIndex, columnIndex) ? 'true' : false"
-                @keydown="setFocusToTargetButton" @click="updateCursor"
+                @keydown.prevent.up="service.send('FOCUS_COUSOR_UP')" @keydown.prevent.down="service.send('FOCUS_COUSOR_DOWN')"
+                @keydown.prevent.right="service.send('FOCUS_COUSOR_RIGHT')" @keydown.prevent.left="service.send('FOCUS_COUSOR_LEFT')"
+                @focus="service.send({
+                  type: 'UPDATE_FOCUS_CURSOR',
+                  data: {
+                    focusGroupName: groupName,
+                    focusRow: rowIndex,
+                    focusColumn: columnIndex,
+                  }}
+                )"
+                @click="service.send({
+                  type: 'UPDATE_ACTIVE_CURSOR',
+                  data: {
+                    activeGroupName: groupName,
+                    activeRow: rowIndex,
+                    activeColumn: columnIndex,
+                  }
+                })"
               >
                 <template v-if="gojuon != 'empty'">
-                  <span  lang="ja-JP" v-show="checkDisplayAndPeek('hiragana', groupName, rowIndex, columnIndex)">
+                  <span lang="ja-JP" v-show="checkDisplayAndPeek('hiragana', groupName, rowIndex, columnIndex)">
                     {{ gojuon[0] }}
                   </span>
-                  <span  lang="ja-JP" v-show="checkDisplayAndPeek('katakana', groupName, rowIndex, columnIndex)">
+                  <span lang="ja-JP" v-show="checkDisplayAndPeek('katakana', groupName, rowIndex, columnIndex)">
                     {{ gojuon[1] }}
                   </span>
-                  <span  lang="ja-JP">{{ gojuon[2] }}</span>
+                  <span lang="ja-JP">{{ gojuon[2] }}</span>
                 </template>
                 <template v-else>
                   無內容
@@ -63,17 +79,18 @@
       </section>
 
       <table-drawing-board
-        v-if="current.matches('drawingBoard.show')"
+        v-show="current.matches('drawingBoard.show')"
         role="dialog" aria-labelledby="table-drawing-board-title" aria-modal="true"
-        :hiraganaDisplay="hiraganaDisplay" :katakanaDisplay="katakanaDisplay"
-        :groupName="current.context.groupName" :row="current.context.row" :column="current.context.column"
-        @peek="peek" @closeboard="closeBoard"
-        @cursortoprevious="cursorToPrevious" @cursortonext="cursorToNext"
+        :service="service" :current="current"
+        :activeGroupName="current.context.activeGroupName"
+        :activeRow="current.context.activeRow"
+        :activeColumn="current.context.activeColumn"
       >
         <template #title>
           <h1 id="table-drawing-board-title">手寫板</h1>
         </template>
       </table-drawing-board>
+
     </section>
   </main>
 </template>
@@ -82,13 +99,13 @@
 import { ref, computed, watch } from '@vue/composition-api'
 import { machine } from '@/states/tableState.js'
 import { useMachine } from '@/utils/useMachine.js'
-import smoothscroll from 'smoothscroll-polyfill'
-smoothscroll.polyfill()
+import tableDisplayControl from '@/components/tableDisplayControl.vue'
+import tableDrawingBoard from '@/components/tableDrawingBoard.vue'
 
 export default {
   components: {
-    tableDisplayControl: () => import(/* webpackChunkName: "tableDisplayControl" */ '@/components/tableDisplayControl.vue'),
-    tableDrawingBoard: () => import(/* webpackChunkName: "tableDrawingBoard" */ '@/components/tableDrawingBoard.vue'),
+    tableDisplayControl,
+    tableDrawingBoard,
   },
   setup () {
     const { service, current } = useMachine(machine)
@@ -97,44 +114,63 @@ export default {
     const gojuonTuples = computed(function getGojuonTuples () {
       return Object.entries(current.value.context.gojuon)
     })
-    const hiraganaDisplay = computed(function getHiraganaDisplay () {
-      return current.value.matches('table.hiragana.show')
-    })
-    const katakanaDisplay = computed(function getKatakanaDisplay () {
-      return current.value.matches('table.katakana.show')
-    })
 
     watch([
-      () => current.value.context.groupName,
-      () => current.value.context.row,
-      () => current.value.context.column,
-    ], function scrollToCursor (params) {
-      const cursorButton = document.querySelector(`#${current.value.context.groupName} tr[aria-rowindex="${current.value.context.row}"] td[aria-colindex="${current.value.context.column}"] button`)
-      if (cursorButton) {
+      () => current.value.context.activeGroupName,
+      () => current.value.context.activeRow,
+      () => current.value.context.activeColumn,
+    ], function scrollToCursor (
+      [groupName, row, column] = [],
+      [previousGroupName, previousRow, previousColumn] = []
+    ) {
+      if (
+        current.value.matches('drawingBoard.show') &&
+        // don't know why multiple source watcher will trigger twice
+        // first time will give same value, add this condition to ignore
+        (groupName != previousGroupName ||
+        row != previousRow ||
+        column != previousColumn)
+      ) {
+        const activeButton = document.getElementById(`${groupName}-${row}-${column}`)
         const tableDisplayControlHeight = tableDisplayControl.value.$el.offsetHeight
-        const top = window.scrollY + cursorButton.getBoundingClientRect().top - tableDisplayControlHeight - 20
+        const top = window.scrollY + activeButton.getBoundingClientRect().top - tableDisplayControlHeight - 20
         window.scrollTo({ top, behavior: 'smooth' })
+      } else if (
+        current.value.matches('drawingBoard.hide')
+      ) {
+        const focusButton = document.getElementById(`${previousGroupName}-${previousRow}-${previousColumn}`)
+        focusButton && focusButton.focus()
       }
     })
 
+    watch([
+      () => current.value.context.focusGroupName,
+      () => current.value.context.focusRow,
+      () => current.value.context.focusColumn,
+    ], function setFocusToButton (
+      [groupName, row, column] = [],
+      [previousGroupName, previousRow, previousColumn] = []
+    ) {
+      if (
+        // don't know why multiple source watcher will trigger twice
+        // first time will give same value, add this condition to ignore
+        groupName != previousGroupName ||
+        row != previousRow ||
+        column != previousColumn
+      ) {
+        const target = document.getElementById(`${groupName}-${row}-${column}`)
+        target && target.focus()
+      }
+    }, { lazy: true })
+
     return {
       tableDisplayControl,
+      service,
       current,
       gojuonTuples,
-      hiraganaDisplay,
-      katakanaDisplay,
       // methods
       generateTitle,
       isCursorPosition,
-      toggleDislayHandler,
-      setFocusToTargetButton,
-      updateCursor,
-      toggleHiragana,
-      toggleKatakana,
-      peek,
-      closeBoard,
-      cursorToPrevious,
-      cursorToNext,
       checkDisplayAndPeek,
     }
 
@@ -154,108 +190,17 @@ export default {
     }
 
     function isCursorPosition (groupName, rowIndex, columnIndex) {
-      return current.value.context.groupName == groupName &&
-        current.value.context.row == rowIndex + 1 &&
-        current.value.context.column == columnIndex + 1
-    }
-
-    function toggleDislayHandler (event) {
-      const { type, checked } = event.detail
-      service.value.send({ type, data: checked })
-    }
-
-    function setFocusToTargetButton (event) {
-      if (['ArrowDown', 'ArrowUp', 'ArrowLeft', 'ArrowRight'].includes(event.code)) {
-        event.preventDefault()
-
-        var {
-          currentColumnNumber,
-          currentRowNumber,
-          currentTableName,
-        } = getButtonInformation(event.currentTarget)
-
-        const target = findTargetBy(event.code)
-        if (target) target.focus()
-      }
-
-      function findTargetBy (eventCode) {
-        switch (eventCode) {
-          case 'ArrowUp':
-            return document.querySelector(`#${currentTableName} tr[aria-rowindex="${currentRowNumber - 1}"] td[aria-colindex="${currentColumnNumber}"] button`)
-          case 'ArrowDown':
-            return document.querySelector(`#${currentTableName} tr[aria-rowindex="${currentRowNumber + 1}"] td[aria-colindex="${currentColumnNumber}"] button`)
-          case 'ArrowLeft':
-            return document.querySelector(`#${currentTableName} tr[aria-rowindex="${currentRowNumber}"] td[aria-colindex="${currentColumnNumber - 1}"] button`) ||
-              document.querySelector(`#${currentTableName} tr[aria-rowindex="${currentRowNumber - 1}"] td[aria-colindex="${(current.value.context.gojuon[currentTableName][currentRowNumber - 2] || {}).length}"] button`)
-          case 'ArrowRight':
-            return document.querySelector(`#${currentTableName} tr[aria-rowindex="${currentRowNumber}"] td[aria-colindex="${currentColumnNumber + 1}"] button`) ||
-              document.querySelector(`#${currentTableName} tr[aria-rowindex="${currentRowNumber + 1}"] td[aria-colindex="1"] button`)
-          default:
-        }
-      }
-    }
-
-    function updateCursor () {
-      const {
-        currentColumnNumber: column,
-        currentRowNumber: row,
-        currentTableName: groupName,
-      } = getButtonInformation(event.currentTarget)
-
-      service.value.send({
-        type: 'UPDATE_CURSOR',
-        data: {
-          groupName,
-          row,
-          column,
-        },
-      })
-    }
-
-    function getButtonInformation (button) {
-      const currentTd = button.parentElement
-      const currentColumnNumber = Number(currentTd.getAttribute('aria-colindex'))
-
-      const currentTr = currentTd.parentElement
-      const currentRowNumber = Number(currentTr.getAttribute('aria-rowindex'))
-
-      const currentTable = currentTr.parentElement
-      const currentTableName = currentTable.id
-
-      return { currentColumnNumber, currentRowNumber, currentTableName }
-    }
-
-    function toggleHiragana (checked) {
-      service.value.send({ type: 'HIRAGANA_TOGGLE_DISPLAY', data: checked })
-    }
-    function toggleKatakana (checked) {
-      service.value.send({ type: 'KATAKANA_TOGGLE_DISPLAY', data: checked })
-    }
-
-    function peek (type) {
-      service.value.send({ type })
-    }
-
-    function closeBoard () {
-      const lastCursorButton = document.querySelector(`#${current.value.context.groupName} tr[aria-rowindex="${current.value.context.row}"] td[aria-colindex="${current.value.context.column}"] button`)
-      lastCursorButton && lastCursorButton.focus()
-      service.value.send({ type: 'CLEAR_CURSOR' })
-    }
-
-    function cursorToPrevious () {
-      service.value.send({ type: 'CURSOR_TO_PREVIOUS' })
-    }
-
-    function cursorToNext () {
-      service.value.send({ type: 'CURSOR_TO_NEXT' })
+      return current.value.context.activeGroupName == groupName &&
+        current.value.context.activeRow == rowIndex &&
+        current.value.context.activeColumn == columnIndex
     }
 
     function checkDisplayAndPeek (hiraganaOrKatakana, groupName, rowIndex, columnIndex) {
       const targetDisplay = hiraganaOrKatakana == 'hiragana'
-        ? hiraganaDisplay.value
-        : katakanaDisplay.value
+        ? current.value.matches('displayPanel.hiragana.show')
+        : current.value.matches('displayPanel.katakana.show')
 
-      if (!targetDisplay && isCursorPosition(groupName, rowIndex, columnIndex) && current.value.matches(`table.${hiraganaOrKatakana}.hide.peek`)) return true
+      if (!targetDisplay && isCursorPosition(groupName, rowIndex, columnIndex) && current.value.matches(`displayPanel.${hiraganaOrKatakana}.hide.peek`)) return true
       else if (!targetDisplay) return false
       return true
     }

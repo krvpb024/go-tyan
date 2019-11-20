@@ -3,16 +3,16 @@
     <div class="field">
       <input
         type="checkbox" id="hiragana"
-        @input="$emit('toggleHiragana', $event.target.checked)"
-        :checked="hiraganaDisplay"
+        @input="service.send({type: 'HIRAGANA_TOGGLE_DISPLAY', data: $event.target.checked})"
+        :checked="current.matches('displayPanel.hiragana.show')"
       >
       <label for="hiragana">hiragana</label>
     </div>
     <div class="field">
       <input
         type="checkbox" id="katakana"
-        @input="$emit('toggleKatakana', $event.target.checked)"
-        :checked="katakanaDisplay"
+        @input="service.send({type: 'KATAKANA_TOGGLE_DISPLAY', data: $event.target.checked})"
+        :checked="current.matches('displayPanel.katakana.show')"
       >
       <label for="katakana">katakana</label>
     </div>
@@ -22,13 +22,13 @@
 <script>
 export default {
   props: {
-    hiraganaDisplay: {
-      type: Boolean,
-      default: true,
+    service: {
+      type: Object,
+      required: true,
     },
-    katakanaDisplay: {
-      type: Boolean,
-      default: true,
+    current: {
+      type: Object,
+      required: true,
     },
   },
 }

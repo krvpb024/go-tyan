@@ -8,6 +8,7 @@ export function useMachine (machine) {
   service
     .value
     .onTransition(function updateState (state) {
+      // console.log(JSON.stringify(state.event, null, 2))
       current.value = state
     })
     .start()
