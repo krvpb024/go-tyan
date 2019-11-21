@@ -1,11 +1,14 @@
 import { Machine, assign } from 'xstate'
 import { gojuon } from '@/states/gojuon.js'
 
-const mutateCursorFocusLeft = mutateCursorPrevious('focus')
-const mutateCursorFocusRight = mutateCursorNext('focus')
+const focusRowMoveUp = getTargetRowByAdd(-1)
+const focusRowMoveDown = getTargetRowByAdd(1)
 
-const mutateCursorActivePrevious = mutateCursorPrevious('active')
-const mutateCursorActiveNext = mutateCursorNext('active')
+const focusColumnMoveLeft = mutateCursorPrevious('focus')
+const focusColumnMoveRight = mutateCursorNext('focus')
+
+const activeColumnMovePrevious = mutateCursorPrevious('active')
+const activeColumnMoveNext = mutateCursorNext('active')
 
 const machine = Machine({
   id: 'table',
@@ -161,7 +164,7 @@ const machine = Machine({
 }, {
   guards: {
     toggleOn (context, { data }) {
-      return data
+      return Boolean(data)
     },
     isNotChange (context, {
       data: {
@@ -176,13 +179,11 @@ const machine = Machine({
     },
   },
   actions: {
-    updateFocusCursor: assign(function mutateFocusCursor (
-      context, {
-        data: {
-          focusGroupName, focusRow, focusColumn,
-        },
-      }
-    ) {
+    updateFocusCursor: assign(function mutateFocusCursor (context, {
+      data: {
+        focusGroupName, focusRow, focusColumn,
+      },
+    }) {
       return {
         focusGroupName, focusRow, focusColumn,
       }
@@ -192,31 +193,15 @@ const machine = Machine({
       focusRow: null,
       focusColumn: null,
     }),
-    focusCursorUp: assign({
-      focusRow ({ gojuon, focusGroupName, focusRow }) {
-        const previousRow = focusRow - 1
-        return ((gojuon || {})[focusGroupName] || {})[previousRow]
-          ? previousRow
-          : focusRow
+    focusCursorUp: assign(focusRowMoveUp),
+    focusCursorDown: assign(focusRowMoveDown),
+    focusCursorRight: assign(focusColumnMoveRight),
+    focusCursorLeft: assign(focusColumnMoveLeft),
+    updateActiveCursor: assign(function mutateActiveCursor (context, {
+      data: {
+        activeGroupName, activeRow, activeColumn,
       },
-    }),
-    focusCursorDown: assign({
-      focusRow ({ gojuon, focusGroupName, focusRow }) {
-        const NextRow = focusRow + 1
-        return ((gojuon || {})[focusGroupName] || {})[NextRow]
-          ? NextRow
-          : focusRow
-      },
-    }),
-    focusCursorRight: assign(mutateCursorFocusRight),
-    focusCursorLeft: assign(mutateCursorFocusLeft),
-    updateActiveCursor: assign(function mutateActiveCursor (
-      context, {
-        data: {
-          activeGroupName, activeRow, activeColumn,
-        },
-      }
-    ) {
+    }) {
       return {
         activeGroupName, activeRow, activeColumn,
       }
@@ -226,13 +211,25 @@ const machine = Machine({
       activeRow: null,
       activeColumn: null,
     }),
-    activeCursorToPrevious: assign(mutateCursorActivePrevious),
-    activeCursorToNext: assign(mutateCursorActiveNext),
+    activeCursorToPrevious: assign(activeColumnMovePrevious),
+    activeCursorToNext: assign(activeColumnMoveNext),
   },
 })
 
 export {
   machine,
+}
+
+function getTargetRowByAdd (addBy) {
+  return function targetRowExistOrIdentity ({ gojuon, focusGroupName, focusRow }) {
+    const previousRow = focusRow + addBy
+    const result = ((gojuon || {})[focusGroupName] || {})[previousRow]
+      ? previousRow
+      : focusRow
+    return {
+      focusRow: result,
+    }
+  }
 }
 
 function mutateCursorPrevious (type) {
