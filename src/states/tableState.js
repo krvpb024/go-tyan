@@ -1,6 +1,12 @@
 import { Machine, assign } from 'xstate'
 import { gojuon } from '@/states/gojuon.js'
 
+const mutateCursorFocusLeft = mutateCursorPrevious('focus')
+const mutateCursorFocusRight = mutateCursorNext('focus')
+
+const mutateCursorActivePrevious = mutateCursorPrevious('active')
+const mutateCursorActiveNext = mutateCursorNext('active')
+
 const machine = Machine({
   id: 'table',
   type: 'parallel',
@@ -202,50 +208,8 @@ const machine = Machine({
           : focusRow
       },
     }),
-    focusCursorRight: assign(
-      function mutateCursorFocusRight ({ gojuon, focusGroupName, focusRow, focusColumn }) {
-        const nextColumnIndex = focusColumn + 1
-        const targetColumn = (((gojuon || {})[focusGroupName] || {})[focusRow] || {})[nextColumnIndex]
-        const nextRowIndex = focusRow + 1
-        const nextRow = ((gojuon || {})[focusGroupName] || {})[nextRowIndex]
-
-        if (!targetColumn && nextRow) {
-          return {
-            focusRow: nextRowIndex,
-            focusColumn: 0,
-          }
-        } else if (!targetColumn && !nextRow) {
-          return {
-            focusColumn,
-          }
-        }
-        return {
-          focusColumn: nextColumnIndex,
-        }
-      },
-    ),
-    focusCursorLeft: assign(
-      function mutateCursorFocusLeft ({ gojuon, focusGroupName, focusRow, focusColumn }) {
-        const previousColumnIndex = focusColumn - 1
-        const targetColumn = (((gojuon || {})[focusGroupName] || {})[focusRow] || {})[previousColumnIndex]
-        const previousRowIndex = focusRow - 1
-        const previousRow = ((gojuon || {})[focusGroupName] || {})[previousRowIndex]
-
-        if (!targetColumn && previousRow) {
-          return {
-            focusRow: previousRowIndex,
-            focusColumn: previousRow.length - 1,
-          }
-        } else if (!targetColumn && !previousRow) {
-          return {
-            focusColumn: focusColumn,
-          }
-        }
-        return {
-          focusColumn: previousColumnIndex,
-        }
-      }
-    ),
+    focusCursorRight: assign(mutateCursorFocusRight),
+    focusCursorLeft: assign(mutateCursorFocusLeft),
     updateActiveCursor: assign(function mutateActiveCursor (
       context, {
         data: {
@@ -262,53 +226,67 @@ const machine = Machine({
       activeRow: null,
       activeColumn: null,
     }),
-    activeCursorToPrevious: assign(
-      function mutateCursorActivePrevious ({ gojuon, activeGroupName, activeRow, activeColumn }) {
-        const previousColumnIndex = activeColumn - 1
-        const targetColumn = (((gojuon || {})[activeGroupName] || {})[activeRow] || {})[previousColumnIndex]
-        const previousRowIndex = activeRow - 1
-        const previousRow = ((gojuon || {})[activeGroupName] || {})[previousRowIndex]
-
-        if (!targetColumn && previousRow) {
-          return {
-            activeRow: previousRowIndex,
-            activeColumn: previousRow.length - 1,
-          }
-        } else if (!targetColumn && !previousRow) {
-          return {
-            activeColumn: activeColumn,
-          }
-        }
-        return {
-          activeColumn: previousColumnIndex,
-        }
-      }
-    ),
-    activeCursorToNext: assign(
-      function mutateCursorActiveNext ({ gojuon, activeGroupName, activeRow, activeColumn }) {
-        const nextColumnIndex = activeColumn + 1
-        const targetColumn = (((gojuon || {})[activeGroupName] || {})[activeRow] || {})[nextColumnIndex]
-        const nextRowIndex = activeRow + 1
-        const nextRow = ((gojuon || {})[activeGroupName] || {})[nextRowIndex]
-
-        if (!targetColumn && nextRow) {
-          return {
-            activeRow: nextRowIndex,
-            activeColumn: 0,
-          }
-        } else if (!targetColumn && !nextRow) {
-          return {
-            activeColumn,
-          }
-        }
-        return {
-          activeColumn: nextColumnIndex,
-        }
-      },
-    ),
+    activeCursorToPrevious: assign(mutateCursorActivePrevious),
+    activeCursorToNext: assign(mutateCursorActiveNext),
   },
 })
 
 export {
   machine,
+}
+
+function mutateCursorPrevious (type) {
+  return function mutateCursorTypePrevious (context) {
+    const { gojuon } = context
+    const groupName = context[`${type}GroupName`]
+    const row = context[`${type}Row`]
+    const column = context[`${type}Column`]
+
+    const previousColumnIndex = column - 1
+    const targetColumn = (((gojuon || {})[groupName] || {})[row] || {})[previousColumnIndex]
+    const previousRowIndex = row - 1
+    const previousRow = ((gojuon || {})[groupName] || {})[previousRowIndex]
+
+    if (!targetColumn && previousRow) {
+      return {
+        [`${type}Row`]: previousRowIndex,
+        [`${type}Column`]: previousRow.length - 1,
+      }
+    } else if (!targetColumn && !previousRow) {
+      return {
+        [`${type}Column`]: column,
+      }
+    }
+    return {
+      [`${type}Column`]: previousColumnIndex,
+    }
+  }
+}
+
+function mutateCursorNext (type) {
+  return function mutateCursorTypeNext (context) {
+    const { gojuon } = context
+    const groupName = context[`${type}GroupName`]
+    const row = context[`${type}Row`]
+    const column = context[`${type}Column`]
+
+    const nextColumnIndex = column + 1
+    const targetColumn = (((gojuon || {})[groupName] || {})[row] || {})[nextColumnIndex]
+    const nextRowIndex = row + 1
+    const nextRow = ((gojuon || {})[groupName] || {})[nextRowIndex]
+
+    if (!targetColumn && nextRow) {
+      return {
+        [`${type}Row`]: nextRowIndex,
+        [`${type}Column`]: 0,
+      }
+    } else if (!targetColumn && !nextRow) {
+      return {
+        [`${type}Column`]: column,
+      }
+    }
+    return {
+      [`${type}Column`]: nextColumnIndex,
+    }
+  }
 }
