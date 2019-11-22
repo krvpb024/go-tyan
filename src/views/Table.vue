@@ -8,7 +8,7 @@
       <h1 class="table__h1">五十音表格</h1>
 
       <section
-        v-for="([groupName, rows]) in gojuonTuples" :key="groupName"
+        v-for="([groupName, rows]) in Object.entries(current.context.gojuon)" :key="groupName"
         role="region" :aria-labelledby="`${groupName}-title`"
       >
         <h2 :id="`${groupName}-title`">{{ generateTitle(groupName) }}</h2>
@@ -96,7 +96,7 @@
 </template>
 
 <script>
-import { ref, computed, watch } from '@vue/composition-api'
+import { ref, watch } from '@vue/composition-api'
 import { machine } from '@/states/tableState.js'
 import { useMachine } from '@/utils/useMachine.js'
 import tableDisplayControl from '@/components/tableDisplayControl.vue'
@@ -111,10 +111,6 @@ export default {
     const { service, current } = useMachine(machine)
     const tableDisplayControl = ref(null)
 
-    const gojuonTuples = computed(function getGojuonTuples () {
-      return Object.entries(current.value.context.gojuon)
-    })
-
     watch([
       () => current.value.context.activeGroupName,
       () => current.value.context.activeRow,
@@ -125,7 +121,7 @@ export default {
     ) {
       if (
         current.value.matches('drawingBoard.show') &&
-        // don't know why multiple source watcher will trigger twice
+        // multiple source wathcer will cause watcher trigger twice
         // first time will give same value, add this condition to ignore
         (groupName != previousGroupName ||
         row != previousRow ||
@@ -152,7 +148,7 @@ export default {
       [previousGroupName, previousRow, previousColumn] = []
     ) {
       if (
-        // don't know why multiple source watcher will trigger twice
+        // multiple source wathcer will cause watcher trigger twice
         // first time will give same value, add this condition to ignore
         groupName != previousGroupName ||
         row != previousRow ||
@@ -167,7 +163,6 @@ export default {
       tableDisplayControl,
       service,
       current,
-      gojuonTuples,
       // methods
       generateTitle,
       isCursorPosition,

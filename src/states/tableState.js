@@ -1,15 +1,6 @@
 import { Machine, assign } from 'xstate'
 import { gojuon } from '@/states/gojuon.js'
 
-const focusRowMoveUp = getTargetRowByAdd(-1)
-const focusRowMoveDown = getTargetRowByAdd(1)
-
-const focusColumnMoveLeft = mutateCursorPrevious('focus')
-const focusColumnMoveRight = mutateCursorNext('focus')
-
-const activeColumnMovePrevious = mutateCursorPrevious('active')
-const activeColumnMoveNext = mutateCursorNext('active')
-
 const machine = Machine({
   id: 'table',
   type: 'parallel',
@@ -193,10 +184,10 @@ const machine = Machine({
       focusRow: null,
       focusColumn: null,
     }),
-    focusCursorUp: assign(focusRowMoveUp),
-    focusCursorDown: assign(focusRowMoveDown),
-    focusCursorRight: assign(focusColumnMoveRight),
-    focusCursorLeft: assign(focusColumnMoveLeft),
+    focusCursorUp: assign(getTargetRowByAdd(-1)),
+    focusCursorDown: assign(getTargetRowByAdd(1)),
+    focusCursorRight: assign(mutateCursorNext('focus')),
+    focusCursorLeft: assign(mutateCursorPrevious('focus')),
     updateActiveCursor: assign(function mutateActiveCursor (context, {
       data: {
         activeGroupName, activeRow, activeColumn,
@@ -211,8 +202,8 @@ const machine = Machine({
       activeRow: null,
       activeColumn: null,
     }),
-    activeCursorToPrevious: assign(activeColumnMovePrevious),
-    activeCursorToNext: assign(activeColumnMoveNext),
+    activeCursorToPrevious: assign(mutateCursorPrevious('active')),
+    activeCursorToNext: assign(mutateCursorNext('active')),
   },
 })
 

@@ -98,7 +98,7 @@ export default {
     useModalNavigation(modalButtons, props.current)
 
     watch([
-      // watch current object prop will cause watcher trigger twice, so use the primitive prop value
+      // multiple source wathcer will cause watcher trigger twice, so use the primitive prop value
       () => props.activeGroupName,
       () => props.activeRow,
       () => props.activeColumn,
