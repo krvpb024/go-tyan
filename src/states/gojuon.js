@@ -38,12 +38,12 @@ const yoon = [
   [['ぴゃ', 'ピャ', 'pya'], 'empty', ['ぴゅ', 'ピュ', 'pyu'], 'empty', ['ぴょ', 'ピョ', 'pyo']],
 ]
 
-const gojuon = [
+const gojuon = {
   seion,
   dakion,
   handakuon,
   yoon,
-]
+}
 
 export {
   gojuon,

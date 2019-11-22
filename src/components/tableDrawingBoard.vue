@@ -2,11 +2,11 @@
   <div ref="modal" class="modal">
     <slot name="title"></slot>
 
-    <button class="block-button" @click="service.send('CLEAR_ACTIVE_CURSOR')" ref="autoFoucusButton">
+    <button class="block-button" @click="service.send('HIDE_DRAWING_BOARD')" ref="autoFoucusButton">
       關閉
     </button>
 
-    <button class="block-button" @click="clearCavnas">
+    <button class="block-button" @click="service.send('CLEAR_CANVAS')">
       清除
     </button>
 
@@ -97,22 +97,24 @@ export default {
 
     useModalNavigation(modalButtons, props.current)
 
-    watch([
-      // multiple source wathcer will cause watcher trigger twice, so use the primitive prop value
-      () => props.activeGroupName,
-      () => props.activeRow,
-      () => props.activeColumn,
-    ], function activeCursorWatcher (
-      [groupName, row, column] = [],
-      [previousGroupName, previousRow, previousColumn] = []
-    ) {
-      if (
-        props.current.matches('drawingBoard.show') &&
-        props.current.history.matches('drawingBoard.hide')
-      ) {
-        autoFoucusButton.value && autoFoucusButton.value.focus()
+    watch(
+      () => props.current.matches('drawingBoard.show.clearCanvas'),
+      function clearCanvas (value) {
+        if (value) {
+          ctx.value.clearRect(0, 0, props.width, props.height)
+          props.service.send('CANVAS_CLREAR_FINISHED')
+        }
       }
-    })
+    )
+
+    watch(
+      () => props.current.matches('drawingBoard.show'),
+      function focusModalFirstButton (value) {
+        if (value) {
+          autoFoucusButton.value && autoFoucusButton.value.focus()
+        }
+      }
+    )
 
     onMounted(function tableDrawingBoardOnMounted () {
       modalButtons.value = modal.value.querySelectorAll('button:not(.control-hidden)')
@@ -138,7 +140,6 @@ export default {
       startDrawing,
       drawLine,
       stopDrawing,
-      clearCavnas,
     }
 
     function startDrawing ({ clientX, clientY, target }) {
@@ -163,10 +164,6 @@ export default {
 
     function stopDrawing () {
       canDraw.value = false
-    }
-
-    function clearCavnas () {
-      ctx.value.clearRect(0, 0, props.width, props.height)
     }
 
     function getMousePosition (clientX, clientY) {

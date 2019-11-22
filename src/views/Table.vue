@@ -111,53 +111,43 @@ export default {
     const { service, current } = useMachine(machine)
     const tableDisplayControl = ref(null)
 
-    watch([
-      () => current.value.context.activeGroupName,
-      () => current.value.context.activeRow,
-      () => current.value.context.activeColumn,
-    ], function scrollToCursor (
-      [groupName, row, column] = [],
-      [previousGroupName, previousRow, previousColumn] = []
-    ) {
-      if (
-        current.value.matches('drawingBoard.show') &&
-        // multiple source wathcer will cause watcher trigger twice
-        // first time will give same value, add this condition to ignore
-        (groupName != previousGroupName ||
-        row != previousRow ||
-        column != previousColumn)
-      ) {
-        const activeButton = document.getElementById(`${groupName}-${row}-${column}`)
-        const tableDisplayControlHeight = tableDisplayControl.value.$el.offsetHeight
-        const top = window.scrollY + activeButton.getBoundingClientRect().top - tableDisplayControlHeight - 20
-        window.scrollTo({ top, behavior: 'smooth' })
-      } else if (
-        current.value.matches('drawingBoard.hide')
-      ) {
-        const focusButton = document.getElementById(`${previousGroupName}-${previousRow}-${previousColumn}`)
-        focusButton && focusButton.focus()
-      }
-    })
+    watch(
+      () => current.value.matches('table.cellFocus.switchFocus'),
+      function switchFocus (value) {
+        if (value) {
+          const { focusGroupName, focusRow, focusColumn } = current.value.context
+          const target = document.getElementById(`${focusGroupName}-${focusRow}-${focusColumn}`)
+          target && target.focus()
 
-    watch([
-      () => current.value.context.focusGroupName,
-      () => current.value.context.focusRow,
-      () => current.value.context.focusColumn,
-    ], function setFocusToButton (
-      [groupName, row, column] = [],
-      [previousGroupName, previousRow, previousColumn] = []
-    ) {
-      if (
-        // multiple source wathcer will cause watcher trigger twice
-        // first time will give same value, add this condition to ignore
-        groupName != previousGroupName ||
-        row != previousRow ||
-        column != previousColumn
-      ) {
-        const target = document.getElementById(`${groupName}-${row}-${column}`)
-        target && target.focus()
+          service.value.send('SWITCH_FOCUS_FINISHED')
+        }
       }
-    }, { lazy: true })
+    )
+
+    watch(
+      () => current.value.matches('table.cellActive.switchActive'),
+      function switchActive (value) {
+        if (value) {
+          try {
+            const { activeGroupName, activeRow, activeColumn } = current.value.context
+            const activeButton = document.getElementById(`${activeGroupName}-${activeRow}-${activeColumn}`)
+
+            if (!tableDisplayControl.value) return
+            const tableDisplayControlHeight = tableDisplayControl.value.$el.offsetHeight
+
+            if (!activeButton) return
+            const top = window.scrollY + activeButton.getBoundingClientRect().top - tableDisplayControlHeight - 20
+            window.scrollTo({ top, behavior: 'smooth' })
+
+            service.value.send('SWITCH_ACTIVE_FINISHED')
+          } catch (err) {
+            console.error(err)
+          } finally {
+            service.value.send('SWITCH_ACTIVE_FINISHED')
+          }
+        }
+      }
+    )
 
     return {
       tableDisplayControl,

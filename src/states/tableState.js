@@ -1,4 +1,4 @@
-import { Machine, assign } from 'xstate'
+import { Machine, assign, send } from 'xstate'
 import { gojuon } from '@/states/gojuon.js'
 
 const machine = Machine({
@@ -79,32 +79,41 @@ const machine = Machine({
       type: 'parallel',
       states: {
         cellFocus: {
-          initial: 'blur',
+          initial: 'focus',
           on: {
             UPDATE_FOCUS_CURSOR: {
               actions: 'updateFocusCursor',
-              target: '.focus',
+              target: '.switchFocus',
             },
-            BLUR_FOCUS: '.blur',
+            FOCUS_CURRENT_ACTIVE_CURSOR: {
+              actions: 'focusCurrentActiveCursor',
+              target: '.switchFocus',
+            },
           },
           states: {
-            blur: {
-              entry: 'clearFocusCursor',
-            },
             focus: {
               on: {
                 FOCUS_COUSOR_UP: {
                   actions: 'focusCursorUp',
+                  target: 'switchFocus',
                 },
                 FOCUS_COUSOR_DOWN: {
                   actions: 'focusCursorDown',
+                  target: 'switchFocus',
                 },
                 FOCUS_COUSOR_RIGHT: {
                   actions: 'focusCursorRight',
+                  target: 'switchFocus',
                 },
                 FOCUS_COUSOR_LEFT: {
                   actions: 'focusCursorLeft',
+                  target: 'switchFocus',
                 },
+              },
+            },
+            switchFocus: {
+              on: {
+                SWITCH_FOCUS_FINISHED: 'focus',
               },
             },
           },
@@ -115,29 +124,35 @@ const machine = Machine({
             UPDATE_ACTIVE_CURSOR: [
               {
                 cond: 'isNotChange',
-                target: ['.idle', '#table.drawingBoard.hide'],
+                target: '.idle',
               },
               {
                 actions: 'updateActiveCursor',
-                target: ['.active', '#table.drawingBoard.show'],
+                target: ['.switchActive', '#table.drawingBoard.show'],
               },
             ],
             CLEAR_ACTIVE_CURSOR: {
-              target: ['.idle', '#table.drawingBoard.hide', '.idle'],
+              actions: 'clearActiveCursor',
+              target: '.switchActive',
             },
           },
           states: {
-            idle: {
-              entry: 'clearActiveCursor',
-            },
+            idle: {},
             active: {
               on: {
                 ACTIVE_CURSOR_TO_PREVIOUS: {
                   actions: 'activeCursorToPrevious',
+                  target: ['#table.drawingBoard.show.clearCanvas', 'switchActive'],
                 },
                 ACTIVE_CURSOR_TO_NEXT: {
                   actions: 'activeCursorToNext',
+                  target: ['#table.drawingBoard.show.clearCanvas', 'switchActive'],
                 },
+              },
+            },
+            switchActive: {
+              on: {
+                SWITCH_ACTIVE_FINISHED: 'active',
               },
             },
           },
@@ -146,9 +161,28 @@ const machine = Machine({
     },
     drawingBoard: {
       initial: 'hide',
+      on: {
+        HIDE_DRAWING_BOARD: '.hide',
+      },
       states: {
-        show: {},
-        hide: {},
+        show: {
+          initial: 'idle',
+          states: {
+            idle: {
+              on: {
+                CLEAR_CANVAS: 'clearCanvas',
+              },
+            },
+            clearCanvas: {
+              on: {
+                CANVAS_CLREAR_FINISHED: 'idle',
+              },
+            },
+          },
+        },
+        hide: {
+          entry: [send('FOCUS_CURRENT_ACTIVE_CURSOR'), send('CLEAR_ACTIVE_CURSOR')],
+        },
       },
     },
   },
@@ -183,6 +217,17 @@ const machine = Machine({
       focusGroupName: null,
       focusRow: null,
       focusColumn: null,
+    }),
+    focusCurrentActiveCursor: assign(function focusCurrentActiveCursor ({
+      activeGroupName,
+      activeRow,
+      activeColumn,
+    }) {
+      return {
+        focusGroupName: activeGroupName,
+        focusRow: activeRow,
+        focusColumn: activeColumn,
+      }
     }),
     focusCursorUp: assign(getTargetRowByAdd(-1)),
     focusCursorDown: assign(getTargetRowByAdd(1)),
