@@ -2,7 +2,7 @@ import { Machine, assign, send } from 'xstate'
 import { gojuon } from '@/states/gojuon.js'
 
 const machine = Machine({
-  id: 'table',
+  id: 'tableView',
   type: 'parallel',
   context: {
     gojuon,
@@ -128,7 +128,7 @@ const machine = Machine({
               },
               {
                 actions: 'updateActiveCursor',
-                target: ['.switchActive', '#table.drawingBoard.show'],
+                target: ['.switchActive', '#tableView.drawingBoard.show'],
               },
             ],
             CLEAR_ACTIVE_CURSOR: {
@@ -142,11 +142,11 @@ const machine = Machine({
               on: {
                 ACTIVE_CURSOR_TO_PREVIOUS: {
                   actions: 'activeCursorToPrevious',
-                  target: ['#table.drawingBoard.show.clearCanvas', 'switchActive'],
+                  target: ['#tableView.drawingBoard.show.clearCanvas', 'switchActive'],
                 },
                 ACTIVE_CURSOR_TO_NEXT: {
                   actions: 'activeCursorToNext',
-                  target: ['#table.drawingBoard.show.clearCanvas', 'switchActive'],
+                  target: ['#tableView.drawingBoard.show.clearCanvas', 'switchActive'],
                 },
               },
             },
