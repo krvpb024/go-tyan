@@ -38,9 +38,9 @@
     <canvas
       ref="canvas"
       :width="width" :height="height"
-      @mousedown="startDrawing" @touchstart="startDrawing"
-      @mouseup="stopDrawing" @touchend="stopDrawing"
-      @mousemove="drawLine" @touchmove="drawLine"
+      @mousedown="startDrawing" @touchstart.prevent="startDrawing"
+      @mouseup="stopDrawing" @touchend.prevent="stopDrawing"
+      @mousemove="drawLine" @touchmove.prevent="drawLine"
     ></canvas>
   </div>
 </template>
@@ -142,16 +142,20 @@ export default {
       stopDrawing,
     }
 
-    function startDrawing ({ clientX, clientY, target }) {
+    function startDrawing ({ type, clientX, clientY, target, touches }) {
       canDraw.value = true
-      const [x, y] = getMousePosition(clientX, clientY)
+      const resultClientX = type == 'touchstart' ? touches[0].clientX : clientX
+      const resultClientY = type == 'touchstart' ? touches[0].clientY : clientY
+      const [x, y] = getMousePosition(resultClientX, resultClientY)
       lastX.value = x
       lastY.value = y
     }
 
-    function drawLine ({ clientX, clientY }) {
+    function drawLine ({ type, clientX, clientY, touches }) {
       if (!canDraw.value) return
-      const [x, y] = getMousePosition(clientX, clientY)
+      const resultClientX = type == 'touchmove' ? touches[0].clientX : clientX
+      const resultClientY = type == 'touchmove' ? touches[0].clientY : clientY
+      const [x, y] = getMousePosition(resultClientX, resultClientY)
 
       ctx.value.beginPath()
       ctx.value.moveTo(lastX.value, lastY.value)
