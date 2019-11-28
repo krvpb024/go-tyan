@@ -12,46 +12,19 @@
     ></exam-range-modal>
 
     <main>
-      <section
-        class="container"
+      <exam-block
         v-if="current.matches('exam.normalExam')"
-      >
-        <h1>測驗</h1>
+        :service="service"
+        :current="current"
+        examType="normalExam"
+      ></exam-block>
 
-        <exam-card
-          :service="service"
-          :current="current"
-          :currentCard="current.context.cards[current.context.cursor]"
-        ></exam-card>
-
-        <p>{{ current.context.cursor }} / {{ current.context.cards.length }}</p>
-
-        <progress
-          :value="current.context.cursor"
-          :max="current.context.cards.length"
-        ></progress>
-      </section>
-
-      <section
-        class="container"
-        v-else-if="current.matches('exam.enhancementExam') &&
-          current.context.enhancementCards.length > 0"
-      >
-        <h1>補強測驗</h1>
-
-        <exam-card
-          :service="service"
-          :current="current"
-          :currentCard="current.context.enhancementCards[current.context.enhancementCursor]"
-        ></exam-card>
-
-        <p>{{ current.context.enhancementCursor }} / {{ current.context.enhancementCards.length }}</p>
-
-        <progress
-          :value="current.context.enhancementCursor"
-          :max="current.context.enhancementCards.length"
-        ></progress>
-      </section>
+      <exam-block
+        v-else-if="current.matches('exam.enhancementExam')"
+        :service="service"
+        :current="current"
+        examType="enhancementExam"
+      ></exam-block>
 
       <section v-else-if="current.matches('exam.examFinish')">
         <h1>測驗結束</h1>
@@ -65,11 +38,11 @@
 <script>
 import { machine } from '@/states/examState.js'
 import { useMachine } from '@/utils/useMachine.js'
-import examCard from '@/components/examCard.vue'
 import examRangeModal from '@/components/examRangeModal.vue'
+import examBlock from '@/components/examBlock.vue'
 
 export default {
-  components: { examCard, examRangeModal },
+  components: { examRangeModal, examBlock },
   setup () {
     const { service, current } = useMachine(machine)
 
@@ -82,9 +55,4 @@ export default {
 </script>
 
 <style scoped>
-.container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
 </style>
