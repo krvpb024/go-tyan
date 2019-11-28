@@ -11,8 +11,8 @@
       :current="current"
     ></exam-range-modal>
 
-    <main v-show="current.matches('exam.normalExam')">
-      <section class="container">
+    <main>
+      <section class="container" v-if="current.matches('exam.normalExam')">
         <h1>測驗</h1>
 
         <exam-card
@@ -26,6 +26,23 @@
         <progress
           :value="current.context.cursor"
           :max="current.context.cards.length"
+        ></progress>
+      </section>
+
+      <section class="container" v-else-if="current.matches('exam.enhancementExam')">
+        <h1>補強測驗</h1>
+
+        <exam-card
+          :service="service"
+          :current="current"
+          :currentCard="current.context.enhancementCards[current.context.enhancementCursor]"
+        ></exam-card>
+
+        <p>{{ current.context.enhancementCursor }} / {{ current.context.enhancementCards.length }}</p>
+
+        <progress
+          :value="current.context.enhancementCursor"
+          :max="current.context.enhancementCards.length"
         ></progress>
       </section>
     </main>

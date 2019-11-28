@@ -13,7 +13,7 @@
         <span>
           {{ currentCard[0] }}
         </span>
-        <span v-show="current.matches('exam.normalExam.answerShowed')">
+        <span v-show="current.matches('exam.normalExam.answerShowed') || current.matches('exam.enhancementExam.answerShowed')">
           {{ currentCard[2] }}
         </span>
       </p>
@@ -48,6 +48,7 @@ export default {
     return {
       cardElement,
       canDrag,
+      xMovement,
       // methods
       dragStart,
       dragging,
@@ -55,9 +56,7 @@ export default {
     }
 
     function dragStart (e) {
-      if (props.current.matches('exam.normalExam.idle')) {
-        props.service.send('SHOW_ANSWER')
-      }
+      props.service.send('SHOW_ANSWER')
       canDrag.value = true
 
       if (e.touches) {
@@ -80,10 +79,12 @@ export default {
       cardElement.value.style.transform = `translate(${xMovement.value}px, 0)`
 
       if (Math.abs(xMovement.value) > (window.innerWidth / 4)) {
-        xMovement.value = 0
         canDrag.value = false
         cardElement.value.style.transform = `translate(0, 0)`
-        props.service.send('NEXT_CARD')
+        props.service.send('NEXT_CARD', {
+          addToEnhancement: !(xMovement.value > 0),
+        })
+        xMovement.value = 0
       }
     }
 
