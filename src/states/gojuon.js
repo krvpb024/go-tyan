@@ -17,7 +17,6 @@ const dakion = [
   [['ざ', 'ザ', 'za'], ['じ', 'ジ', 'zi'], ['ず', 'ズ', 'zu'], ['ぜ', 'ゼ', 'ze'], ['ぞ', 'ｿﾞ', 'zo']],
   [['だ', 'ダ', 'da'], ['ぢ', 'ヂ', 'di'], ['づ', 'ヅ', 'du'], ['で', 'デ', 'de'], ['ど', 'ド', 'do']],
   [['ば', 'バ', 'ba'], ['び', 'ビ', 'bi'], ['ぶ', 'ブ', 'bu'], ['べ', 'ベ', 'be'], ['ぼ', 'ボ', 'bo']],
-  [['ぱ', 'パ', 'pa'], ['ぴ', 'ピ', 'pi'], ['ぷ', 'プ', 'pu'], ['ぺ', 'ペ', 'pe'], ['ぽ', 'ポ', 'po']],
 ]
 
 const handakuon = [
@@ -47,4 +46,20 @@ const gojuon = {
 
 export {
   gojuon,
+  generateTitle,
+}
+
+function generateTitle (groupName) {
+  switch (groupName) {
+    case 'seion':
+      return '清音'
+    case 'dakion':
+      return '濁音'
+    case 'handakuon':
+      return '半濁音'
+    case 'yoon':
+      return '拗音'
+    default:
+      return ''
+  }
 }

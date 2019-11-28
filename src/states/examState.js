@@ -1,12 +1,14 @@
 import { Machine, assign, send } from 'xstate'
-import { mutateByDataValue } from '@/utils/machineFactory.js'
-// import { gojuon } from '@/states/gojuon.js'
+// import { mutateByDataValue } from '@/utils/machineFactory.js'
+import { gojuon } from '@/states/gojuon.js'
 
 const machine = Machine({
   id: 'examView',
   type: 'parallel',
   context: {
+    gojuon,
     selectedGojuon: [],
+    submittedGojuon: [],
     examRange: [],
     cards: [],
     cursor: 0,
@@ -15,25 +17,38 @@ const machine = Machine({
   },
   states: {
     exam: {
-      initial: 'generateExam',
+      initial: 'initializeExam',
+      on: {
+        SHOW_EXAM_RANGE_MODAL: '.settingExamRange',
+      },
       states: {
-        generateExam: {
+        initializeExam: {
+          entry: ['setContextToInitial', 'getInitialDataFromLocalStorage'],
           on: {
             '': [
               {
                 cond: 'noExamRange',
-                target: 'setExamRange',
+                target: 'settingExamRange',
               },
               {
-                actions: 'generateExam',
                 target: 'normalExam',
               },
             ],
           },
         },
-        setExamRange: {
+        settingExamRange: {
           initial: 'idle',
           on: {
+            HIDE_EXAM_RANGE_MODAL: [
+              {
+                cond: 'examRangeIsEmpty',
+                target: '.error',
+              },
+              {
+                actions: 'undoMutateSelectedGojuon',
+                target: 'initializeExam',
+              },
+            ],
             UPDATE_SELECTED_GOJUON: {
               actions: 'updateSelectedGojuon',
             },
@@ -43,8 +58,8 @@ const machine = Machine({
                 target: '.error',
               },
               {
-                actions: 'setExamRange',
-                target: 'generateExam',
+                actions: ['updateSubmittedGojuon', 'setExamRange'],
+                target: 'initializeExam',
               },
             ],
           },
@@ -59,6 +74,7 @@ const machine = Machine({
         },
         normalExam: {
           initial: 'idle',
+          entry: ['generateExam'],
           states: {
             idle: {
               on: {
@@ -150,6 +166,12 @@ const machine = Machine({
   },
 }, {
   guards: {
+    examRangeIsEmpty ({ examRange }) {
+      return !(examRange.length > 0)
+    },
+    selectedGojuonIsEmpty ({ selectedGojuon }) {
+      return !(selectedGojuon.length > 0)
+    },
     noExamRange ({ examRange }) {
       return examRange.length == 0
     },
@@ -164,15 +186,72 @@ const machine = Machine({
     },
   },
   actions: {
+    setContextToInitial: assign({
+      cursor: 0,
+      enhancementCards: [],
+      enhancementCursor: 0,
+    }),
+    getInitialDataFromLocalStorage: assign(function mutateInitailDataByLocalStorage ({ examRange, submittedGojuon, selectedGojuon }) {
+      const localExamRange = JSON.parse(window.localStorage.getItem('examRange'))
+      const localSubmittedGojuon = JSON.parse(window.localStorage.getItem('submittedGojuon'))
+
+      return {
+        examRange: localExamRange || examRange,
+        submittedGojuon: localSubmittedGojuon || submittedGojuon,
+        selectedGojuon: localSubmittedGojuon || selectedGojuon,
+      }
+    }),
     generateExam: assign(function mutateCards ({ examRange }) {
       return {
         cards: shuffle(examRange),
       }
     }),
-    updateSelectedGojuon: assign(mutateByDataValue('selectedGojuon')),
-    setExamRange: assign(function mutateExamRange ({ selectedGojuon }) {
+    updateSelectedGojuon: assign(function mutateSelectedGojuon ({ selectedGojuon }, {
+      data: {
+        checked,
+        target,
+      },
+    }) {
+      if (checked) {
+        return {
+          selectedGojuon: Array.from(new Set([...selectedGojuon, target])),
+        }
+      }
       return {
-        examRange: [...selectedGojuon],
+        selectedGojuon: selectedGojuon.filter(function removeTarget (gojuon) {
+          return gojuon != target
+        }),
+      }
+    }),
+    updateSubmittedGojuon: assign(function mutateSubmittedGojuon ({ selectedGojuon }) {
+      window.localStorage.setItem('submittedGojuon', JSON.stringify(selectedGojuon))
+
+      return {
+        submittedGojuon: selectedGojuon,
+      }
+    }),
+    undoMutateSelectedGojuon: assign(function undoMutateSelectedGojuon ({ submittedGojuon }) {
+      return {
+        selectedGojuon: submittedGojuon,
+      }
+    }),
+    setExamRange: assign(function mutateExamRange ({ submittedGojuon }) {
+      const result = submittedGojuon
+        .map(function turnStringNameToRowArray (stringName) {
+          const [groupName, rowIndex] = stringName.split('-')
+          return gojuon[groupName][rowIndex]
+        })
+        .reduce(function flatArray (acc, row) {
+          return [...acc, ...row]
+        }, [])
+        .filter(function removeEmpty (gojuon) {
+          return gojuon != 'empty'
+        })
+
+      window.localStorage.setItem('examRange', JSON.stringify(result))
+
+      return {
+        examRange: [...result],
       }
     }),
     addCardsToEnhancement: assign(function addCardsToEnhancement ({ enhancementCards, cards, cursor }) {

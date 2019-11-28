@@ -32,7 +32,7 @@
             :aria-rowindex="rowIndex + 1"
           >
             <td
-              v-for="(gojuon /* [hiragana, katakana, pinyin] */, columnIndex) in row"
+              v-for="(gojuon /* [hiragana, katakana, romanization] */, columnIndex) in row"
               :key="gojuon != 'empty' ? `${gojuon[0]}-${gojuon[1]}-${gojuon[2]}` : `empty-${rowIndex}-${columnIndex}`"
               role="gridcell" :aria-colindex="columnIndex + 1"
             >
@@ -99,6 +99,7 @@
 import { ref, watch } from '@vue/composition-api'
 import { machine } from '@/states/tableState.js'
 import { useMachine } from '@/utils/useMachine.js'
+import { generateTitle } from '@/states/gojuon.js'
 import tableDisplayControl from '@/components/tableDisplayControl.vue'
 import tableDrawingBoard from '@/components/tableDrawingBoard.vue'
 
@@ -157,21 +158,6 @@ export default {
       generateTitle,
       isCursorPosition,
       checkDisplayAndPeek,
-    }
-
-    function generateTitle (groupName) {
-      switch (groupName) {
-        case 'seion':
-          return '清音'
-        case 'dakion':
-          return '濁音'
-        case 'handakuon':
-          return '半濁音'
-        case 'yoon':
-          return '拗音'
-        default:
-          return ''
-      }
     }
 
     function isCursorPosition (groupName, rowIndex, columnIndex) {
