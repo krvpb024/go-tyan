@@ -1,6 +1,5 @@
 <template>
   <section
-    v-show="current.matches('exam.settingExamRange')"
     aria-labelledby="exam-range-modal-title"
     role="dialog"
     aria-modal="true"
@@ -11,12 +10,12 @@
       @submit.prevent="service.send('SET_EXAM_RANGE')"
       aria-labelledby="exam-range-modal-title"
     >
-      <section v-show="current.matches('exam.settingExamRange.error')">
+      <section v-show="current.matches('examRangeModal.show.error')">
         <div
           role="alert"
-          v-if="current.meta['examView.exam.settingExamRange.error']"
+          v-if="current.meta['examView.examRangeModal.show.error']"
         >
-          <p>{{ current.meta['examView.exam.settingExamRange.error'].message }}</p>
+          <p>{{ current.meta['examView.examRangeModal.show.error'].message }}</p>
         </div>
       </section>
 

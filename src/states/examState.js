@@ -15,27 +15,10 @@ const machine = Machine({
     enhancementCursor: 0,
   },
   states: {
-    exam: {
-      initial: 'initializeExam',
-      on: {
-        SHOW_EXAM_RANGE_MODAL: '.settingExamRange',
-      },
+    examRangeModal: {
+      initial: 'hide',
       states: {
-        initializeExam: {
-          entry: ['setContextToInitial', 'getInitialDataFromLocalStorage'],
-          on: {
-            '': [
-              {
-                cond: 'noExamRange',
-                target: 'settingExamRange',
-              },
-              {
-                target: 'normalExam',
-              },
-            ],
-          },
-        },
-        settingExamRange: {
+        show: {
           initial: 'idle',
           on: {
             HIDE_EXAM_RANGE_MODAL: [
@@ -45,6 +28,7 @@ const machine = Machine({
               },
               {
                 actions: 'undoMutateSelectedGojuon',
+                target: 'hide',
               },
             ],
             UPDATE_SELECTED_GOJUON: {
@@ -57,7 +41,7 @@ const machine = Machine({
               },
               {
                 actions: ['updateSubmittedGojuon', 'setExamRange'],
-                target: 'initializeExam',
+                target: ['#examView.exam.initializeExam', 'hide'],
               },
             ],
           },
@@ -70,6 +54,33 @@ const machine = Machine({
             },
           },
         },
+        hide: {
+          on: {
+            SHOW_EXAM_RANGE_MODAL: {
+              target: ['show'],
+            },
+          },
+        },
+      },
+    },
+    exam: {
+      initial: 'initializeExam',
+      states: {
+        initializeExam: {
+          entry: ['setContextToInitial', 'getInitialDataFromLocalStorage'],
+          on: {
+            '': [
+              {
+                cond: 'noExamRange',
+                target: ['#examView.examRangeModal.show.idle', 'settingExamRange'],
+              },
+              {
+                target: 'normalExam',
+              },
+            ],
+          },
+        },
+        settingExamRange: {},
         normalExam: {
           initial: 'idle',
           entry: ['generateExam'],

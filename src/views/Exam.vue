@@ -1,17 +1,18 @@
 <template>
   <div>
-    <button @click="current.matches('exam.settingExamRange')
+    <button @click="current.matches('examRangeModal.show')
       ? service.send('HIDE_EXAM_RANGE_MODAL')
       : service.send('SHOW_EXAM_RANGE_MODAL')">
       設定測驗範圍
     </button>
 
     <exam-range-modal
+      v-show="current.matches('examRangeModal.show')"
       :service="service"
       :current="current"
     ></exam-range-modal>
 
-    <main>
+    <main v-show="!current.matches('examRangeModal.show')">
       <exam-block
         v-if="current.matches('exam.normalExam')"
         :service="service"
