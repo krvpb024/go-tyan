@@ -12,7 +12,10 @@
     ></exam-range-modal>
 
     <main>
-      <section class="container" v-if="current.matches('exam.normalExam')">
+      <section
+        class="container"
+        v-if="current.matches('exam.normalExam')"
+      >
         <h1>測驗</h1>
 
         <exam-card
@@ -29,7 +32,11 @@
         ></progress>
       </section>
 
-      <section class="container" v-else-if="current.matches('exam.enhancementExam')">
+      <section
+        class="container"
+        v-else-if="current.matches('exam.enhancementExam') &&
+          current.context.enhancementCards.length > 0"
+      >
         <h1>補強測驗</h1>
 
         <exam-card
@@ -44,6 +51,12 @@
           :value="current.context.enhancementCursor"
           :max="current.context.enhancementCards.length"
         ></progress>
+      </section>
+
+      <section v-else-if="current.matches('exam.examFinish')">
+        <h1>測驗結束</h1>
+
+        <button @click="service.send('TAKE_EXAM_AGAIN')">重來一次</button>
       </section>
     </main>
   </div>

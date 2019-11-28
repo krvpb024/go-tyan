@@ -1,5 +1,4 @@
 import { Machine, assign, send } from 'xstate'
-// import { mutateByDataValue } from '@/utils/machineFactory.js'
 import { gojuon } from '@/states/gojuon.js'
 
 const machine = Machine({
@@ -46,7 +45,6 @@ const machine = Machine({
               },
               {
                 actions: 'undoMutateSelectedGojuon',
-                target: 'initializeExam',
               },
             ],
             UPDATE_SELECTED_GOJUON: {
@@ -108,6 +106,10 @@ const machine = Machine({
           states: {
             idle: {
               on: {
+                '': {
+                  cond: 'noEnhancementCards',
+                  target: '#examView.exam.examFinish',
+                },
                 SHOW_ANSWER: 'answerShowed',
               },
             },
@@ -117,7 +119,7 @@ const machine = Machine({
                   {
                     cond: 'noMoreEnhancementCards',
                     actions: send('CLEAR_CANVAS'),
-                    target: '#examView.exam.examFinishModal',
+                    target: '#examView.exam.examFinish',
                   },
                   {
                     actions: ['nextEnhancementCard', send('CLEAR_CANVAS')],
@@ -128,9 +130,10 @@ const machine = Machine({
             },
           },
         },
-        examFinishModal: {
+        examFinish: {
           on: {
             BACK_TO_HOME: {},
+            TAKE_EXAM_AGAIN: 'initializeExam',
           },
         },
       },
@@ -180,6 +183,9 @@ const machine = Machine({
     },
     addToEnhancement (context, { addToEnhancement }) {
       return Boolean(addToEnhancement)
+    },
+    noEnhancementCards ({ enhancementCards }) {
+      return enhancementCards.length == 0
     },
     noMoreEnhancementCards ({ enhancementCards, enhancementCursor }) {
       return enhancementCursor == enhancementCards.length - 1
