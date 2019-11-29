@@ -12,7 +12,7 @@
       :current="current"
     ></exam-range-modal>
 
-    <main v-show="!current.matches('examRangeModal.show')">
+    <main v-show="current.matches('examRangeModal.hide')">
       <exam-block
         v-if="current.matches('exam.normalExam')"
         :service="service"

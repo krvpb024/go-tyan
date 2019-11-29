@@ -40,6 +40,7 @@
       </section>
 
       <button type="submit">送出</button>
+
       <button
         type="button"
         @click="service.send('HIDE_EXAM_RANGE_MODAL')"

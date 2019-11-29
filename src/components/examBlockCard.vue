@@ -11,10 +11,10 @@
     >
       <p class="card-text">
         <span>
-          {{ currentCard[0] }}
+          {{ question }}
         </span>
         <span v-show="current.matches('exam.normalExam.answerShowed') || current.matches('exam.enhancementExam.answerShowed')">
-          {{ currentCard[2] }}
+          {{ answer }}
         </span>
       </p>
     </div>
@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import { ref } from '@vue/composition-api'
+import { ref, computed } from '@vue/composition-api'
 
 export default {
   props: {
@@ -39,16 +39,52 @@ export default {
       required: true,
     },
   },
-  setup (props) {
+  setup (props, context) {
     const cardElement = ref(null)
     const canDrag = ref(false)
     const lastTouchX = ref(null)
     const xMovement = ref(0)
 
+    const examMode = computed(function getExamMode () {
+      return context.root.$route.name
+    })
+
+    const question = computed(function getQuestion () {
+      switch (examMode.value) {
+        case 'hiraganaToRomanization':
+        case 'hiraganaToKatakana':
+          return props.currentCard[0]
+        case 'katakanaToRomanization':
+        case 'katakanaToHiragana':
+          return props.currentCard[1]
+        case 'romanizationToHiragana':
+        case 'romanizationToKatakana':
+          return props.currentCard[2]
+        default:
+      }
+    })
+    const answer = computed(function getAnswer () {
+      switch (examMode.value) {
+        case 'romanizationToHiragana':
+        case 'katakanaToHiragana':
+          return props.currentCard[0]
+        case 'hiraganaToKatakana':
+        case 'romanizationToKatakana':
+          return props.currentCard[1]
+        case 'hiraganaToRomanization':
+        case 'katakanaToRomanization':
+          return props.currentCard[2]
+        default:
+      }
+    })
+
     return {
       cardElement,
       canDrag,
       xMovement,
+      examMode,
+      question,
+      answer,
       // methods
       dragStart,
       dragging,
