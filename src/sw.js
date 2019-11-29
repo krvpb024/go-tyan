@@ -1,4 +1,4 @@
-const CACHE_NAME = 'gojuon-v0'
+const CACHE_NAME = 'gojuon-v1'
 
 const { assets } = global.serviceWorkerOption
 const assetsToCache = [...assets, './']
@@ -20,6 +20,9 @@ function preCacheAssets (assets) {
     .then(function addAssetsToCache (cache) {
       return cache.addAll(assets)
     })
+    .then(function skipWaiting () {
+      return self.skipWaiting()
+    })
 }
 
 function returnCacheFirstThenFetch (request) {
@@ -38,5 +41,8 @@ function clearCacheExcept (currentCache) {
           if (cacheName != currentCache) return caches.delete(cacheName)
         })
       )
+    })
+    .then(function skipWaiting () {
+      return self.clients.claim()
     })
 }
