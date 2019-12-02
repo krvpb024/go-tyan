@@ -69,10 +69,7 @@
                 :tabindex="columnIndex == 0 && rowIndex == 0 ? '0' : '-1'"
                 :id="`${groupName}-${rowIndex}-${columnIndex}`"
                 class="table-button"
-                :class="[
-                  {'empty-button': gojuon == 'empty'},
-                  groupName == 'yoon' ? 'three-row' : 'two-row'
-                ]"
+                :class="{'empty-button': gojuon == 'empty'}"
                 :aria-pressed="isCursorPosition(groupName, rowIndex, columnIndex) ? 'true' : false"
                 @keydown.prevent.up="service.send('FOCUS_COUSOR_UP')"
                 @keydown.prevent.down="service.send('FOCUS_COUSOR_DOWN')"
@@ -95,24 +92,34 @@
                   }
                 })"
               >
-                <template v-if="gojuon != 'empty'">
-                  <span
-                    lang="ja-JP" class="hiragana"
-                    v-show="checkDisplayAndPeek('hiragana', groupName, rowIndex, columnIndex)"
-                  >
-                    {{ gojuon[0] }}
-                  </span>
-                  <span
-                    lang="ja-JP" class="katakana"
-                    v-show="checkDisplayAndPeek('katakana', groupName, rowIndex, columnIndex)"
-                  >
-                    {{ gojuon[1] }}
-                  </span>
-                  <span lang="ja-JP" class="romanization">{{ gojuon[2] }}</span>
-                </template>
-                <template v-else>
-                  無內容
-                </template>
+                <div
+                  class="table-button__content"
+                  :class="[groupName == 'yoon' ? 'three-row' : 'two-row']"
+                >
+                  <template v-if="gojuon != 'empty'">
+                    <span
+                      lang="ja-JP"
+                      class="hiragana"
+                      v-show="checkDisplayAndPeek('hiragana', groupName, rowIndex, columnIndex)"
+                    >
+                      {{ gojuon[0] }}
+                    </span>
+                    <span
+                      lang="ja-JP"
+                      class="katakana"
+                      v-show="checkDisplayAndPeek('katakana', groupName, rowIndex, columnIndex)"
+                    >
+                      {{ gojuon[1] }}
+                    </span>
+                    <span
+                      lang="ja-JP"
+                      class="romanization"
+                    >{{ gojuon[2] }}</span>
+                  </template>
+                  <template v-else>
+                    無內容
+                  </template>
+                </div>
               </button>
             </td>
           </tr>
@@ -277,6 +284,7 @@ td + td {
 }
 
 .table-button {
+  box-sizing: border-box;
   width: 100%;
   height: 100%;
   border-radius: 8px;
@@ -284,33 +292,25 @@ td + td {
   background-color: #fff;
   font-size: 1rem;
   padding: 3px;
+}
+
+.table-button__content {
   display: grid;
-    align-items: center;
+  align-items: center;
   justify-items: center;
 }
 
-.table-button.two-row {
-  grid-template-areas:
-    "hiragana     katakana"
-    "romanization romanization";
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr 1fr;
-  /* grid-template:
+.table-button__content.two-row {
+  grid-template:
     "hiragana     katakana    " 1fr
-    "romanization romanization" 1fr / 1fr 1fr; */
+    "romanization romanization" 1fr / 1fr 1fr;
 }
 
-.table-button.three-row {
-  grid-template-areas:
-    "hiragana    "
-    "katakana    "
-    "romanization";
-  grid-template-columns: 1fr;
-  grid-template-rows: 1fr 1fr 1fr;
-  /* grid-template:
+.table-button__content.three-row {
+  grid-template:
     "hiragana    " 1fr
     "katakana    " 1fr
-    "romanization" 1fr / 1fr; */
+    "romanization" 1fr / 1fr;
 }
 
 .hiragana {

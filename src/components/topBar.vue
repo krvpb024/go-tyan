@@ -4,6 +4,7 @@
       <router-link
         to="/"
         class="left-icon"
+        aria-label="返回"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
