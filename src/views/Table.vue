@@ -1,48 +1,83 @@
 <template>
   <main>
     <section class="table-view">
-      <table-display-control
-        ref="tableDisplayControl" :service="service" :current="current"
-      ></table-display-control>
+      <div
+        class="sticky-top"
+        ref="topStickyElement"
+      >
+        <top-bar>五十音表格</top-bar>
 
-      <h1 class="table__h1">五十音表格</h1>
+        <table-display-control
+          :service="service"
+          :current="current"
+        ></table-display-control>
+      </div>
 
       <section
-        v-for="([groupName, rows]) in Object.entries(current.context.gojuon)" :key="groupName"
-        role="region" :aria-labelledby="`${groupName}-title`"
+        v-for="([groupName, rows]) in Object.entries(current.context.gojuon)"
+        :key="groupName"
+        role="region"
+        :aria-labelledby="`${groupName}-title`"
+        class="table-section"
       >
-        <h2 :id="`${groupName}-title`">{{ generateTitle(groupName) }}</h2>
+        <h2
+          class="table-title"
+          :id="`${groupName}-title`"
+        >{{ generateTitle(groupName) }}</h2>
 
         <table
-          :id="groupName" role="grid" :aria-labelledby="`${groupName}-title`"
-          data-wrap-cols="true" data-wrap-rows="false"
-          :aria-rowcount="rows.length" aria-colcount="5"
+          :id="groupName"
+          role="grid"
+          :aria-labelledby="`${groupName}-title`"
+          data-wrap-cols="true"
+          data-wrap-rows="false"
+          :aria-rowcount="rows.length"
+          aria-colcount="5"
         >
           <tr>
-            <th scope="col">a</th>
-            <th scope="col">i</th>
-            <th scope="col">u</th>
-            <th scope="col">e</th>
-            <th scope="col">o</th>
+            <th scope="col">
+              <span class="th-text">a</span>
+            </th>
+            <th scope="col">
+              <span class="th-text">i</span>
+            </th>
+            <th scope="col">
+              <span class="th-text">u</span>
+            </th>
+            <th scope="col">
+              <span class="th-text">e</span>
+            </th>
+            <th scope="col">
+              <span class="th-text">o</span>
+            </th>
           </tr>
 
           <tr
             v-for="(row, rowIndex) in rows"
-            :key="rowIndex" role="rowgroup"
+            :key="rowIndex"
+            role="rowgroup"
             :aria-rowindex="rowIndex + 1"
+            class="table-row"
           >
             <td
               v-for="(gojuon /* [hiragana, katakana, romanization] */, columnIndex) in row"
               :key="gojuon != 'empty' ? `${gojuon[0]}-${gojuon[1]}-${gojuon[2]}` : `empty-${rowIndex}-${columnIndex}`"
-              role="gridcell" :aria-colindex="columnIndex + 1"
+              role="gridcell"
+              :aria-colindex="columnIndex + 1"
             >
               <button
                 :tabindex="columnIndex == 0 && rowIndex == 0 ? '0' : '-1'"
                 :id="`${groupName}-${rowIndex}-${columnIndex}`"
-                class="table-button" :class="{'empty-button': gojuon == 'empty'}"
+                class="table-button"
+                :class="[
+                  {'empty-button': gojuon == 'empty'},
+                  groupName == 'yoon' ? 'three-row' : 'two-row'
+                ]"
                 :aria-pressed="isCursorPosition(groupName, rowIndex, columnIndex) ? 'true' : false"
-                @keydown.prevent.up="service.send('FOCUS_COUSOR_UP')" @keydown.prevent.down="service.send('FOCUS_COUSOR_DOWN')"
-                @keydown.prevent.right="service.send('FOCUS_COUSOR_RIGHT')" @keydown.prevent.left="service.send('FOCUS_COUSOR_LEFT')"
+                @keydown.prevent.up="service.send('FOCUS_COUSOR_UP')"
+                @keydown.prevent.down="service.send('FOCUS_COUSOR_DOWN')"
+                @keydown.prevent.right="service.send('FOCUS_COUSOR_RIGHT')"
+                @keydown.prevent.left="service.send('FOCUS_COUSOR_LEFT')"
                 @focus="service.send({
                   type: 'UPDATE_FOCUS_CURSOR',
                   data: {
@@ -61,13 +96,19 @@
                 })"
               >
                 <template v-if="gojuon != 'empty'">
-                  <span lang="ja-JP" v-show="checkDisplayAndPeek('hiragana', groupName, rowIndex, columnIndex)">
+                  <span
+                    lang="ja-JP" class="hiragana"
+                    v-show="checkDisplayAndPeek('hiragana', groupName, rowIndex, columnIndex)"
+                  >
                     {{ gojuon[0] }}
                   </span>
-                  <span lang="ja-JP" v-show="checkDisplayAndPeek('katakana', groupName, rowIndex, columnIndex)">
+                  <span
+                    lang="ja-JP" class="katakana"
+                    v-show="checkDisplayAndPeek('katakana', groupName, rowIndex, columnIndex)"
+                  >
                     {{ gojuon[1] }}
                   </span>
-                  <span lang="ja-JP">{{ gojuon[2] }}</span>
+                  <span lang="ja-JP" class="romanization">{{ gojuon[2] }}</span>
                 </template>
                 <template v-else>
                   無內容
@@ -80,8 +121,11 @@
 
       <table-drawing-board
         v-show="current.matches('drawingBoard.show')"
-        role="dialog" aria-labelledby="table-drawing-board-title" aria-modal="true"
-        :service="service" :current="current"
+        role="dialog"
+        aria-labelledby="table-drawing-board-title"
+        aria-modal="true"
+        :service="service"
+        :current="current"
         :activeGroupName="current.context.activeGroupName"
         :activeRow="current.context.activeRow"
         :activeColumn="current.context.activeColumn"
@@ -102,15 +146,17 @@ import { useMachine } from '@/utils/useMachine.js'
 import { generateTitle } from '@/states/gojuon.js'
 import tableDisplayControl from '@/components/tableDisplayControl.vue'
 import tableDrawingBoard from '@/components/tableDrawingBoard.vue'
+import topBar from '@/components/topBar.vue'
 
 export default {
   components: {
     tableDisplayControl,
     tableDrawingBoard,
+    topBar,
   },
   setup () {
     const { service, current } = useMachine(machine)
-    const tableDisplayControl = ref(null)
+    const topStickyElement = ref(null)
 
     watch(
       () => current.value.matches('table.cellFocus.switchFocus'),
@@ -133,11 +179,11 @@ export default {
             const { activeGroupName, activeRow, activeColumn } = current.value.context
             const activeButton = document.getElementById(`${activeGroupName}-${activeRow}-${activeColumn}`)
 
-            if (!tableDisplayControl.value) return
-            const tableDisplayControlHeight = tableDisplayControl.value.$el.offsetHeight
+            if (!topStickyElement.value) return
+            const topStickyElementHeight = topStickyElement.value.offsetHeight
 
             if (!activeButton) return
-            const top = window.scrollY + activeButton.getBoundingClientRect().top - tableDisplayControlHeight - 20
+            const top = window.scrollY + activeButton.getBoundingClientRect().top - topStickyElementHeight - 20
             window.scrollTo({ top, behavior: 'smooth' })
 
             service.value.send('SWITCH_ACTIVE_FINISHED')
@@ -151,7 +197,7 @@ export default {
     )
 
     return {
-      tableDisplayControl,
+      topStickyElement,
       service,
       current,
       // methods
@@ -180,8 +226,112 @@ export default {
 </script>
 
 <style scoped>
+.sticky-top {
+  position: sticky;
+  top: 0;
+  /* box-shadow: 0 3px 5px var(--main-black); */
+}
+
+.table-title {
+  background-color: var(--title-bg-color);
+  padding: 6px 12px;
+  font-size: 1.2rem;
+  margin: 0;
+}
+
+table {
+  padding: 10px 12px;
+  width: 100%;
+}
+
+tr {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 4px;
+}
+
+th,
+td {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  max-width: 64px;
+  height: 64px;
+}
+
+th {
+  height: auto;
+}
+
+th + th,
+td + td {
+  margin-left: 4px;
+}
+
+.th-text {
+  display: inline-block;
+  width: 100%;
+  height: 100%;
+}
+
+.table-button {
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+  border: solid 0.6px #d3d3d3;
+  background-color: #fff;
+  font-size: 1rem;
+  padding: 3px;
+  display: grid;
+    align-items: center;
+  justify-items: center;
+}
+
+.table-button.two-row {
+  grid-template-areas:
+    "hiragana     katakana"
+    "romanization romanization";
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  /* grid-template:
+    "hiragana     katakana    " 1fr
+    "romanization romanization" 1fr / 1fr 1fr; */
+}
+
+.table-button.three-row {
+  grid-template-areas:
+    "hiragana    "
+    "katakana    "
+    "romanization";
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr 1fr 1fr;
+  /* grid-template:
+    "hiragana    " 1fr
+    "katakana    " 1fr
+    "romanization" 1fr / 1fr; */
+}
+
+.hiragana {
+  grid-area: hiragana;
+}
+
+.katakana {
+  grid-area: katakana;
+}
+
+.romanization {
+  grid-area: romanization;
+}
+
+.table-button:focus {
+  border: solid 2.5px var(--main-color);
+  outline: none;
+}
+
 .table-button[aria-pressed="true"] {
-  background-color: red;
+  background-color: var(--main-color);
 }
 
 .empty-button {
