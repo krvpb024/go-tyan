@@ -27,7 +27,6 @@
 
         <table
           :id="groupName"
-          role="grid"
           :aria-labelledby="`${groupName}-title`"
           data-wrap-cols="true"
           data-wrap-rows="false"
@@ -66,7 +65,6 @@
               :aria-colindex="columnIndex + 1"
             >
               <button
-                :tabindex="columnIndex == 0 && rowIndex == 0 ? '0' : '-1'"
                 :id="`${groupName}-${rowIndex}-${columnIndex}`"
                 class="table-button"
                 :class="{'empty-button': gojuon == 'empty'}"

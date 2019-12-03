@@ -4,14 +4,18 @@
       <router-link
         to="/"
         class="left-icon"
-        aria-label="返回"
+        aria-labelledby="nav-return-label"
       >
         <svg
+          role="img"
+          aria-labelledby="nav-return-label"
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 20 20"
           width="18.035"
           height="16.297"
         >
+          <title id="nav-return-label">返回</title>
+
           <filter id="shadow">
             <feDropShadow
               dx="2.2"
@@ -22,6 +26,7 @@
           </filter>
 
           <path
+            aria-labelledby="nav-return-label"
             d="M7.865 16.414L.684 9.233a.967.967 0 0 1 0-1.368L7.865.684a.967.967 0 0 1 1.368 1.368L3.792 7.493h13.676a.967.967 0 1 1 0 1.934H3.614l5.619 5.619a.967.967 0 1 1-1.368 1.368z"
             stroke="#313131"
             filter="url(#shadow)"
@@ -38,7 +43,6 @@
 </template>
 
 <script>
-import { onMounted } from '@vue/composition-api'
 export default {
   setup () {
 
