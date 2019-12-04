@@ -368,7 +368,7 @@ export default {
     function openModalAnimation () {
       anime
         .timeline({
-          duration: 200,
+          duration: 300,
           easing: 'easeOutExpo',
         })
         .add({
@@ -387,7 +387,7 @@ export default {
 
       anime
         .timeline({
-          duration: 200,
+          duration: 300,
           easing: 'linear',
         })
         .add({
@@ -403,7 +403,7 @@ export default {
     function closeModalAnimation () {
       anime
         .timeline({
-          duration: 200,
+          duration: 300,
           easing: 'easeOutExpo',
         })
         .add({
@@ -418,7 +418,7 @@ export default {
 
       anime
         .timeline({
-          duration: 120,
+          duration: 150,
           easing: 'linear',
         })
         .add({
@@ -464,13 +464,14 @@ export default {
   border: solid 2px var(--main-black);
   background-color: #fff;
   border-radius: 4px;
-  padding: 10px 15px;
+  padding: 10px 10px;
   width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: stretch;
+  will-change: auto;
 }
 
 .title-button {
@@ -523,6 +524,7 @@ export default {
 }
 
 .tool-button {
+  box-sizing: border-box;
   background-color: transparent;
   border: 2px transparent solid;
   font-weight: bold;
@@ -530,10 +532,10 @@ export default {
   text-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
   font-size: 1rem;
   user-select: none;
-}
-
-.tool-button + .tool-button {
-  margin-left: 25px;
+  padding: 5px 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .tool-button.close-button {
