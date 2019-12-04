@@ -200,12 +200,27 @@ const machine = Machine({
         hide: {
           initial: 'idle',
           entry: [send('FOCUS_CURRENT_ACTIVE_CURSOR'), send('CLEAR_ACTIVE_CURSOR')],
-          on: {
-            SHOW_TOOLTIPS: '.tooltips',
-          },
           states: {
-            idle: {},
-            tooltips: {},
+            idle: {
+              on: {
+                SHOW_TOOLTIPS: 'showTooltipsAnimation',
+              },
+            },
+            showTooltipsAnimation: {
+              on: {
+                SHOW_TOOLTIPS_ANIMATION_END: 'tooltips',
+              },
+            },
+            tooltips: {
+              on: {
+                HIDE_TOOLTIPS: 'hideTooltipsAnimation',
+              },
+            },
+            hideTooltipsAnimation: {
+              on: {
+                HIDE_TOOLTIPS_ANIMATION_END: 'idle',
+              },
+            },
           },
         },
       },

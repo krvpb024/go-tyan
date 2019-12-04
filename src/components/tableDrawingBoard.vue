@@ -14,8 +14,14 @@
       <button
         class="title-button"
         ref="drawingBoardTitleElement"
-        @click="send('SHOW_TOOLTIPS')"
+        @click="service.send('SHOW_TOOLTIPS')"
       >
+        <table-tooltips
+          class="table-tooltips"
+          :service="service"
+          :current="current"
+        >請先點選五十音</table-tooltips>
+
         <h1 id="table-drawing-board-title">
           手寫板
         </h1>
@@ -204,9 +210,11 @@
 import { ref, watch, onMounted, onUpdated } from '@vue/composition-api'
 import anime from 'animejs/lib/anime.es.js'
 import { useModalNavigation } from '@/utils/useModalNavigation.js'
+import tableTooltips from '@/components/tableTooltips.vue'
 
 export default {
   name: 'tableDrawingBoard',
+  components: { tableTooltips },
   props: {
     service: {
       type: Object,
@@ -261,22 +269,28 @@ export default {
       () => props.current.matches('drawingBoard.show.clearCanvas') ||
         props.current.matches('drawingBoard.clearCanvasBeforeAnimation'),
       function clearCanvas (value) {
-        if (value) props.service.send('CANVAS_CLREAR_FINISHED')
-      }
+        if (value) {
+          ctx.value.clearRect(0, 0, canvas.value.width, canvas.value.height)
+          props.service.send('CANVAS_CLREAR_FINISHED')
+        }
+      },
+      { lazy: true }
     )
 
     watch(
       () => props.current.matches('drawingBoard.openAnimation'),
       function startOpenAnimation (value) {
         if (value) openModalAnimation()
-      }
+      },
+      { lazy: true }
     )
 
     watch(
       () => props.current.matches('drawingBoard.closeAnimation'),
       function startCloseAnimation (value) {
         if (value) closeModalAnimation()
-      }
+      },
+      { lazy: true }
     )
 
     onMounted(function tableDrawingBoardOnMounted () {
@@ -352,89 +366,79 @@ export default {
     }
 
     function openModalAnimation () {
-      if (containerElement.value) {
-        anime
-          .timeline({
-            duration: 200,
-            easing: 'easeOutExpo',
-          })
-          .add({
-            targets: containerElement.value,
-            height: '40vh',
-            width: '100%',
-            begin () {
-              drawingBoardTitleElement.value.classList.add('visual-hidden')
-            },
-            complete () {
-              canvasInitialSettings()
-              autoFoucusButton.value && autoFoucusButton.value.focus()
-              props.service.send('OPEN_ANIMATION_END')
-            },
-          })
-      }
+      anime
+        .timeline({
+          duration: 200,
+          easing: 'easeOutExpo',
+        })
+        .add({
+          targets: containerElement.value,
+          height: '40vh',
+          width: '100%',
+          begin () {
+            drawingBoardTitleElement.value.classList.add('visual-hidden')
+          },
+          complete () {
+            canvasInitialSettings()
+            autoFoucusButton.value && autoFoucusButton.value.focus()
+            props.service.send('OPEN_ANIMATION_END')
+          },
+        })
 
-      if (activeShowElement.value) {
-        anime
-          .timeline({
-            duration: 200,
-            easing: 'linear',
-          })
-          .add({
-            targets: activeShowElement.value,
-            opacity: 1,
-            begin () {
-              activeShowElement.value.style.display = 'flex'
-              activeShowElement.value.style.position = 'relative'
-            },
-          })
-      }
+      anime
+        .timeline({
+          duration: 200,
+          easing: 'linear',
+        })
+        .add({
+          targets: activeShowElement.value,
+          opacity: 1,
+          begin () {
+            activeShowElement.value.style.display = 'flex'
+            activeShowElement.value.style.position = 'relative'
+          },
+        })
     }
 
     function closeModalAnimation () {
-      if (containerElement.value) {
-        anime
-          .timeline({
-            duration: 200,
-            easing: 'easeOutExpo',
-          })
-          .add({
-            targets: containerElement.value,
-            height: '8vh',
-            width: '30%',
-            complete () {
-              drawingBoardTitleElement.value.classList.remove('visual-hidden')
-              props.service.send('CLOSE_ANIMATION_END')
-            },
-          })
-      }
+      anime
+        .timeline({
+          duration: 200,
+          easing: 'easeOutExpo',
+        })
+        .add({
+          targets: containerElement.value,
+          height: '8vh',
+          width: '30%',
+          complete () {
+            drawingBoardTitleElement.value.classList.remove('visual-hidden')
+            props.service.send('CLOSE_ANIMATION_END')
+          },
+        })
 
-      if (activeShowElement.value) {
-        anime
-          .timeline({
-            duration: 120,
-            easing: 'linear',
-          })
-          .add({
-            targets: activeShowElement.value,
-            opacity: 0,
-            complete () {
-              activeShowElement.value.style.display = 'none'
-              activeShowElement.value.style.position = 'absolute'
-            },
-          })
-      }
+      anime
+        .timeline({
+          duration: 120,
+          easing: 'linear',
+        })
+        .add({
+          targets: activeShowElement.value,
+          opacity: 0,
+          complete () {
+            activeShowElement.value.style.display = 'none'
+            activeShowElement.value.style.position = 'absolute'
+          },
+        })
     }
 
     function canvasInitialSettings () {
-      if (canvas.value) {
-        canvas.value.width = canvasContainerElement.value.offsetWidth
-        canvas.value.height = canvasContainerElement.value.offsetHeight
-        ctx.value = canvas.value.getContext('2d')
-        ctx.value.lineWidth = 10
-        ctx.value.strokeStyle = '#313131'
-        ctx.value.lineJoin = 'round'
-        ctx.value.lineCap = 'round'
-      }
+      canvas.value.width = canvasContainerElement.value.offsetWidth
+      canvas.value.height = canvasContainerElement.value.offsetHeight
+      ctx.value = canvas.value.getContext('2d')
+      ctx.value.lineWidth = 10
+      ctx.value.strokeStyle = '#313131'
+      ctx.value.lineJoin = 'round'
+      ctx.value.lineCap = 'round'
     }
   },
 }
@@ -445,9 +449,6 @@ export default {
   position: sticky;
   padding: 6px 8px;
   box-sizing: border-box;
-  display: inline-flex;
-  align-items: stretch;
-  justify-content: center;
   bottom: 0;
   width: 30%;
   height: 8vh;
@@ -455,6 +456,7 @@ export default {
 }
 
 .modal {
+  position: relative;
   transition: width 0.3s ease-in-out, height 0.3s ease-in-out;
   will-change: auto;
   box-sizing: border-box;
@@ -482,6 +484,13 @@ export default {
   left: 0;
 }
 
+.table-tooltips {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translate(0, calc(-100% - 10px));
+}
+
 #table-drawing-board-title {
   margin: 0;
   font-size: 1rem;
@@ -498,7 +507,6 @@ export default {
   will-change: auto;
   display: none;
   flex-direction: column;
-
 }
 
 .first-column {
@@ -521,6 +529,7 @@ export default {
   padding: 0;
   text-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
   font-size: 1rem;
+  user-select: none;
 }
 
 .tool-button + .tool-button {

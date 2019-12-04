@@ -325,6 +325,7 @@ td + td {
 
 .table-button[aria-pressed="true"] {
   background-color: var(--main-color);
+  border: solid 2.5px var(--main-color);
 }
 
 .empty-button {
