@@ -125,20 +125,12 @@
       </section>
 
       <table-drawing-board
-        v-show="current.matches('drawingBoard.show')"
-        role="dialog"
-        aria-labelledby="table-drawing-board-title"
-        aria-modal="true"
         :service="service"
         :current="current"
         :activeGroupName="current.context.activeGroupName"
         :activeRow="current.context.activeRow"
         :activeColumn="current.context.activeColumn"
-      >
-        <template #title>
-          <h1 id="table-drawing-board-title">手寫板</h1>
-        </template>
-      </table-drawing-board>
+      ></table-drawing-board>
 
     </section>
   </main>
@@ -231,10 +223,13 @@ export default {
 </script>
 
 <style scoped>
+.table-view {
+  position: relative;
+}
+
 .sticky-top {
   position: sticky;
   top: 0;
-  /* box-shadow: 0 3px 5px var(--main-black); */
 }
 
 .table-title {

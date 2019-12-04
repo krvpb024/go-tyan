@@ -1,17 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="32.729" height="32.727" viewBox="0 0 32.729 32.727">
+<svg xmlns="http://www.w3.org/2000/svg" width="14.729" height="14.727" viewBox="0 0 14.729 14.727">
     <defs>
         <style>
-            .cls-1{fill:#313131}.cls-2{filter:url(#Union_10)}
+            .cls-1{fill:#313131}
         </style>
-        <filter id="Union_10" width="32.729" height="32.727" x="0" y="0" filterUnits="userSpaceOnUse">
-            <feOffset dy="3"/>
-            <feGaussianBlur result="blur" stdDeviation="3"/>
-            <feFlood flood-opacity=".161"/>
-            <feComposite in2="blur" operator="in"/>
-            <feComposite in="SourceGraphic"/>
-        </filter>
     </defs>
-    <g id="Group_101" class="cls-2" data-name="Group 101" transform="translate(-.004 .005)">
-        <path id="Union_10-2" d="M-11781.959-9448.151l-5.657-5.657-5.656 5.657a1 1 0 0 1-1.415 0 1 1 0 0 1 0-1.415l5.657-5.656-5.657-5.657a1 1 0 0 1 0-1.412 1 1 0 0 1 1.415 0l5.656 5.656 5.657-5.656a1 1 0 0 1 1.415 0 1 1 0 0 1 0 1.412l-5.658 5.658 5.655 5.655a1 1 0 0 1 0 1.415.991.991 0 0 1-.705.293 1 1 0 0 1-.707-.293z" class="cls-1" data-name="Union 10" transform="translate(11803.98 9468.58)"/>
+    <g id="Group_101" data-name="Group 101" transform="translate(-.414 -.415)">
+        <path id="Union_10" d="M-11781.959-9448.151l-5.657-5.657-5.656 5.657a1 1 0 0 1-1.415 0 1 1 0 0 1 0-1.415l5.657-5.656-5.657-5.657a1 1 0 0 1 0-1.412 1 1 0 0 1 1.415 0l5.656 5.656 5.657-5.656a1 1 0 0 1 1.415 0 1 1 0 0 1 0 1.412l-5.658 5.658 5.655 5.655a1 1 0 0 1 0 1.415.991.991 0 0 1-.705.293 1 1 0 0 1-.707-.293z" class="cls-1" data-name="Union 10" transform="translate(11795.395 9463)"/>
     </g>
 </svg>
