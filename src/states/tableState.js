@@ -124,16 +124,16 @@ const machine = Machine({
             UPDATE_ACTIVE_CURSOR: [
               {
                 cond: 'isNotChange',
-                target: '.idle',
+                target: ['.idle', '#tableView.drawingBoard.clearCanvasBeforeAnimation'],
               },
               {
                 actions: 'updateActiveCursor',
-                target: ['.switchActive', '#tableView.drawingBoard.show'],
+                target: '#tableView.drawingBoard.openAnimation',
               },
             ],
             CLEAR_ACTIVE_CURSOR: {
               actions: 'clearActiveCursor',
-              target: '.switchActive',
+              target: '.scrollToActiveCursor',
             },
           },
           states: {
@@ -142,15 +142,15 @@ const machine = Machine({
               on: {
                 ACTIVE_CURSOR_TO_PREVIOUS: {
                   actions: 'activeCursorToPrevious',
-                  target: ['#tableView.drawingBoard.show.clearCanvas', 'switchActive'],
+                  target: ['#tableView.drawingBoard.show.clearCanvas', 'scrollToActiveCursor'],
                 },
                 ACTIVE_CURSOR_TO_NEXT: {
                   actions: 'activeCursorToNext',
-                  target: ['#tableView.drawingBoard.show.clearCanvas', 'switchActive'],
+                  target: ['#tableView.drawingBoard.show.clearCanvas', 'scrollToActiveCursor'],
                 },
               },
             },
-            switchActive: {
+            scrollToActiveCursor: {
               on: {
                 SWITCH_ACTIVE_FINISHED: 'active',
               },
@@ -162,9 +162,16 @@ const machine = Machine({
     drawingBoard: {
       initial: 'hide',
       on: {
-        HIDE_DRAWING_BOARD: '.hide',
+        HIDE_DRAWING_BOARD: '.clearCanvasBeforeAnimation',
       },
       states: {
+        openAnimation: {
+          on: {
+            OPEN_ANIMATION_END: {
+              target: ['show', '#tableView.table.cellActive.scrollToActiveCursor'],
+            },
+          },
+        },
         show: {
           initial: 'idle',
           states: {
@@ -180,8 +187,26 @@ const machine = Machine({
             },
           },
         },
+        clearCanvasBeforeAnimation: {
+          on: {
+            CANVAS_CLREAR_FINISHED: 'closeAnimation',
+          },
+        },
+        closeAnimation: {
+          on: {
+            CLOSE_ANIMATION_END: 'hide',
+          },
+        },
         hide: {
+          initial: 'idle',
           entry: [send('FOCUS_CURRENT_ACTIVE_CURSOR'), send('CLEAR_ACTIVE_CURSOR')],
+          on: {
+            SHOW_TOOLTIPS: '.tooltips',
+          },
+          states: {
+            idle: {},
+            tooltips: {},
+          },
         },
       },
     },

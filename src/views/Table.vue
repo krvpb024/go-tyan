@@ -169,8 +169,8 @@ export default {
     )
 
     watch(
-      () => current.value.matches('table.cellActive.switchActive'),
-      function switchActive (value) {
+      () => current.value.matches('table.cellActive.scrollToActiveCursor'),
+      function scrollToActiveCursor (value) {
         if (value) {
           try {
             const { activeGroupName, activeRow, activeColumn } = current.value.context

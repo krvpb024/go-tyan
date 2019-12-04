@@ -11,10 +11,15 @@
       class="modal"
       id="modal"
     >
-      <h1
+      <button
+        class="title-button"
         ref="drawingBoardTitleElement"
-        id="table-drawing-board-title"
-      >手寫板</h1>
+        @click="send('SHOW_TOOLTIPS')"
+      >
+        <h1 id="table-drawing-board-title">
+          手寫板
+        </h1>
+      </button>
 
       <div
         class="active-show"
@@ -253,24 +258,24 @@ export default {
     useModalNavigation(modalButtons, props.current)
 
     watch(
-      () => props.current.matches('drawingBoard.show.clearCanvas'),
+      () => props.current.matches('drawingBoard.show.clearCanvas') ||
+        props.current.matches('drawingBoard.clearCanvasBeforeAnimation'),
       function clearCanvas (value) {
-        if (value) {
-          ctx.value.clearRect(0, 0, canvas.value.width, canvas.value.height)
-          props.service.send('CANVAS_CLREAR_FINISHED')
-        }
+        if (value) props.service.send('CANVAS_CLREAR_FINISHED')
       }
     )
 
     watch(
-      () => props.current.matches('drawingBoard.show'),
-      function focusModalFirstButton (value) {
-        if (value) {
-          openModalAnimation()
-        } else {
-          ctx.value && ctx.value.clearRect(0, 0, canvas.value.width, canvas.value.height)
-          closeModalAnimation()
-        }
+      () => props.current.matches('drawingBoard.openAnimation'),
+      function startOpenAnimation (value) {
+        if (value) openModalAnimation()
+      }
+    )
+
+    watch(
+      () => props.current.matches('drawingBoard.closeAnimation'),
+      function startCloseAnimation (value) {
+        if (value) closeModalAnimation()
       }
     )
 
@@ -350,7 +355,7 @@ export default {
       if (containerElement.value) {
         anime
           .timeline({
-            duration: 300,
+            duration: 200,
             easing: 'easeOutExpo',
           })
           .add({
@@ -363,6 +368,7 @@ export default {
             complete () {
               canvasInitialSettings()
               autoFoucusButton.value && autoFoucusButton.value.focus()
+              props.service.send('OPEN_ANIMATION_END')
             },
           })
       }
@@ -370,7 +376,7 @@ export default {
       if (activeShowElement.value) {
         anime
           .timeline({
-            duration: 300,
+            duration: 200,
             easing: 'linear',
           })
           .add({
@@ -388,7 +394,7 @@ export default {
       if (containerElement.value) {
         anime
           .timeline({
-            duration: 300,
+            duration: 200,
             easing: 'easeOutExpo',
           })
           .add({
@@ -397,6 +403,7 @@ export default {
             width: '30%',
             complete () {
               drawingBoardTitleElement.value.classList.remove('visual-hidden')
+              props.service.send('CLOSE_ANIMATION_END')
             },
           })
       }
@@ -464,6 +471,17 @@ export default {
   align-items: stretch;
 }
 
+.title-button {
+  border: none;
+  background-color: transparent;
+  padding: 0;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+}
+
 #table-drawing-board-title {
   margin: 0;
   font-size: 1rem;
@@ -478,8 +496,9 @@ export default {
   width: 100%;
   height: 100%;
   will-change: auto;
-  display: flex;
+  display: none;
   flex-direction: column;
+
 }
 
 .first-column {
