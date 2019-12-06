@@ -41,7 +41,7 @@ const machine = Machine({
               },
               {
                 actions: ['updateSubmittedGojuon', 'setExamRange'],
-                target: ['#examView.exam.initializeExam', 'hide'],
+                target: ['#examView.exam.setContextToInitial', 'hide'],
               },
             ],
           },
@@ -64,10 +64,17 @@ const machine = Machine({
       },
     },
     exam: {
-      initial: 'initializeExam',
+      initial: 'setContextToInitial',
       states: {
-        initializeExam: {
-          entry: ['setContextToInitial', 'getInitialDataFromLocalStorage'],
+        setContextToInitial: {
+          on: {
+            '': {
+              actions: 'setContextToInitial',
+              target: 'checkIfExamRangeExist',
+            },
+          },
+        },
+        checkIfExamRangeExist: {
           on: {
             '': [
               {
@@ -144,7 +151,7 @@ const machine = Machine({
         examFinish: {
           on: {
             BACK_TO_HOME: {},
-            TAKE_EXAM_AGAIN: 'initializeExam',
+            TAKE_EXAM_AGAIN: 'setContextToInitial',
           },
         },
       },
@@ -207,16 +214,6 @@ const machine = Machine({
       cursor: 0,
       enhancementCards: [],
       enhancementCursor: 0,
-    }),
-    getInitialDataFromLocalStorage: assign(function mutateInitailDataByLocalStorage ({ examRange, submittedGojuon, selectedGojuon }) {
-      const localExamRange = JSON.parse(window.localStorage.getItem('examRange'))
-      const localSubmittedGojuon = JSON.parse(window.localStorage.getItem('submittedGojuon'))
-
-      return {
-        examRange: localExamRange || examRange,
-        submittedGojuon: localSubmittedGojuon || submittedGojuon,
-        selectedGojuon: localSubmittedGojuon || selectedGojuon,
-      }
     }),
     generateExam: assign(function mutateCards ({ examRange }) {
       return {
