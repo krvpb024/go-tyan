@@ -32,16 +32,27 @@
         </gojuon-title>
 
         <div
+          class="gojuon-group-container"
           v-for="(row, rowIndex) in rows"
           :key="rowIndex"
         >
           <input
             type="checkbox"
+            class="visual-hidden"
             :id="`${groupName}-row-${rowIndex}-select-all`"
             :checked="current.context.selectedGojuon.includes(`${groupName}-${rowIndex}`)"
             @input="updateSelectedGojuon({ groupName, rowIndex }, $event)"
           >
-          <label :for="`${groupName}-row-${rowIndex}-select-all`">{{ getRowString(row) }}</label>
+          <checkbox-label :forId="`${groupName}-row-${rowIndex}-select-all`">
+
+            <span
+              v-for="hiragana in getRowString(row)"
+              :key="hiragana"
+              class="label-text"
+            >
+              {{ hiragana }}
+            </span>
+          </checkbox-label>
         </div>
       </section>
 
@@ -59,9 +70,10 @@
 import { generateTitle } from '@/states/gojuon.js'
 import topBar from '@/components/topBar.vue'
 import gojuonTitle from '@/components/gojuonTitle.vue'
+import checkboxLabel from '@/components/checkboxLabel.vue'
 
 export default {
-  components: { topBar, gojuonTitle },
+  components: { topBar, gojuonTitle, checkboxLabel },
   props: {
     service: {
       type: Object,
@@ -84,10 +96,13 @@ export default {
         .filter(function removeEmpty (gojuon) {
           return gojuon != 'empty'
         })
-        .reduce(function flatArrays (acc, column) {
-          const [hiragana] = column
-          return acc.concat(hiragana)
-        }, '')
+        .map(function remainHiragana ([hiragana]) {
+          return hiragana
+        })
+        // .reduce(function flatArrays (acc, column) {
+        //   const [hiragana] = column
+        //   return acc.concat(hiragana)
+        // }, '')
     }
 
     function updateSelectedGojuon ({ groupName, rowIndex }, { currentTarget: { checked } }) {
@@ -115,10 +130,20 @@ export default {
   margin: 0;
 }
 
-.input-group-title {
-  font-size: 1rem;
-  background-color: var(--title-bg-color);
-  padding: 12px 5px;
-  margin: 0;
+.gojuon-group-container {
+  border-bottom: .5px solid #d3d3d3;
+  padding: 10px;
+}
+
+.label-text {
+  font-size: 1.25rem;
+}
+
+.label-text:first-child {
+  margin-left: 10px;
+}
+
+.label-text + .label-text {
+  margin-left: 1rem;
 }
 </style>

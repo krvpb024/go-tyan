@@ -23,7 +23,7 @@ export default {
   border-radius: 4px;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   padding: 2px;
 }
 
