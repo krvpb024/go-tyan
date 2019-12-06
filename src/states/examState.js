@@ -183,19 +183,19 @@ const machine = Machine({
     },
     drawingBoard: {
       initial: 'hide',
-      on: {
-        HIDE_DRAWING_BOARD: '.clearCanvasBeforeAnimation',
-      },
       states: {
-        openAnimation: {
+        openDrawingBoardAnimation: {
           on: {
-            OPEN_ANIMATION_END: {
+            OPEN_DRAWING_BOARD_ANIMATION_END: {
               target: 'show',
             },
           },
         },
         show: {
           initial: 'idle',
+          on: {
+            HIDE_DRAWING_BOARD: 'clearCanvasBeforeAnimation',
+          },
           states: {
             idle: {
               on: {
@@ -211,17 +211,17 @@ const machine = Machine({
         },
         clearCanvasBeforeAnimation: {
           on: {
-            CANVAS_CLREAR_FINISHED: 'closeAnimation',
+            CANVAS_CLREAR_FINISHED: 'closeDrawingBoardAnimation',
           },
         },
-        closeAnimation: {
+        closeDrawingBoardAnimation: {
           on: {
-            CLOSE_ANIMATION_END: 'hide',
+            CLOSE_DRAWING_BOARD_ANIMATION_END: 'hide',
           },
         },
         hide: {
           on: {
-            OPEN_DRAWING_BOARD: 'openAnimation',
+            OPEN_DRAWING_BOARD: 'openDrawingBoardAnimation',
           },
         },
       },

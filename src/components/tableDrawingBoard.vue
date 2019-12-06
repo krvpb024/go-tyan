@@ -284,16 +284,16 @@ export default {
     )
 
     watch(
-      () => props.current.matches('drawingBoard.openAnimation'),
-      function startOpenAnimation (value) {
+      () => props.current.matches('drawingBoard.openDrawingBoardAnimation'),
+      function startOpenDrawingBoardAnimation (value) {
         if (value) openModalAnimation()
       },
       { lazy: true }
     )
 
     watch(
-      () => props.current.matches('drawingBoard.closeAnimation'),
-      function startCloseAnimation (value) {
+      () => props.current.matches('drawingBoard.closeDrawingBoardAnimation'),
+      function startcloseDrawingBoardAnimation (value) {
         if (value) closeModalAnimation()
       },
       { lazy: true }
@@ -387,7 +387,7 @@ export default {
           complete () {
             canvasInitialSettings()
             autoFoucusButton.value && autoFoucusButton.value.focus()
-            props.service.send('OPEN_ANIMATION_END')
+            props.service.send('OPEN_DRAWING_BOARD_ANIMATION_END')
           },
         })
 
@@ -418,7 +418,7 @@ export default {
           width: '30%',
           complete () {
             drawingBoardTitleElement.value.classList.remove('visual-hidden')
-            props.service.send('CLOSE_ANIMATION_END')
+            props.service.send('CLOSE_DRAWING_BOARD_ANIMATION_END')
           },
         })
 

@@ -128,7 +128,7 @@ const machine = Machine({
               },
               {
                 actions: 'updateActiveCursor',
-                target: '#tableView.drawingBoard.openAnimation',
+                target: '#tableView.drawingBoard.openDrawingBoardAnimation',
               },
             ],
             CLEAR_ACTIVE_CURSOR: {
@@ -161,19 +161,19 @@ const machine = Machine({
     },
     drawingBoard: {
       initial: 'hide',
-      on: {
-        HIDE_DRAWING_BOARD: '.clearCanvasBeforeAnimation',
-      },
       states: {
-        openAnimation: {
+        openDrawingBoardAnimation: {
           on: {
-            OPEN_ANIMATION_END: {
+            OPEN_DRAWING_BOARD_ANIMATION_END: {
               target: ['show', '#tableView.table.cellActive.scrollToActiveCursor'],
             },
           },
         },
         show: {
           initial: 'idle',
+          on: {
+            HIDE_DRAWING_BOARD: 'clearCanvasBeforeAnimation',
+          },
           states: {
             idle: {
               on: {
@@ -189,12 +189,12 @@ const machine = Machine({
         },
         clearCanvasBeforeAnimation: {
           on: {
-            CANVAS_CLREAR_FINISHED: 'closeAnimation',
+            CANVAS_CLREAR_FINISHED: 'closeDrawingBoardAnimation',
           },
         },
-        closeAnimation: {
+        closeDrawingBoardAnimation: {
           on: {
-            CLOSE_ANIMATION_END: 'hide',
+            CLOSE_DRAWING_BOARD_ANIMATION_END: 'hide',
           },
         },
         hide: {
