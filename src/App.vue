@@ -11,6 +11,10 @@
   --title-bg-color: #f5f5f5;
 }
 
+body {
+  color: var(--main-black);
+}
+
 .visual-hidden {
   clip-path: inset(100%);
   clip: rect(1px 1px 1px 1px); /* IE 6/7 */
@@ -22,7 +26,8 @@
   width: 1px;
 }
 
-body {
-  color: var(--main-black);
+.focusable:focus {
+  border: solid 2.5px var(--main-color);
+  outline: none;
 }
 </style>

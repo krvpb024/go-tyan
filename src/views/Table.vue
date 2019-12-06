@@ -20,10 +20,9 @@
         :aria-labelledby="`${groupName}-title`"
         class="table-section"
       >
-        <h2
-          class="table-title"
-          :id="`${groupName}-title`"
-        >{{ generateTitle(groupName) }}</h2>
+        <gojuon-title fontSize="1.25rem">
+          <h2 :id="`${groupName}-title`">{{ generateTitle(groupName) }}</h2>
+        </gojuon-title>
 
         <table
           :id="groupName"
@@ -144,12 +143,14 @@ import { generateTitle } from '@/states/gojuon.js'
 import tableDisplayControl from '@/components/tableDisplayControl.vue'
 import tableDrawingBoard from '@/components/tableDrawingBoard.vue'
 import topBar from '@/components/topBar.vue'
+import gojuonTitle from '@/components/gojuonTitle.vue'
 
 export default {
   components: {
     tableDisplayControl,
     tableDrawingBoard,
     topBar,
+    gojuonTitle,
   },
   setup () {
     const { service, current } = useMachine(machine)
@@ -230,13 +231,6 @@ export default {
 .sticky-top {
   position: sticky;
   top: 0;
-}
-
-.table-title {
-  background-color: var(--title-bg-color);
-  padding: 6px 12px;
-  font-size: 1.2rem;
-  margin: 0;
 }
 
 table {

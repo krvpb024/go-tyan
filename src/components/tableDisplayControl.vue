@@ -4,37 +4,34 @@
       <input
         type="checkbox"
         id="hiragana"
-        class="display-checkbox visual-hidden"
+        class="visual-hidden"
         @input="service.send({type: 'HIRAGANA_TOGGLE_DISPLAY', data: $event.target.checked})"
         :checked="current.matches('displayPanel.hiragana.show')"
       >
-      <label
-        for="hiragana"
-        class="display-label"
-      >
+      <checkbox-label forId="hiragana">
         <span class="label-text">顯示平假名</span>
-      </label>
+      </checkbox-label>
     </div>
     <div class="field">
       <input
         type="checkbox"
         id="katakana"
-        class="display-checkbox visual-hidden"
+        class="visual-hidden"
         @input="service.send({type: 'KATAKANA_TOGGLE_DISPLAY', data: $event.target.checked})"
         :checked="current.matches('displayPanel.katakana.show')"
       >
-      <label
-        for="katakana"
-        class="display-label"
-      >
+      <checkbox-label forId="katakana">
         <span class="label-text">顯示片假名</span>
-      </label>
+      </checkbox-label>
     </div>
   </div>
 </template>
 
 <script>
+import checkboxLabel from '@/components/checkboxLabel.vue'
+
 export default {
+  components: { checkboxLabel },
   props: {
     service: {
       type: Object,
@@ -64,22 +61,6 @@ export default {
 
 .field + .field {
   margin-left: 12px;
-}
-
-.display-label::before {
-  content: "";
-  box-sizing: border-box;
-  display: inline-block;
-  width: 14px;
-  height: 14px;
-  border-radius: 4px;
-  border: solid 1.5px var(--main-black);
-  margin-right: 4px;
-  vertical-align: middle;
-}
-
-.display-checkbox:checked + .display-label::before {
-  background-color: var(--main-color);
 }
 
 .label-text {

@@ -4,7 +4,11 @@
     role="dialog"
     aria-modal="true"
   >
-    <h1 id="exam-range-modal-title">選擇測驗範圍</h1>
+    <div class="sticky-top">
+      <top-bar>設定</top-bar>
+    </div>
+
+    <h2 class="subtitle">設定測驗範圍</h2>
 
     <form
       @submit.prevent="service.send('SET_EXAM_RANGE')"
@@ -23,7 +27,9 @@
         v-for="([groupName, rows]) in Object.entries(current.context.gojuon)"
         :key="groupName"
       >
-        <h2>{{generateTitle(groupName)}}</h2>
+        <gojuon-title>
+          <h3>{{generateTitle(groupName)}}</h3>
+        </gojuon-title>
 
         <div
           v-for="(row, rowIndex) in rows"
@@ -51,8 +57,11 @@
 
 <script>
 import { generateTitle } from '@/states/gojuon.js'
+import topBar from '@/components/topBar.vue'
+import gojuonTitle from '@/components/gojuonTitle.vue'
 
 export default {
+  components: { topBar, gojuonTitle },
   props: {
     service: {
       type: Object,
@@ -92,3 +101,24 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+.sticky-top {
+  position: sticky;
+  top: 0;
+}
+
+.subtitle {
+  font-size: 1.2rem;
+  font-weight: bold;
+  padding: 12px 8px;
+  margin: 0;
+}
+
+.input-group-title {
+  font-size: 1rem;
+  background-color: var(--title-bg-color);
+  padding: 12px 5px;
+  margin: 0;
+}
+</style>
