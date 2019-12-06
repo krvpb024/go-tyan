@@ -98,23 +98,43 @@ const machine = Machine({
               },
             },
             answerShowed: {
-              on: {
-                NEXT_CARD: [
-                  {
-                    cond: 'noMoreCards',
-                    actions: send('CLEAR_CANVAS'),
-                    target: '#examView.exam.enhancementExam',
+              initial: 'idle',
+              states: {
+                idle: {},
+                moved: {
+                  on: {
+                    CARD_BACK_TO_POSITION: 'cardBackToPositionAnimation',
+                    NEXT_CARD: [
+                      {
+                        cond: 'addToEnhancement',
+                        actions: ['addCardsToEnhancement', 'nextCard', send('CLEAR_CANVAS')],
+                        target: '#examView.exam.normalExam.answerShowed.cardSwipeAnimation',
+                      },
+                      {
+                        actions: ['nextCard', send('CLEAR_CANVAS')],
+                        target: '#examView.exam.normalExam.answerShowed.cardSwipeAnimation',
+                      },
+                    ],
                   },
-                  {
-                    cond: 'addToEnhancement',
-                    actions: ['addCardsToEnhancement', 'nextCard', send('CLEAR_CANVAS')],
-                    target: 'idle',
+                },
+                cardBackToPositionAnimation: {
+                  on: {
+                    CARD_BACK_TO_POSITION_ANIMATION_END: 'idle',
                   },
-                  {
-                    actions: ['nextCard', send('CLEAR_CANVAS')],
-                    target: 'idle',
+                },
+                cardSwipeAnimation: {
+                  on: {
+                    CARD_SWIPE_ANIMATION_END: [
+                      {
+                        cond: 'noMoreCards',
+                        target: '#examView.exam.enhancementExam',
+                      },
+                      {
+                        target: 'idle',
+                      },
+                    ],
                   },
-                ],
+                },
               },
             },
           },
@@ -132,18 +152,36 @@ const machine = Machine({
               },
             },
             answerShowed: {
-              on: {
-                NEXT_CARD: [
-                  {
-                    cond: 'noMoreEnhancementCards',
-                    actions: send('CLEAR_CANVAS'),
-                    target: '#examView.exam.examFinish',
+              initial: 'idle',
+              states: {
+                idle: {},
+                moved: {
+                  on: {
+                    CARD_BACK_TO_POSITION: 'cardBackToPositionAnimation',
+                    NEXT_CARD: {
+                      actions: ['nextCard', send('CLEAR_CANVAS')],
+                      target: '#examView.exam.enhancementExam.answerShowed.cardSwipeAnimation',
+                    },
                   },
-                  {
-                    actions: ['nextEnhancementCard', send('CLEAR_CANVAS')],
-                    target: 'idle',
+                },
+                cardBackToPositionAnimation: {
+                  on: {
+                    CARD_BACK_TO_POSITION_ANIMATION_END: 'idle',
                   },
-                ],
+                },
+                cardSwipeAnimation: {
+                  on: {
+                    CARD_SWIPE_ANIMATION_END: [
+                      {
+                        cond: 'noMoreEnhancementCards',
+                        target: '#examView.exam.examFinish',
+                      },
+                      {
+                        target: 'idle',
+                      },
+                    ],
+                  },
+                },
               },
             },
           },
