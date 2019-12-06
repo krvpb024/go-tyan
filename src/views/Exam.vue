@@ -7,7 +7,7 @@
     </button>
 
     <exam-range-modal
-      v-show="current.matches('examRangeModal.show')"
+      v-if="current.matches('examRangeModal.show')"
       :service="service"
       :current="current"
     ></exam-range-modal>

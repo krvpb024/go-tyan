@@ -156,19 +156,46 @@ const machine = Machine({
         },
       },
     },
-    drawingBoard: {
+    infoModal: {
       initial: 'hide',
       states: {
+        showInfoModalAnimation: {
+          on: {
+            SHOW_INFO_MODAL_ANIMATION_END: 'show',
+          },
+        },
+        show: {
+          on: {
+            HIDE_INFO_MODAL: 'hideInfoModalAnimation',
+          },
+        },
+        hideInfoModalAnimation: {
+          on: {
+            HIDE_INFO_MODAL_ANIMATION_END: 'hide',
+          },
+        },
         hide: {
           on: {
-            SHOW_DRAWING_BOARD: 'show',
+            SHOW_INFO_MODAL: 'showInfoModalAnimation',
+          },
+        },
+      },
+    },
+    drawingBoard: {
+      initial: 'hide',
+      on: {
+        HIDE_DRAWING_BOARD: '.clearCanvasBeforeAnimation',
+      },
+      states: {
+        openAnimation: {
+          on: {
+            OPEN_ANIMATION_END: {
+              target: 'show',
+            },
           },
         },
         show: {
           initial: 'idle',
-          on: {
-            HIDE_DRAWING_BOARD: 'hide',
-          },
           states: {
             idle: {
               on: {
@@ -177,9 +204,24 @@ const machine = Machine({
             },
             clearCanvas: {
               on: {
-                CANVAS_CLEAR_FINISHED: 'idle',
+                CANVAS_CLREAR_FINISHED: 'idle',
               },
             },
+          },
+        },
+        clearCanvasBeforeAnimation: {
+          on: {
+            CANVAS_CLREAR_FINISHED: 'closeAnimation',
+          },
+        },
+        closeAnimation: {
+          on: {
+            CLOSE_ANIMATION_END: 'hide',
+          },
+        },
+        hide: {
+          on: {
+            OPEN_DRAWING_BOARD: 'openAnimation',
           },
         },
       },

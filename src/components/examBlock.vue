@@ -1,6 +1,8 @@
 <template>
   <section class="container">
-    <h1>{{ title }}</h1>
+    <div class="top-sticky">
+      <top-bar>{{ title }}</top-bar>
+    </div>
 
     <exam-block-card
       :service="service"
@@ -20,9 +22,10 @@
 <script>
 import { computed } from '@vue/composition-api'
 import examBlockCard from '@/components/examBlockCard.vue'
+import topBar from '@/components/topBar.vue'
 
 export default {
-  components: { examBlockCard },
+  components: { topBar, examBlockCard },
   props: {
     service: {
       type: Object,
@@ -96,6 +99,5 @@ export default {
 .container {
   display: flex;
   flex-direction: column;
-  align-items: center;
 }
 </style>
