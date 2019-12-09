@@ -22,34 +22,38 @@ export default new Router({
       component: table,
     },
     {
-      path: '/exam/hiragana_to_romanization',
-      name: 'hiraganaToRomanization',
+      path: '/exam',
       component: exam,
-    },
-    {
-      path: '/exam/katakana_to_romanization',
-      name: 'katakanaToRomanization',
-      component: exam,
-    },
-    {
-      path: '/exam/romanization_to_hiragana',
-      name: 'romanizationToHiragana',
-      component: exam,
-    },
-    {
-      path: '/exam/romanization_to_katakana',
-      name: 'romanizationToKatakana',
-      component: exam,
-    },
-    {
-      path: '/exam/hiragana_to_katakana',
-      name: 'hiraganaToKatakana',
-      component: exam,
-    },
-    {
-      path: '/exam/katakana_to_hiragana',
-      name: 'katakanaToHiragana',
-      component: exam,
+      children: [
+        {
+          path: '',
+          name: 'exam',
+        },
+        {
+          path: 'hiragana_to_romanization',
+          name: 'hiraganaToRomanization',
+        },
+        {
+          path: 'katakana_to_romanization',
+          name: 'katakanaToRomanization',
+        },
+        {
+          path: 'romanization_to_hiragana',
+          name: 'romanizationToHiragana',
+        },
+        {
+          path: 'romanization_to_katakana',
+          name: 'romanizationToKatakana',
+        },
+        {
+          path: 'hiragana_to_katakana',
+          name: 'hiraganaToKatakana',
+        },
+        {
+          path: 'katakana_to_hiragana',
+          name: 'katakanaToHiragana',
+        },
+      ],
     },
   ],
 })
