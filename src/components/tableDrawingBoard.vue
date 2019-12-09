@@ -438,8 +438,8 @@ export default {
     }
 
     function canvasInitialSettings () {
-      canvas.value.width = canvasContainerElement.value.offsetWidth
-      canvas.value.height = canvasContainerElement.value.offsetHeight
+      canvas.value.width = canvasContainerElement.value.clientWidth * 0.95
+      canvas.value.height = canvasContainerElement.value.clientHeight * 0.95
       ctx.value = canvas.value.getContext('2d')
       ctx.value.lineWidth = 10
       ctx.value.strokeStyle = '#313131'
@@ -523,6 +523,7 @@ export default {
 }
 
 .second-column {
+  box-sizing: border-box;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -532,9 +533,8 @@ export default {
 .tool-button {
   box-sizing: border-box;
   background-color: transparent;
-  border: 2px transparent solid;
+  border: solid var(--focus-border-width) transparent;
   font-weight: bold;
-  padding: 0;
   text-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
   font-size: 1rem;
   user-select: none;
@@ -548,18 +548,27 @@ export default {
   margin-left: auto;
 }
 
+.canvas-container {
+  flex: 1;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#canvas {
+  margin: 0;
+  padding: 0;
+  border: solid var(--focus-border-width) transparent;
+}
+
 #canvas:focus, .tool-button:focus {
-  border: 2px var(--main-color) solid;
+  border: var(--focus-border);
   border-radius: 4px;
   outline: none;
 }
 
 .control-hidden {
   display: none;
-}
-
-.canvas-container {
-  flex: 1;
-  height: 100%;
 }
 </style>

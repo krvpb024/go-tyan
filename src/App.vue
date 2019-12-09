@@ -9,7 +9,8 @@
   --main-color: #ffe65a;
   --text-color: #313131;
   --title-bg-color: #f5f5f5;
-  --focus-border: solid 2.5px var(--main-color);
+  --focus-border-width: 2.5px;
+  --focus-border: solid var(--focus-border-width) var(--main-color);
 }
 
 body {
