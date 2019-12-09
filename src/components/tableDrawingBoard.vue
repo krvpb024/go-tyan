@@ -467,7 +467,7 @@ export default {
   will-change: auto;
   box-sizing: border-box;
   box-shadow: 0 2px 20px 0 rgba(0, 0, 0, 0.13);
-  border: solid 2px var(--main-black);
+  border: solid 2px var(--text-color);
   background-color: #fff;
   border-radius: 4px;
   padding: 10px 10px;

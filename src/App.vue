@@ -7,12 +7,13 @@
 <style>
 :root {
   --main-color: #ffe65a;
-  --main-black: #313131;
+  --text-color: #313131;
   --title-bg-color: #f5f5f5;
+  --focus-border: solid 2.5px var(--main-color);
 }
 
 body {
-  color: var(--main-black);
+  color: var(--text-color);
 }
 
 .visual-hidden {
@@ -24,10 +25,5 @@ body {
   position: absolute;
   white-space: nowrap; /* added line */
   width: 1px;
-}
-
-.focusable:focus {
-  border: solid 2.5px var(--main-color);
-  outline: none;
 }
 </style>

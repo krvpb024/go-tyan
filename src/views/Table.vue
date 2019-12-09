@@ -313,13 +313,13 @@ td + td {
 }
 
 .table-button:focus {
-  border: solid 2.5px var(--main-color);
+  border: var(--focus-border);
   outline: none;
 }
 
 .table-button[aria-pressed="true"] {
   background-color: var(--main-color);
-  border: solid 2.5px var(--main-color);
+  border: var(--focus-border);
 }
 
 .empty-button {

@@ -34,7 +34,7 @@ export default {
   width: 14px;
   height: 14px;
   border-radius: 4px;
-  border: solid 1.5px var(--main-black);
+  border: solid 1.5px var(--text-color);
   margin-right: 4px;
   vertical-align: middle;
 }
@@ -44,7 +44,7 @@ input[type="checkbox"]:checked + .display-label::before {
 }
 
 input[type="checkbox"]:focus + .display-label {
-  border: solid 2.5px var(--main-color);
+  border: var(--focus-border);
   outline: none;
   border-radius: 4px;
 }

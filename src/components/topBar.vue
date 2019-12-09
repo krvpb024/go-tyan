@@ -58,7 +58,7 @@ export default {
 
 .top-bar {
   border-radius: 4px;
-  border: solid 2px var(--main-black);
+  border: solid 2px var(--text-color);
   background-color: var(--main-color);
   width: 100%;
   height: 50px;
@@ -80,7 +80,7 @@ export default {
   font-weight: bold;
   line-height: 1.2;
   text-align: center;
-  color: var(--main-black);
+  color: var(--text-color);
   text-shadow: 1.7px 1.5px 0 #fff;
 }
 </style>
