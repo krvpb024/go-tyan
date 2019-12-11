@@ -421,12 +421,12 @@ export default {
           ease: 'circ.inOut',
         })
         .to('.table-drawing-board-active-show', {
-          display: 'none',
-          position: 'absolute',
-        }, '-=0.3')
-        .to('.table-drawing-board-active-show', {
           opacity: 0,
           duration: 0.1,
+        }, '-=0.3')
+        .to('.table-drawing-board-active-show', {
+          display: 'none',
+          duration: 0,
         }, '-=0.3')
       containerElementAnimationTimeline.value.play()
 
