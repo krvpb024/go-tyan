@@ -437,8 +437,8 @@ export default {
     }
 
     function canvasInitialSettings () {
-      canvas.value.width = canvasContainerElement.value.clientWidth * 0.95
-      canvas.value.height = canvasContainerElement.value.clientHeight * 0.95
+      canvas.value.width = canvasContainerElement.value.clientWidth * 0.99
+      canvas.value.height = canvasContainerElement.value.clientHeight * 0.99
       ctx.value = canvas.value.getContext('2d')
       ctx.value.lineWidth = 10
       ctx.value.strokeStyle = '#313131'
