@@ -287,12 +287,15 @@ export default {
     watch(
       () => props.current.matches('drawingBoard.openDrawingBoardAnimation'),
       function startOpenDrawingBoardAnimation (value) {
-        if (value) {
+        if (value && props.current.history.matches('drawingBoard.hide')) {
           openModalAnimation().then(function animationEnd () {
             canvasInitialSettings()
             autoFoucusButton.value && autoFoucusButton.value.focus()
             props.service.send('OPEN_DRAWING_BOARD_ANIMATION_END')
           })
+        } else {
+          autoFoucusButton.value && autoFoucusButton.value.focus()
+          props.service.send('OPEN_DRAWING_BOARD_ANIMATION_END')
         }
       },
       { lazy: true }
@@ -383,13 +386,11 @@ export default {
     }
 
     function openModalAnimation () {
-      gsap.set('.table-drawing-board-container', { clearProps: 'all' })
       drawingBoardTitleElement.value.classList.add('visual-hidden')
 
       containerElementAnimationTimeline.value = gsap.timeline({ paused: true })
       containerElementAnimationTimeline.value
         .to('.table-drawing-board-container', {
-          display: 'block',
           height: '40vh',
           width: '100%',
           duration: 0.3,
@@ -401,7 +402,7 @@ export default {
         }, '-=0.3')
         .to('.table-drawing-board-active-show', {
           opacity: 1,
-          duration: 0.3,
+          duration: 0.1,
         }, '-=0.3')
       containerElementAnimationTimeline.value.play()
 
@@ -409,7 +410,27 @@ export default {
     }
 
     function closeModalAnimation () {
-      return containerElementAnimationTimeline.value.reverse()
+      drawingBoardTitleElement.value.classList.add('visual-hidden')
+
+      containerElementAnimationTimeline.value = gsap.timeline({ paused: true })
+      containerElementAnimationTimeline.value
+        .to('.table-drawing-board-container', {
+          height: '50px',
+          width: '100px',
+          duration: 0.3,
+          ease: 'circ.inOut',
+        })
+        .to('.table-drawing-board-active-show', {
+          display: 'none',
+          position: 'absolute',
+        }, '-=0.3')
+        .to('.table-drawing-board-active-show', {
+          opacity: 0,
+          duration: 0.1,
+        }, '-=0.3')
+      containerElementAnimationTimeline.value.play()
+
+      return containerElementAnimationTimeline.value
         .then(function animationEnd () {
           drawingBoardTitleElement.value.classList.remove('visual-hidden')
         })
