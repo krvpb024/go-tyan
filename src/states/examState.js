@@ -1,23 +1,25 @@
-import { Machine, assign, send } from 'xstate'
+import { Machine, assign } from 'xstate'
 import { gojuon } from '@/states/gojuon.js'
 
 const machine = Machine({
-  id: 'examView',
+  id: 'examRangeView',
   type: 'parallel',
   context: {
     gojuon,
     selectedGojuon: [],
     submittedGojuon: [],
     examRange: [],
-    cards: [],
-    cursor: 0,
-    enhancementCards: [],
-    enhancementCursor: 0,
   },
   states: {
+    idle: {},
     examRangeModal: {
       initial: 'hide',
       states: {
+        showAnimation: {
+          on: {
+            SHOW_EXAM_RANGE_MODAL_ANIMATION_END: 'show',
+          },
+        },
         show: {
           initial: 'idle',
           on: {
@@ -28,7 +30,7 @@ const machine = Machine({
               },
               {
                 actions: 'undoMutateSelectedGojuon',
-                target: 'hide',
+                target: 'hideAnimation',
               },
             ],
             UPDATE_SELECTED_GOJUON: {
@@ -41,7 +43,7 @@ const machine = Machine({
               },
               {
                 actions: ['updateSubmittedGojuon', 'setExamRange'],
-                target: ['#examView.exam.setContextToInitial', 'hide'],
+                target: 'hideAnimation',
               },
             ],
           },
@@ -54,212 +56,16 @@ const machine = Machine({
             },
           },
         },
-        hide: {
+        hideAnimation: {
           on: {
-            SHOW_EXAM_RANGE_MODAL: {
-              target: ['show'],
-            },
-          },
-        },
-      },
-    },
-    exam: {
-      initial: 'setContextToInitial',
-      states: {
-        setContextToInitial: {
-          on: {
-            '': {
-              actions: 'setContextToInitial',
-              target: 'checkIfExamRangeExist',
-            },
-          },
-        },
-        checkIfExamRangeExist: {
-          on: {
-            '': [
-              {
-                cond: 'noExamRange',
-                target: ['#examView.examRangeModal.show.idle', 'settingExamRange'],
-              },
-              {
-                target: 'normalExam',
-              },
-            ],
-          },
-        },
-        settingExamRange: {},
-        normalExam: {
-          initial: 'idle',
-          entry: ['generateExam'],
-          states: {
-            idle: {
-              on: {
-                SHOW_ANSWER: 'answerShowed',
-              },
-            },
-            answerShowed: {
-              initial: 'idle',
-              states: {
-                idle: {},
-                moved: {
-                  on: {
-                    CARD_BACK_TO_POSITION: 'cardBackToPositionAnimation',
-                    NEXT_CARD: [
-                      {
-                        cond: 'addToEnhancement',
-                        actions: ['addCardsToEnhancement', 'nextCard', send('CLEAR_CANVAS')],
-                        target: '#examView.exam.normalExam.answerShowed.cardSwipeAnimation',
-                      },
-                      {
-                        actions: ['nextCard', send('CLEAR_CANVAS')],
-                        target: '#examView.exam.normalExam.answerShowed.cardSwipeAnimation',
-                      },
-                    ],
-                  },
-                },
-                cardBackToPositionAnimation: {
-                  on: {
-                    CARD_BACK_TO_POSITION_ANIMATION_END: 'idle',
-                  },
-                },
-                cardSwipeAnimation: {
-                  on: {
-                    CARD_SWIPE_ANIMATION_END: [
-                      {
-                        cond: 'noMoreCards',
-                        target: '#examView.exam.enhancementExam',
-                      },
-                      {
-                        target: 'idle',
-                      },
-                    ],
-                  },
-                },
-              },
-            },
-          },
-        },
-        enhancementExam: {
-          initial: 'idle',
-          states: {
-            idle: {
-              on: {
-                '': {
-                  cond: 'noEnhancementCards',
-                  target: '#examView.exam.examFinish',
-                },
-                SHOW_ANSWER: 'answerShowed',
-              },
-            },
-            answerShowed: {
-              initial: 'idle',
-              states: {
-                idle: {},
-                moved: {
-                  on: {
-                    CARD_BACK_TO_POSITION: 'cardBackToPositionAnimation',
-                    NEXT_CARD: {
-                      actions: ['nextCard', send('CLEAR_CANVAS')],
-                      target: '#examView.exam.enhancementExam.answerShowed.cardSwipeAnimation',
-                    },
-                  },
-                },
-                cardBackToPositionAnimation: {
-                  on: {
-                    CARD_BACK_TO_POSITION_ANIMATION_END: 'idle',
-                  },
-                },
-                cardSwipeAnimation: {
-                  on: {
-                    CARD_SWIPE_ANIMATION_END: [
-                      {
-                        cond: 'noMoreEnhancementCards',
-                        target: '#examView.exam.examFinish',
-                      },
-                      {
-                        target: 'idle',
-                      },
-                    ],
-                  },
-                },
-              },
-            },
-          },
-        },
-        examFinish: {
-          on: {
-            BACK_TO_HOME: {},
-            TAKE_EXAM_AGAIN: 'setContextToInitial',
-          },
-        },
-      },
-    },
-    infoModal: {
-      initial: 'hide',
-      states: {
-        showInfoModalAnimation: {
-          on: {
-            SHOW_INFO_MODAL_ANIMATION_END: 'show',
-          },
-        },
-        show: {
-          on: {
-            HIDE_INFO_MODAL: 'hideInfoModalAnimation',
-          },
-        },
-        hideInfoModalAnimation: {
-          on: {
-            HIDE_INFO_MODAL_ANIMATION_END: 'hide',
+            HIDE_EXAM_RANGE_MODAL_ANIMATION_END: 'hide',
           },
         },
         hide: {
           on: {
-            SHOW_INFO_MODAL: 'showInfoModalAnimation',
-          },
-        },
-      },
-    },
-    drawingBoard: {
-      initial: 'hide',
-      states: {
-        openDrawingBoardAnimation: {
-          on: {
-            OPEN_DRAWING_BOARD_ANIMATION_END: {
-              target: 'show',
+            SHOW_EXAM_RANGE_MODAL: {
+              target: 'showAnimation',
             },
-          },
-        },
-        show: {
-          initial: 'idle',
-          on: {
-            HIDE_DRAWING_BOARD: 'clearCanvasBeforeAnimation',
-          },
-          states: {
-            idle: {
-              on: {
-                CLEAR_CANVAS: 'clearCanvas',
-              },
-            },
-            clearCanvas: {
-              on: {
-                CANVAS_CLREAR_FINISHED: 'idle',
-              },
-            },
-          },
-        },
-        clearCanvasBeforeAnimation: {
-          on: {
-            CANVAS_CLREAR_FINISHED: 'closeDrawingBoardAnimation',
-          },
-        },
-        closeDrawingBoardAnimation: {
-          on: {
-            CLOSE_DRAWING_BOARD_ANIMATION_END: 'hide',
-          },
-        },
-        hide: {
-          on: {
-            OPEN_DRAWING_BOARD: 'openDrawingBoardAnimation',
           },
         },
       },
@@ -273,31 +79,11 @@ const machine = Machine({
     selectedGojuonIsEmpty ({ selectedGojuon }) {
       return !(selectedGojuon.length > 0)
     },
-    noExamRange ({ examRange }) {
-      return examRange.length == 0
-    },
-    noMoreCards ({ cards, cursor }) {
-      return cursor == cards.length - 1
-    },
-    addToEnhancement (context, { addToEnhancement }) {
-      return Boolean(addToEnhancement)
-    },
-    noEnhancementCards ({ enhancementCards }) {
-      return enhancementCards.length == 0
-    },
-    noMoreEnhancementCards ({ enhancementCards, enhancementCursor }) {
-      return enhancementCursor == enhancementCards.length - 1
-    },
   },
   actions: {
-    setContextToInitial: assign({
-      cursor: 0,
-      enhancementCards: [],
-      enhancementCursor: 0,
-    }),
-    generateExam: assign(function mutateCards ({ examRange }) {
+    undoMutateSelectedGojuon: assign(function undoMutateSelectedGojuon ({ submittedGojuon }) {
       return {
-        cards: shuffle(examRange),
+        selectedGojuon: submittedGojuon,
       }
     }),
     updateSelectedGojuon: assign(function mutateSelectedGojuon ({ selectedGojuon }, {
@@ -324,11 +110,6 @@ const machine = Machine({
         submittedGojuon: selectedGojuon,
       }
     }),
-    undoMutateSelectedGojuon: assign(function undoMutateSelectedGojuon ({ submittedGojuon }) {
-      return {
-        selectedGojuon: submittedGojuon,
-      }
-    }),
     setExamRange: assign(function mutateExamRange ({ submittedGojuon }) {
       const result = submittedGojuon
         .map(function turnStringNameToRowArray (stringName) {
@@ -348,41 +129,9 @@ const machine = Machine({
         examRange: [...result],
       }
     }),
-    addCardsToEnhancement: assign(function addCardsToEnhancement ({ enhancementCards, cards, cursor }) {
-      return {
-        enhancementCards: [...enhancementCards, cards[cursor]],
-      }
-    }),
-    nextCard: assign(function cursorToNext ({ cursor }) {
-      return {
-        cursor: cursor + 1,
-      }
-    }),
-    nextEnhancementCard: assign(function enhancementCursorToNext ({ enhancementCursor }) {
-      return {
-        enhancementCursor: enhancementCursor + 1,
-      }
-    }),
   },
 })
 
 export {
   machine,
-}
-
-function shuffle (array) {
-  const resultArray = [...array]
-  let m = resultArray.length
-  let t
-  let i
-
-  while (m) {
-    i = Math.floor(Math.random() * m--)
-
-    t = resultArray[m]
-    resultArray[m] = resultArray[i]
-    resultArray[i] = t
-  }
-
-  return resultArray
 }

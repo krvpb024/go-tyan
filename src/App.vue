@@ -13,6 +13,10 @@
   --focus-border: solid var(--focus-border-width) var(--main-color);
 }
 
+* {
+  box-sizing: border-box;
+}
+
 body {
   color: var(--text-color);
 }
@@ -26,5 +30,20 @@ body {
   position: absolute;
   white-space: nowrap; /* added line */
   width: 1px;
+}
+
+.root-sticky-top {
+  box-sizing: border-box;
+  padding: 8px;
+  background-color: #fff;
+  padding-bottom: 0;
+  position: sticky;
+  top: 0;
+}
+
+.root-top-bar-link-icon {
+  display:flex;
+  align-items: center;
+  justify-content: center;
 }
 </style>

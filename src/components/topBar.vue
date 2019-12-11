@@ -1,86 +1,75 @@
 <template>
-  <div class="container">
-    <div class="top-bar">
-      <router-link
-        to="/"
-        class="left-icon"
-        aria-labelledby="nav-return-label"
-      >
-        <svg
-          role="img"
-          aria-labelledby="nav-return-label"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 20 20"
-          width="18.035"
-          height="16.297"
-        >
-          <title id="nav-return-label">返回</title>
+  <div class="top-bar" :class="{ 'top-bar-border': withBorder }">
+    <div class="left-container">
+      <slot name="leftContainer"></slot>
+    </div>
 
-          <filter id="shadow">
-            <feDropShadow
-              dx="2.2"
-              dy="2.2"
-              stdDeviation="0"
-              flood-color="#ffffff"
-            />
-          </filter>
+    <div class="title">
+      <slot></slot>
+    </div>
 
-          <path
-            aria-labelledby="nav-return-label"
-            d="M7.865 16.414L.684 9.233a.967.967 0 0 1 0-1.368L7.865.684a.967.967 0 0 1 1.368 1.368L3.792 7.493h13.676a.967.967 0 1 1 0 1.934H3.614l5.619 5.619a.967.967 0 1 1-1.368 1.368z"
-            stroke="#313131"
-            filter="url(#shadow)"
-            stroke-width="0.6"
-          />
-        </svg>
-      </router-link>
-
-      <h1 class="title">
-        <slot></slot>
-      </h1>
+    <div class="right-container">
+      <slot name="rightContainer"></slot>
     </div>
   </div>
 </template>
 
 <script>
 export default {
-
+  props: {
+    withBorder: {
+      type: Boolean,
+      default: true,
+    },
+  },
 }
 </script>
 
 <style scoped>
-.container {
-  box-sizing: border-box;
-  padding: 8px;
-  background-color: #fff;
-  padding-bottom: 0;
-}
-
 .top-bar {
+  box-sizing: border-box;
   border-radius: 4px;
-  border: solid 2px var(--text-color);
   background-color: var(--main-color);
   width: 100%;
   height: 50px;
-  box-shadow: inset 4px -4px #fff, inset -5px 0 #fff;
+  box-shadow: inset 2px -2px #fff, inset -3px 0 #fff;
   display: grid;
-  grid-template: "left-button title right-button" 1fr / 40px 1fr 40px;
+  grid-template: "left-button title right-button" 1fr / 50px 1fr 50px;
   justify-items: center;
   align-items: center;
 }
 
-.left-icon {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.top-bar-border {
+  border: solid 2px var(--text-color);
 }
 
-.title {
+.title h1 {
   font-size: 1.25rem;
   font-weight: bold;
-  line-height: 1.2;
   text-align: center;
   color: var(--text-color);
   text-shadow: 1.7px 1.5px 0 #fff;
+}
+
+.left-container, .right-container {
+  position: relative;
+}
+
+.left-container *:focus, .right-container *:focus {
+  border: 2.5px solid var(--text-color);
+  outline: none;
+  border-radius: 4px;
+}
+
+.left-container button, .right-container button, .left-container a, .right-container a {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  background-color: transparent;
+  font-weight: bold;
+  font-size: 1rem;
+  text-shadow: 1.7px 1.5px 0 #fff;
+  padding: 4px;
 }
 </style>

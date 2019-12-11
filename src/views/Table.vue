@@ -1,18 +1,56 @@
 <template>
-  <main>
-    <section class="table-view">
-      <div
-        class="sticky-top"
-        ref="topStickyElement"
-      >
-        <top-bar>五十音表格</top-bar>
+  <section class="table-view">
+    <div
+      class="root-sticky-top"
+      ref="topStickyElement"
+    >
+      <top-bar>
+        <template #leftContainer>
+          <router-link
+            to="/"
+            class="left-icon"
+            aria-labelledby="nav-return-label"
+          >
+            <svg
+              role="img"
+              aria-labelledby="nav-return-label"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+              width="18.035"
+              height="16.297"
+            >
+              <title id="nav-return-label">返回</title>
 
-        <table-display-control
-          :service="service"
-          :current="current"
-        ></table-display-control>
-      </div>
+              <filter id="shadow">
+                <feDropShadow
+                  dx="2.2"
+                  dy="2.2"
+                  stdDeviation="0"
+                  flood-color="#ffffff"
+                />
+              </filter>
 
+              <path
+                aria-labelledby="nav-return-label"
+                d="M7.865 16.414L.684 9.233a.967.967 0 0 1 0-1.368L7.865.684a.967.967 0 0 1 1.368 1.368L3.792 7.493h13.676a.967.967 0 1 1 0 1.934H3.614l5.619 5.619a.967.967 0 1 1-1.368 1.368z"
+                stroke="#313131"
+                filter="url(#shadow)"
+                stroke-width="0.6"
+              />
+            </svg>
+          </router-link>
+        </template>
+
+        <h1>五十音表格</h1>
+      </top-bar>
+
+      <table-display-control
+        :service="service"
+        :current="current"
+      ></table-display-control>
+    </div>
+
+    <main>
       <section
         v-for="([groupName, rows]) in Object.entries(current.context.gojuon)"
         :key="groupName"
@@ -131,8 +169,8 @@
         :activeColumn="current.context.activeColumn"
       ></table-drawing-board>
 
-    </section>
-  </main>
+    </main>
+  </section>
 </template>
 
 <script>
@@ -146,6 +184,7 @@ import topBar from '@/components/topBar.vue'
 import gojuonTitle from '@/components/gojuonTitle.vue'
 
 export default {
+  name: 'Table',
   components: {
     tableDisplayControl,
     tableDrawingBoard,
@@ -226,11 +265,6 @@ export default {
 <style scoped>
 .table-view {
   position: relative;
-}
-
-.sticky-top {
-  position: sticky;
-  top: 0;
 }
 
 table {

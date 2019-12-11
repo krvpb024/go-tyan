@@ -23,37 +23,40 @@ export default new Router({
     },
     {
       path: '/exam',
+      name: 'exam',
       component: exam,
-      children: [
-        {
-          path: '',
-          name: 'exam',
-        },
-        {
-          path: 'hiragana_to_romanization',
-          name: 'hiraganaToRomanization',
-        },
-        {
-          path: 'katakana_to_romanization',
-          name: 'katakanaToRomanization',
-        },
-        {
-          path: 'romanization_to_hiragana',
-          name: 'romanizationToHiragana',
-        },
-        {
-          path: 'romanization_to_katakana',
-          name: 'romanizationToKatakana',
-        },
-        {
-          path: 'hiragana_to_katakana',
-          name: 'hiraganaToKatakana',
-        },
-        {
-          path: 'katakana_to_hiragana',
-          name: 'katakanaToHiragana',
-        },
-      ],
     },
   ],
 })
+
+// children: [
+//   {
+//     path: 'settings',
+//     name: 'settings',
+//     component: examRange,
+//   },
+//   {
+//     path: 'hiragana_to_romanization',
+//     name: 'hiraganaToRomanization',
+//   },
+//   {
+//     path: 'katakana_to_romanization',
+//     name: 'katakanaToRomanization',
+//   },
+//   {
+//     path: 'romanization_to_hiragana',
+//     name: 'romanizationToHiragana',
+//   },
+//   {
+//     path: 'romanization_to_katakana',
+//     name: 'romanizationToKatakana',
+//   },
+//   {
+//     path: 'hiragana_to_katakana',
+//     name: 'hiraganaToKatakana',
+//   },
+//   {
+//     path: 'katakana_to_hiragana',
+//     name: 'katakanaToHiragana',
+//   },
+// ],
