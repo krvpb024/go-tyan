@@ -109,7 +109,16 @@ export default {
   name: 'Exam',
   components: { topBar, examRangeModal },
   setup (props, context) {
-    const { service, current } = useMachine(machine)
+    const localExamRange = JSON.parse(window.localStorage.getItem('examRange'))
+    const localSubmittedGojuon = JSON.parse(window.localStorage.getItem('submittedGojuon'))
+
+    const { service, current } = useMachine(machine.withContext({
+      ...machine.context,
+      examRange: localExamRange || machine.context.examRange,
+      submittedGojuon: localSubmittedGojuon || machine.context.submittedGojuon,
+      selectedGojuon: localSubmittedGojuon || machine.context.selectedGojuon,
+    }))
+
     const settingButtonElement = ref(null)
     const settingButtonBoundingClientRect = ref(null)
 

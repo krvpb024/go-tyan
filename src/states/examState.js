@@ -3,14 +3,37 @@ import { gojuon } from '@/states/gojuon.js'
 
 const machine = Machine({
   id: 'examRangeView',
-  type: 'parallel',
+  initial: 'pageUnounted',
   context: {
     gojuon,
     selectedGojuon: [],
     submittedGojuon: [],
     examRange: [],
   },
+  on: {
+    SHOW_EXAM_RANGE_MODAL: {
+      target: 'examRangeModal.showAnimation',
+    },
+  },
   states: {
+    pageUnounted: {
+      on: {
+        PAGE_MOUNTED: 'checkIfExamRangeExist',
+      },
+    },
+    checkIfExamRangeExist: {
+      on: {
+        '': [
+          {
+            cond: 'noExamRange',
+            target: 'examRangeModal.showAnimation',
+          },
+          {
+            target: 'idle',
+          },
+        ],
+      },
+    },
     idle: {},
     examRangeModal: {
       initial: 'hide',
@@ -61,13 +84,7 @@ const machine = Machine({
             HIDE_EXAM_RANGE_MODAL_ANIMATION_END: 'hide',
           },
         },
-        hide: {
-          on: {
-            SHOW_EXAM_RANGE_MODAL: {
-              target: 'showAnimation',
-            },
-          },
-        },
+        hide: {},
       },
     },
   },
@@ -78,6 +95,9 @@ const machine = Machine({
     },
     selectedGojuonIsEmpty ({ selectedGojuon }) {
       return !(selectedGojuon.length > 0)
+    },
+    noExamRange ({ examRange }) {
+      return examRange.length == 0
     },
   },
   actions: {

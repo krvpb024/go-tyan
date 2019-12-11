@@ -6,7 +6,7 @@
     aria-modal="true"
     ref="examRangeModalContainerElement"
   >
-    <div class="exam-range-background"></div>
+    <div class="exam-range-background" @click="service.send('HIDE_EXAM_RANGE_MODAL')"></div>
 
     <div
       class="exam-range-modal"
@@ -119,7 +119,7 @@
 </template>
 
 <script>
-import { ref, watch } from '@vue/composition-api'
+import { ref, watch, onMounted } from '@vue/composition-api'
 import { gsap } from 'gsap'
 import { generateTitle } from '@/states/gojuon.js'
 import topBar from '@/components/topBar.vue'
@@ -173,6 +173,10 @@ export default {
       },
       { lazy: true }
     )
+
+    onMounted(function examRangeModalOnMounted () {
+      props.service.send('PAGE_MOUNTED')
+    })
 
     return {
       examRangeModalContainerElement,
