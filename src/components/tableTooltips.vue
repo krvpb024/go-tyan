@@ -8,7 +8,7 @@
 
 <script>
 import { ref, watch } from '@vue/composition-api'
-import anime from 'animejs/lib/anime.es.js'
+import { gsap } from 'gsap'
 
 export default {
   props: {
@@ -24,10 +24,16 @@ export default {
   setup (props) {
     const tooltipsElement = ref(null)
 
+    const tooltipsElementAnimationTimeline = ref(null)
+
     watch(
       () => props.current.matches('drawingBoard.hide.showTooltipsAnimation'),
       function startShowTooltipsAnimation (value) {
-        if (value) showTooltips()
+        if (value) {
+          showTooltips().then(function animationEnd () {
+            props.service.send('SHOW_TOOLTIPS_ANIMATION_END')
+          })
+        }
       },
       { lazy: true }
     )
@@ -45,7 +51,11 @@ export default {
     watch(
       () => props.current.matches('drawingBoard.hide.hideTooltipsAnimation'),
       function startHideTooltipsAnimation (value) {
-        if (value) hideTooltips()
+        if (value) {
+          hideTooltips().then(function animationEnd () {
+            props.service.send('HIDE_TOOLTIPS_ANIMATION_END')
+          })
+        }
       },
       { lazy: true }
     )
@@ -55,37 +65,25 @@ export default {
     }
 
     function showTooltips () {
-      anime
-        .timeline({
-          duration: 100,
-          easing: 'linear',
+      gsap.set('.tooltips-container', { clearProps: 'all' })
+
+      tooltipsElementAnimationTimeline.value = gsap.timeline({ paused: true })
+      tooltipsElementAnimationTimeline.value
+        .to('.tooltips-container', {
+          display: 'flex',
+          duration: 0,
         })
-        .add({
-          targets: tooltipsElement.value,
+        .to('.tooltips-container', {
           opacity: 1,
-          begin () {
-            tooltipsElement.value.style.display = 'flex'
-          },
-          complete () {
-            props.service.send('SHOW_TOOLTIPS_ANIMATION_END')
-          },
+          duration: 0.1,
         })
+      tooltipsElementAnimationTimeline.value.play()
+
+      return tooltipsElementAnimationTimeline.value
     }
 
     function hideTooltips () {
-      anime
-        .timeline({
-          duration: 100,
-          easing: 'linear',
-        })
-        .add({
-          targets: tooltipsElement.value,
-          opacity: 0,
-          complete () {
-            tooltipsElement.value.style.display = 'none'
-            props.service.send('HIDE_TOOLTIPS_ANIMATION_END')
-          },
-        })
+      return tooltipsElementAnimationTimeline.value.reverse()
     }
   },
 }

@@ -211,7 +211,6 @@ export default {
         .from('.exam-range-modal', {
           left: props.buttonInfo.left,
           top: props.buttonInfo.top,
-
           width: props.buttonInfo.width,
           height: props.buttonInfo.height,
           duration: 0.3,

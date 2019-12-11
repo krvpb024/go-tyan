@@ -3,12 +3,12 @@
     role="dialog"
     aria-labelledby="table-drawing-board-title"
     aria-modal="true"
-    class="container"
+    class="table-drawing-board-container"
     ref="containerElement"
   >
     <div
       ref="modalElement"
-      class="modal"
+      class="table-drawing-board-modal"
       id="modal"
     >
       <button
@@ -28,7 +28,7 @@
       </button>
 
       <div
-        class="active-show"
+        class="table-drawing-board-active-show"
         ref="activeShowElement"
       >
 
@@ -204,7 +204,6 @@
                 />
               </g>
             </svg>
-
           </button>
         </div>
       </div>
@@ -214,7 +213,7 @@
 
 <script>
 import { ref, watch, onMounted, onUpdated } from '@vue/composition-api'
-import anime from 'animejs/lib/anime.es.js'
+import { gsap } from 'gsap'
 import { useModalNavigation } from '@/utils/useModalNavigation.js'
 import tableTooltips from '@/components/tableTooltips.vue'
 
@@ -271,6 +270,8 @@ export default {
 
     useModalNavigation(modalButtons, props.current)
 
+    const containerElementAnimationTimeline = ref(null)
+
     watch(
       () => props.current.matches('drawingBoard.show.clearCanvas') ||
         props.current.matches('drawingBoard.clearCanvasBeforeAnimation'),
@@ -286,7 +287,13 @@ export default {
     watch(
       () => props.current.matches('drawingBoard.openDrawingBoardAnimation'),
       function startOpenDrawingBoardAnimation (value) {
-        if (value) openModalAnimation()
+        if (value) {
+          openModalAnimation().then(function animationEnd () {
+            canvasInitialSettings()
+            autoFoucusButton.value && autoFoucusButton.value.focus()
+            props.service.send('OPEN_DRAWING_BOARD_ANIMATION_END')
+          })
+        }
       },
       { lazy: true }
     )
@@ -294,7 +301,11 @@ export default {
     watch(
       () => props.current.matches('drawingBoard.closeDrawingBoardAnimation'),
       function startcloseDrawingBoardAnimation (value) {
-        if (value) closeModalAnimation()
+        if (value) {
+          closeModalAnimation().then(function animationEnd () {
+            props.service.send('CLOSE_DRAWING_BOARD_ANIMATION_END')
+          })
+        }
       },
       { lazy: true }
     )
@@ -372,68 +383,35 @@ export default {
     }
 
     function openModalAnimation () {
-      anime
-        .timeline({
-          duration: 300,
-          easing: 'easeOutExpo',
-        })
-        .add({
-          targets: containerElement.value,
+      gsap.set('.table-drawing-board-container', { clearProps: 'all' })
+      drawingBoardTitleElement.value.classList.add('visual-hidden')
+
+      containerElementAnimationTimeline.value = gsap.timeline({ paused: true })
+      containerElementAnimationTimeline.value
+        .to('.table-drawing-board-container', {
+          display: 'block',
           height: '40vh',
           width: '100%',
-          begin () {
-            drawingBoardTitleElement.value.classList.add('visual-hidden')
-          },
-          complete () {
-            canvasInitialSettings()
-            autoFoucusButton.value && autoFoucusButton.value.focus()
-            props.service.send('OPEN_DRAWING_BOARD_ANIMATION_END')
-          },
+          duration: 0.3,
+          ease: 'circ.inOut',
         })
-
-      anime
-        .timeline({
-          duration: 300,
-          easing: 'linear',
-        })
-        .add({
-          targets: activeShowElement.value,
+        .to('.table-drawing-board-active-show', {
+          display: 'flex',
+          position: 'relative',
+        }, '-=0.3')
+        .to('.table-drawing-board-active-show', {
           opacity: 1,
-          begin () {
-            activeShowElement.value.style.display = 'flex'
-            activeShowElement.value.style.position = 'relative'
-          },
-        })
+          duration: 0.3,
+        }, '-=0.3')
+      containerElementAnimationTimeline.value.play()
+
+      return containerElementAnimationTimeline.value
     }
 
     function closeModalAnimation () {
-      anime
-        .timeline({
-          duration: 300,
-          easing: 'easeOutExpo',
-        })
-        .add({
-          targets: containerElement.value,
-          height: '8vh',
-          width: '30%',
-          complete () {
-            drawingBoardTitleElement.value.classList.remove('visual-hidden')
-            props.service.send('CLOSE_DRAWING_BOARD_ANIMATION_END')
-          },
-        })
-
-      anime
-        .timeline({
-          duration: 150,
-          easing: 'linear',
-        })
-        .add({
-          targets: activeShowElement.value,
-          opacity: 0,
-          complete () {
-            activeShowElement.value.style.display = 'none'
-            activeShowElement.value.style.position = 'absolute'
-          },
+      return containerElementAnimationTimeline.value.reverse()
+        .then(function animationEnd () {
+          drawingBoardTitleElement.value.classList.remove('visual-hidden')
         })
     }
 
@@ -451,17 +429,17 @@ export default {
 </script>
 
 <style scoped>
-.container {
+.table-drawing-board-container {
   position: sticky;
   padding: 6px 8px;
   box-sizing: border-box;
   bottom: 0;
-  width: 30%;
-  height: 8vh;
+  width: 100px;
+  height: 50px;
   will-change: auto;
 }
 
-.modal {
+.table-drawing-board-modal {
   position: relative;
   transition: width 0.3s ease-in-out, height 0.3s ease-in-out;
   will-change: auto;
@@ -504,7 +482,7 @@ export default {
   text-align: center;
 }
 
-.active-show {
+.table-drawing-board-active-show {
   box-sizing: border-box;
   opacity: 0;
   position: absolute;
