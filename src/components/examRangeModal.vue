@@ -8,15 +8,11 @@
   >
     <div class="exam-range-background" @click="service.send('HIDE_EXAM_RANGE_MODAL')"></div>
 
-    <div class="exam-range-modal">
+    <form class="exam-range-modal" @submit.prevent="service.send('SET_EXAM_RANGE')">
       <div class="top-bar">
-        <top-bar
-          :withBorder="false"
-          @leftClick="service.send('HIDE_EXAM_RANGE_MODAL')"
-          @rightClick="service.send('SET_EXAM_RANGE')"
-        >
+        <top-bar :withBorder="false">
           <template #leftContainer>
-            <button @click="service.send('HIDE_EXAM_RANGE_MODAL')">
+            <button type="button" @click="service.send('HIDE_EXAM_RANGE_MODAL')">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="14.729"
@@ -55,7 +51,7 @@
           <h1 id="exam-range-modal-title">設定</h1>
 
           <template #rightContainer>
-            <button @click="service.send('SET_EXAM_RANGE')">儲存</button>
+            <button @click="service.send('SET_EXAM_RANGE')" type="submit">儲存</button>
           </template>
         </top-bar>
       </div>
@@ -64,10 +60,7 @@
 
         <h2 class="subtitle">設定測驗範圍</h2>
 
-        <form
-          @submit.prevent="service.send('SET_EXAM_RANGE')"
-          aria-labelledby="exam-range-modal-title"
-        >
+        <div>
           <section v-show="current.matches('examRangeModal.show.error')">
             <div
               role="alert"
@@ -109,9 +102,9 @@
               </checkbox-label>
             </div>
           </section>
-        </form>
+        </div>
       </div>
-    </div>
+    </form>
   </section>
 </template>
 
