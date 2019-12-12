@@ -50,7 +50,7 @@
         <button
           class="exam-mode-info-modal-button"
           ref="examModeInfoModalButtonElement"
-          @click="service.send('SHOW_INFO_MODAL')"
+          @click="current.matches('idle.infoModal.hide') ? service.send('SHOW_INFO_MODAL') : service.send('HIDE_INFO_MODAL')"
         >
           ！
         </button>

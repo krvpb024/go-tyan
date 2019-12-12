@@ -1,5 +1,10 @@
 <template>
   <div class="exam-mode-info-modal-container">
+    <div
+      class="exam-mode-info-modal-background"
+      @click="service.send('HIDE_INFO_MODAL')"
+    ></div>
+
     <section class="exam-mode-info-modal">
       <button
         class="close-button"
@@ -147,6 +152,7 @@ export default {
     function showInfoModalAnimation () {
       gsap.set('.exam-mode-info-modal', { clearProps: 'all' })
       gsap.set('.exam-mode-info-modal', { display: 'block' })
+      gsap.set('.exam-mode-info-modal-background', { display: 'block' })
 
       examModeInfoModalAnimationTimeline.value = gsap.timeline({ paused: true })
 
@@ -171,6 +177,7 @@ export default {
       return examModeInfoModalAnimationTimeline.value.reverse()
         .then(function hideModal () {
           gsap.set('.exam-mode-info-modal', { display: 'none' })
+          gsap.set('.exam-mode-info-modal-background', { display: 'none' })
         })
     }
   },
@@ -183,8 +190,17 @@ export default {
   z-index: 100;
 }
 
+.exam-mode-info-modal-background {
+  display: none;
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+}
+
 .exam-mode-info-modal {
-  width: 80%;
+  width: 70%;
   border-radius: 6px;
   box-shadow: 0 3px 20px 0 rgba(0, 0, 0, 0.16);
   border: solid 3px var(--text-color);
@@ -196,6 +212,7 @@ export default {
   z-index: 100;
   display: none;
   overflow: hidden;
+  will-change: auto;
 }
 
 .close-button {
