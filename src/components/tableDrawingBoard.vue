@@ -12,7 +12,7 @@
       id="modal"
     >
       <button
-        class="title-button"
+        class="title-button fake-drawing-board-button"
         ref="drawingBoardTitleElement"
         @click="service.send('SHOW_TOOLTIPS')"
       >
@@ -314,11 +314,11 @@ export default {
     )
 
     onMounted(function tableDrawingBoardOnMounted () {
-      modalButtons.value = modalElement.value.querySelectorAll('button:not(.control-hidden)')
+      modalButtons.value = modalElement.value.querySelectorAll('button:not(.fake-drawing-board-button)')
     })
 
     onUpdated(function tableDrawingBoardOUpdate () {
-      modalButtons.value = modalElement.value.querySelectorAll('button:not(.control-hidden)')
+      modalButtons.value = modalElement.value.querySelectorAll('button:not(.fake-drawing-board-button)')
     })
 
     return {
@@ -410,8 +410,6 @@ export default {
     }
 
     function closeModalAnimation () {
-      drawingBoardTitleElement.value.classList.add('visual-hidden')
-
       containerElementAnimationTimeline.value = gsap.timeline({ paused: true })
       containerElementAnimationTimeline.value
         .to('.table-drawing-board-container', {
