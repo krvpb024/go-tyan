@@ -1,9 +1,5 @@
 <template>
-  <section class="container">
-    <div class="top-sticky">
-      <top-bar>{{ title }}</top-bar>
-    </div>
-
+  <section class="exam-block-container">
     <exam-block-card
       :service="service"
       :current="current"
@@ -22,10 +18,10 @@
 <script>
 import { computed } from '@vue/composition-api'
 import examBlockCard from '@/components/examBlockCard.vue'
-import topBar from '@/components/topBar.vue'
 
 export default {
-  components: { topBar, examBlockCard },
+  name: 'examBlock',
+  components: { examBlockCard },
   props: {
     service: {
       type: Object,
@@ -41,17 +37,6 @@ export default {
     },
   },
   setup (props) {
-    const title = computed(function getTitle () {
-      switch (props.examType) {
-        case 'normalExam':
-          return '測驗'
-        case 'enhancementExam':
-          return '補強測驗'
-        default:
-          throw new Error('unknown examType')
-      }
-    })
-
     const currentCard = computed(function getCurrentCard () {
       switch (props.examType) {
         case 'normalExam':
@@ -86,7 +71,6 @@ export default {
     })
 
     return {
-      title,
       currentCard,
       progressValue,
       progressMax,
@@ -96,7 +80,7 @@ export default {
 </script>
 
 <style scoped>
-.container {
+.exam-block-container {
   display: flex;
   flex-direction: column;
 }

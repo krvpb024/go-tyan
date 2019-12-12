@@ -140,39 +140,4 @@ export default {
     }
   },
 }
-
-// const localExamRange = JSON.parse(window.localStorage.getItem('examRange'))
-// const localSubmittedGojuon = JSON.parse(window.localStorage.getItem('submittedGojuon'))
-
-// const { service, current } = useMachine(machine.withContext({
-//   ...machine.context,
-//   examRange: localExamRange || machine.context.examRange,
-//   submittedGojuon: localSubmittedGojuon || machine.context.submittedGojuon,
-//   selectedGojuon: localSubmittedGojuon || machine.context.selectedGojuon,
-// }))
-
-// const title = computed(function getQuestion () {
-//   switch (context.root.$route.name) {
-//     case 'hiraganaToRomanization':
-//       return '平假名轉拼音'
-//     case 'hiraganaToKatakana':
-//       return '平假名轉片假名'
-//     case 'katakanaToRomanization':
-//       return '片假名轉拼音'
-//     case 'katakanaToHiragana':
-//       return '片假名轉平假名'
-//     case 'romanizationToHiragana':
-//       return '拼音轉平假名'
-//     case 'romanizationToKatakana':
-//       return '拼音轉片假名'
-//     default:
-//       return ''
-//   }
-// })
 </script>
-
-<style scoped>
-.setting-button {
-  position: relative;
-}
-</style>

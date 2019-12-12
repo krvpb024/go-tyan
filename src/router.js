@@ -6,6 +6,7 @@ Vue.use(Router)
 
 const table = () => import(/* webpackChunkName: "table" */ './views/Table.vue')
 const exam = () => import(/* webpackChunkName: "exam" */ './views/Exam.vue')
+const examMode = () => import(/* webpackChunkName: "examMode" */ './views/ExamMode.vue')
 
 export default new Router({
   mode: 'history',
@@ -26,37 +27,35 @@ export default new Router({
       name: 'exam',
       component: exam,
     },
+    {
+      path: '/exam/hiragana_to_romanization',
+      name: 'hiraganaToRomanization',
+      component: examMode,
+    },
+    {
+      path: '/exam/katakana_to_romanization',
+      name: 'katakanaToRomanization',
+      component: examMode,
+    },
+    {
+      path: '/exam/romanization_to_hiragana',
+      name: 'romanizationToHiragana',
+      component: examMode,
+    },
+    {
+      path: '/exam/romanization_to_katakana',
+      name: 'romanizationToKatakana',
+      component: examMode,
+    },
+    {
+      path: '/exam/hiragana_to_katakana',
+      name: 'hiraganaToKatakana',
+      component: examMode,
+    },
+    {
+      path: '/exam/katakana_to_hiragana',
+      name: 'katakanaToHiragana',
+      component: examMode,
+    },
   ],
 })
-
-// children: [
-//   {
-//     path: 'settings',
-//     name: 'settings',
-//     component: examRange,
-//   },
-//   {
-//     path: 'hiragana_to_romanization',
-//     name: 'hiraganaToRomanization',
-//   },
-//   {
-//     path: 'katakana_to_romanization',
-//     name: 'katakanaToRomanization',
-//   },
-//   {
-//     path: 'romanization_to_hiragana',
-//     name: 'romanizationToHiragana',
-//   },
-//   {
-//     path: 'romanization_to_katakana',
-//     name: 'romanizationToKatakana',
-//   },
-//   {
-//     path: 'hiragana_to_katakana',
-//     name: 'hiraganaToKatakana',
-//   },
-//   {
-//     path: 'katakana_to_hiragana',
-//     name: 'katakanaToHiragana',
-//   },
-// ],
