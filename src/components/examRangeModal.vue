@@ -8,10 +8,7 @@
   >
     <div class="exam-range-background" @click="service.send('HIDE_EXAM_RANGE_MODAL')"></div>
 
-    <div
-      class="exam-range-modal"
-      ref="examRangeModalElement"
-    >
+    <div class="exam-range-modal">
       <div class="top-bar">
         <top-bar
           :withBorder="false"
@@ -122,6 +119,7 @@
 import { ref, watch, onMounted } from '@vue/composition-api'
 import { gsap } from 'gsap'
 import { generateTitle } from '@/states/gojuon.js'
+import { useModalNavigation } from '@/utils/useModalNavigation.js'
 import topBar from '@/components/topBar.vue'
 import gojuonTitle from '@/components/gojuonTitle.vue'
 import checkboxLabel from '@/components/checkboxLabel.vue'
@@ -143,9 +141,11 @@ export default {
   },
   setup (props, context) {
     const examRangeModalContainerElement = ref(null)
-    const examRangeModalElement = ref(null)
 
     const examRangeModalAnimationTimeline = ref(null)
+
+    const modalFocusables = ref(null)
+    useModalNavigation(modalFocusables)
 
     watch(
       () => props.current.matches('examRangeModal.showAnimation'),
@@ -155,6 +155,8 @@ export default {
         showModalAnimation()
           .then(function animationEnd () {
             props.service.send('SHOW_EXAM_RANGE_MODAL_ANIMATION_END')
+            modalFocusables.value = examRangeModalContainerElement.value.querySelectorAll('button, input[type="checkbox"]')
+            modalFocusables.value[0] && modalFocusables.value[0].focus()
           })
       },
       { lazy: true }
@@ -180,7 +182,6 @@ export default {
 
     return {
       examRangeModalContainerElement,
-      examRangeModalElement,
       generateTitle,
       getRowString,
       updateSelectedGojuon,
