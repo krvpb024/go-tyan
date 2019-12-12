@@ -13,8 +13,13 @@
   --focus-border: solid var(--focus-border-width) var(--main-color);
 }
 
-* {
+html {
   box-sizing: border-box;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+*, *:before, *:after {
+  box-sizing: inherit;
 }
 
 body {
