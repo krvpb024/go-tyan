@@ -223,6 +223,14 @@ export default {
           duration: 0.3,
           opacity: 0.5,
         }, '-=0.3')
+        .to('.scroll-container', {
+          display: 'block',
+          duration: 0,
+        })
+        .to('.scroll-container', {
+          duration: 0.15,
+          opacity: 1,
+        })
         .play()
     }
 
@@ -266,7 +274,7 @@ export default {
   height: 80%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   text-align: left;
   background-color: #fff;
   border: solid 2px var(--text-color);
@@ -280,6 +288,8 @@ export default {
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
   padding: 0 5px;
+  display: none;
+  opacity: 0;
 }
 
 .subtitle {
