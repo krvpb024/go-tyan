@@ -68,7 +68,7 @@ export default {
       gsap.set('.tooltips-container', { clearProps: 'all' })
 
       tooltipsElementAnimationTimeline.value = gsap.timeline({ paused: true })
-      tooltipsElementAnimationTimeline.value
+      return tooltipsElementAnimationTimeline.value
         .to('.tooltips-container', {
           display: 'flex',
           duration: 0,
@@ -77,9 +77,7 @@ export default {
           opacity: 1,
           duration: 0.1,
         })
-      tooltipsElementAnimationTimeline.value.play()
-
-      return tooltipsElementAnimationTimeline.value
+        .play()
     }
 
     function hideTooltips () {

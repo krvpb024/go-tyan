@@ -389,7 +389,7 @@ export default {
       drawingBoardTitleElement.value.classList.add('visual-hidden')
 
       containerElementAnimationTimeline.value = gsap.timeline({ paused: true })
-      containerElementAnimationTimeline.value
+      return containerElementAnimationTimeline.value
         .to('.table-drawing-board-container', {
           height: '40vh',
           width: '100%',
@@ -404,14 +404,13 @@ export default {
           opacity: 1,
           duration: 0.1,
         }, '-=0.3')
-      containerElementAnimationTimeline.value.play()
-
-      return containerElementAnimationTimeline.value
+        .play()
     }
 
     function closeModalAnimation () {
       containerElementAnimationTimeline.value = gsap.timeline({ paused: true })
-      containerElementAnimationTimeline.value
+
+      return containerElementAnimationTimeline.value
         .to('.table-drawing-board-container', {
           height: '50px',
           width: '100px',
@@ -426,9 +425,7 @@ export default {
           display: 'none',
           duration: 0,
         }, '-=0.3')
-      containerElementAnimationTimeline.value.play()
-
-      return containerElementAnimationTimeline.value
+        .play()
         .then(function animationEnd () {
           drawingBoardTitleElement.value.classList.remove('visual-hidden')
         })

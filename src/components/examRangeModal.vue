@@ -212,7 +212,7 @@ export default {
 
       examRangeModalAnimationTimeline.value = gsap.timeline({ paused: true })
 
-      examRangeModalAnimationTimeline.value
+      return examRangeModalAnimationTimeline.value
         .from('.exam-range-modal', {
           left: props.buttonInfo.left,
           top: props.buttonInfo.top,
@@ -230,10 +230,7 @@ export default {
           duration: 0.3,
           opacity: 0.5,
         }, '-=0.3')
-
-      examRangeModalAnimationTimeline.value.play()
-
-      return examRangeModalAnimationTimeline.value
+        .play()
     }
 
     function hideModalAnimation () {
