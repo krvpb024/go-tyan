@@ -132,15 +132,12 @@ export default {
 </script>
 
 <style scoped>
-.exam-mode-info-modal {
-}
-
 .exam-mode-info-modal-wrap {
   position: relative;
   display: flex;
   justify-content: flex-end;
   position: relative;
-  margin-bottom: 32px;
+  margin-bottom: 10px;
 }
 
 .exam-mode-info-modal-button {

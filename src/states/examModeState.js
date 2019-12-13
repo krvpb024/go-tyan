@@ -62,12 +62,12 @@ const machine = Machine({
                         NEXT_CARD: [
                           {
                             cond: 'addToEnhancement',
-                            actions: ['addCardsToEnhancement', 'nextCard', send('CLEAR_CANVAS')],
-                            target: 'cardSwipeAnimation',
+                            actions: ['addCardsToEnhancement', send('CLEAR_CANVAS')],
+                            target: 'cardSwipeLeftAnimation',
                           },
                           {
-                            actions: ['nextCard', send('CLEAR_CANVAS')],
-                            target: 'cardSwipeAnimation',
+                            actions: [send('CLEAR_CANVAS')],
+                            target: 'cardSwipeRightAnimation',
                           },
                         ],
                       },
@@ -77,21 +77,41 @@ const machine = Machine({
                         CARD_BACK_TO_POSITION_ANIMATION_END: 'idle',
                       },
                     },
-                    cardSwipeAnimation: {
+                    cardSwipeRightAnimation: {
+                      exit: ['nextCard'],
                       on: {
                         CARD_SWIPE_ANIMATION_END: [
                           {
                             cond: 'noMoreCards',
-                            target: '#exam.enhancementExam',
+                            target: '#exam.changeExamModeAnimation',
                           },
                           {
-                            target: 'idle',
+                            target: '#exam.normalExam.idle',
+                          },
+                        ],
+                      },
+                    },
+                    cardSwipeLeftAnimation: {
+                      exit: ['nextCard'],
+                      on: {
+                        CARD_SWIPE_ANIMATION_END: [
+                          {
+                            cond: 'noMoreCards',
+                            target: '#exam.changeExamModeAnimation',
+                          },
+                          {
+                            target: '#exam.normalExam.idle',
                           },
                         ],
                       },
                     },
                   },
                 },
+              },
+            },
+            changeExamModeAnimation: {
+              on: {
+                CHANGE_EXAM_MODE_ANIMATION_END: 'enhancementExam',
               },
             },
             enhancementExam: {
@@ -119,10 +139,17 @@ const machine = Machine({
                     moved: {
                       on: {
                         CARD_BACK_TO_POSITION: 'cardBackToPositionAnimation',
-                        NEXT_CARD: {
-                          actions: ['nextCard', send('CLEAR_CANVAS')],
-                          target: 'cardSwipeAnimation',
-                        },
+                        NEXT_CARD: [
+                          {
+                            cond: 'addToEnhancement',
+                            actions: [send('CLEAR_CANVAS')],
+                            target: 'cardSwipeLeftAnimation',
+                          },
+                          {
+                            actions: [send('CLEAR_CANVAS')],
+                            target: 'cardSwipeRightAnimation',
+                          },
+                        ],
                       },
                     },
                     cardBackToPositionAnimation: {
@@ -130,7 +157,8 @@ const machine = Machine({
                         CARD_BACK_TO_POSITION_ANIMATION_END: 'idle',
                       },
                     },
-                    cardSwipeAnimation: {
+                    cardSwipeRightAnimation: {
+                      exit: ['nextCard'],
                       on: {
                         CARD_SWIPE_ANIMATION_END: [
                           {
@@ -138,7 +166,21 @@ const machine = Machine({
                             target: '#exam.examFinish',
                           },
                           {
-                            target: 'idle',
+                            target: '#exam.enhancementExam.idle',
+                          },
+                        ],
+                      },
+                    },
+                    cardSwipeLeftAnimation: {
+                      exit: ['nextCard'],
+                      on: {
+                        CARD_SWIPE_ANIMATION_END: [
+                          {
+                            cond: 'noMoreEnhancementCards',
+                            target: '#exam.examFinish',
+                          },
+                          {
+                            target: '#exam.enhancementExam.idle',
                           },
                         ],
                       },
@@ -229,11 +271,14 @@ const machine = Machine({
   },
 }, {
   guards: {
+    addToEnhancement (context, { addToEnhancement }) {
+      return Boolean(addToEnhancement)
+    },
     noExamRange ({ examRange }) {
       return examRange.length == 0
     },
     noMoreCards ({ cards, cursor }) {
-      return cursor == cards.length - 1
+      return cursor == cards.length
     },
     noEnhancementCards ({ enhancementCards }) {
       return enhancementCards.length == 0

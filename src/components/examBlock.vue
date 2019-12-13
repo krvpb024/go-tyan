@@ -3,7 +3,7 @@
     <exam-block-card
       :service="service"
       :current="current"
-      :currentCard="currentCard"
+      :cards="cards"
     ></exam-block-card>
 
     <p>{{ progressValue }} / {{ progressMax }}</p>
@@ -37,12 +37,12 @@ export default {
     },
   },
   setup (props) {
-    const currentCard = computed(function getCurrentCard () {
+    const cards = computed(function getCards () {
       switch (props.examType) {
         case 'normalExam':
-          return props.current.context.cards[props.current.context.cursor]
+          return props.current.context.cards.slice(props.current.context.cursor, props.current.context.cursor + 4)
         case 'enhancementExam':
-          return props.current.context.enhancementCards[props.current.context.enhancementCursor]
+          return props.current.context.enhancementCards.slice(props.current.context.enhancementCursor, props.current.context.enhancementCursor + 4)
         default:
           throw new Error('unknown examType')
       }
@@ -71,7 +71,7 @@ export default {
     })
 
     return {
-      currentCard,
+      cards,
       progressValue,
       progressMax,
     }
