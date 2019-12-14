@@ -269,7 +269,7 @@ export default {
   border-radius: 6px;
   border: solid 2px var(--text-color);
   font-size: 3.625rem;
-  padding: 10% 0;
+  /* padding: 10% 0; */
   transform-origin: center;
   display: grid;
   grid-template:
@@ -294,11 +294,14 @@ export default {
 
 .card-question {
   grid-area: question;
+  align-self: end;
+  margin-bottom: 10px;
 }
 
 .card-answer {
   grid-area: answer;
   opacity: 0;
+  align-self: start;
 }
 
 .card-2 {

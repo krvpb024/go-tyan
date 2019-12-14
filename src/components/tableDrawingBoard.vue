@@ -14,7 +14,10 @@
       <button
         class="title-button fake-drawing-board-button"
         ref="drawingBoardTitleElement"
-        @click="service.send('SHOW_TOOLTIPS')"
+        @click="service.send(
+          service.id == 'examMode'
+            ? 'OPEN_DRAWING_BOARD'
+            : 'SHOW_TOOLTIPS')"
       >
         <table-tooltips
           class="table-tooltips"
@@ -43,7 +46,7 @@
 
           <button
             class="tool-button"
-            :class="{ 'control-hidden': current.matches('displayPanel.hiragana.show') }"
+            v-if="service.id == 'tableView' && !current.matches('displayPanel.hiragana.show')"
             :aria-controls="`${current.context.activeGroupName}-${current.context.activeRow}-${current.context.activeColumn}`"
             @mousedown="service.send('PEEK_HIRAGANA')"
             @touchstart="service.send('PEEK_HIRAGANA')"
@@ -57,14 +60,14 @@
 
           <button
             class="tool-button"
-            :class="{ 'control-hidden': current.matches('displayPanel.katakana.show') }"
+            v-if="service.id =='tableView' && !current.matches('displayPanel.katakana.show')"
             :aria-controls="
-            (current.context.activeGroupName &&
-            current.context.activeRow &&
-            current.context.activeColumn)
-              ? `${current.context.activeGroupName}-${current.context.activeRow}-${current.context.activeColumn}`
-              : false
-          "
+              (current.context.activeGroupName &&
+              current.context.activeRow &&
+              current.context.activeColumn)
+                ? `${current.context.activeGroupName}-${current.context.activeRow}-${current.context.activeColumn}`
+                : false
+            "
             @mousedown="service.send('PEEK_KATAKANA')"
             @touchstart="service.send('PEEK_KATAKANA')"
             @keydown.space="service.send('PEEK_KATAKANA')"
@@ -112,6 +115,7 @@
 
         <div class="second-column">
           <button
+            v-if="service.id == 'tableView'"
             class="tool-button"
             @click="service.send('ACTIVE_CURSOR_TO_PREVIOUS')"
             aria-labelledby="drawing-board-nav-previous"
@@ -169,6 +173,7 @@
           </div>
 
           <button
+            v-if="service.id == 'tableView'"
             class="tool-button"
             @click="service.send('ACTIVE_CURSOR_TO_NEXT')"
             aria-labelledby="drawing-board-nav-next"
@@ -274,44 +279,61 @@ export default {
 
     watch(
       () => props.current.matches('drawingBoard.show.clearCanvas') ||
-        props.current.matches('drawingBoard.clearCanvasBeforeAnimation'),
-      function clearCanvas (value) {
-        if (value) {
-          ctx.value.clearRect(0, 0, canvas.value.width, canvas.value.height)
-          props.service.send('CANVAS_CLREAR_FINISHED')
-        }
-      },
+          props.current.matches('drawingBoard.clearCanvasBeforeAnimation'),
+      clearCanvas,
       { lazy: true }
     )
+    watch(
+      () => props.current.matches('idle.drawingBoard.show.clearCanvas') ||
+          props.current.matches('idle.drawingBoard.clearCanvasBeforeAnimation'),
+      clearCanvas,
+      { lazy: true }
+    )
+    function clearCanvas (value) {
+      if (value) {
+        ctx.value.clearRect(0, 0, canvas.value.width, canvas.value.height)
+        props.service.send('CANVAS_CLREAR_FINISHED')
+      }
+    }
 
     watch(
       () => props.current.matches('drawingBoard.openDrawingBoardAnimation'),
-      function startOpenDrawingBoardAnimation (value) {
-        if (value && props.current.history.matches('drawingBoard.hide')) {
-          openModalAnimation().then(function animationEnd () {
-            canvasInitialSettings()
-            autoFoucusButton.value && autoFoucusButton.value.focus()
-            props.service.send('OPEN_DRAWING_BOARD_ANIMATION_END')
-          })
-        } else {
-          autoFoucusButton.value && autoFoucusButton.value.focus()
-          props.service.send('OPEN_DRAWING_BOARD_ANIMATION_END')
-        }
-      },
+      startOpenDrawingBoardAnimation,
       { lazy: true }
     )
+    watch(
+      () => props.current.matches('idle.drawingBoard.openDrawingBoardAnimation'),
+      startOpenDrawingBoardAnimation,
+      { lazy: true }
+    )
+    function startOpenDrawingBoardAnimation (value) {
+      if (value) {
+        openModalAnimation().then(function animationEnd () {
+          canvasInitialSettings()
+          autoFoucusButton.value && autoFoucusButton.value.focus()
+          props.service.send('OPEN_DRAWING_BOARD_ANIMATION_END')
+        })
+      }
+    }
 
     watch(
       () => props.current.matches('drawingBoard.closeDrawingBoardAnimation'),
-      function startcloseDrawingBoardAnimation (value) {
-        if (value) {
-          closeModalAnimation().then(function animationEnd () {
-            props.service.send('CLOSE_DRAWING_BOARD_ANIMATION_END')
-          })
-        }
-      },
+      startCloseDrawingBoardAnimation,
       { lazy: true }
     )
+    watch(
+      () => props.current.matches('idle.drawingBoard.closeDrawingBoardAnimation'),
+      startCloseDrawingBoardAnimation,
+      { lazy: true }
+    )
+
+    function startCloseDrawingBoardAnimation (value) {
+      if (value) {
+        closeModalAnimation().then(function animationEnd () {
+          props.service.send('CLOSE_DRAWING_BOARD_ANIMATION_END')
+        })
+      }
+    }
 
     onMounted(function tableDrawingBoardOnMounted () {
       modalButtons.value = modalElement.value.querySelectorAll('button:not(.fake-drawing-board-button)')
@@ -560,9 +582,5 @@ export default {
   border: var(--focus-border);
   border-radius: 4px;
   outline: none;
-}
-
-.control-hidden {
-  display: none;
 }
 </style>

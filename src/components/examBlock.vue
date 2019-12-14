@@ -40,9 +40,15 @@ export default {
     const cards = computed(function getCards () {
       switch (props.examType) {
         case 'normalExam':
-          return props.current.context.cards.slice(props.current.context.cursor, props.current.context.cursor + 4)
+          return props.current.context.cards.slice(
+            props.current.context.cursor,
+            props.current.context.cursor + 4
+          )
         case 'enhancementExam':
-          return props.current.context.enhancementCards.slice(props.current.context.enhancementCursor, props.current.context.enhancementCursor + 4)
+          return props.current.context.enhancementCards.slice(
+            props.current.context.enhancementCursor,
+            props.current.context.enhancementCursor + 4
+          )
         default:
           throw new Error('unknown examType')
       }

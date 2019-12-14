@@ -50,7 +50,9 @@
         <button
           class="exam-mode-info-modal-button"
           ref="examModeInfoModalButtonElement"
-          @click="current.matches('idle.infoModal.hide') ? service.send('SHOW_INFO_MODAL') : service.send('HIDE_INFO_MODAL')"
+          @click="current.matches('idle.infoModal.hide')
+            ? service.send('SHOW_INFO_MODAL')
+            : service.send('HIDE_INFO_MODAL')"
         >
           ！
         </button>
@@ -68,6 +70,10 @@
         :service="service"
         :current="current"
       ></exam-block>
+
+      <div class="exam-mode-drawing-board">
+        <table-drawing-board :service="service" :current="current"></table-drawing-board>
+      </div>
     </div>
   </section>
 </template>
@@ -79,10 +85,11 @@ import { useMachine } from '@/utils/useMachine.js'
 import topBar from '@/components/topBar.vue'
 import examBlock from '@/components/examBlock.vue'
 import examModeInfoModal from '@/components/examModeInfoModal.vue'
+import tableDrawingBoard from '@/components/tableDrawingBoard.vue'
 
 export default {
   name: 'ExamMode',
-  components: { topBar, examBlock, examModeInfoModal },
+  components: { topBar, examBlock, examModeInfoModal, tableDrawingBoard },
   setup (props, context) {
     const localExamRange = JSON.parse(window.localStorage.getItem('examRange'))
 
@@ -132,11 +139,15 @@ export default {
 </script>
 
 <style scoped>
-.exam-mode-info-modal-wrap {
+.exam-content {
   position: relative;
+}
+
+.exam-mode-info-modal-wrap {
+  right: 0;
+  position: absolute;
   display: flex;
   justify-content: flex-end;
-  position: relative;
   margin-bottom: 10px;
 }
 
@@ -163,5 +174,11 @@ export default {
 .exam-mode-info-modal-button:focus {
   border: var(--focus-border);
   outline: none;
+}
+
+.exam-mode-drawing-board {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
 }
 </style>
