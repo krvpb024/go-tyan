@@ -7,7 +7,6 @@
     @touchend="dragEnd"
   >
     <div
-      v-if="cards[0]"
       class="card card-layout"
       ref="cardElement"
       @mousedown="dragStart"
@@ -23,13 +22,13 @@
       </span>
     </div>
 
-    <div v-if="cards[1]" class="card-2 card-background card-layout">
+    <div class="card-2 card-background card-layout">
       <span class="card-question card-2-question">
-        {{ nextQuestion }}
+        {{ question }}
       </span>
     </div>
-    <div v-if="cards[2]" class="card-3 card-background card-layout"></div>
-    <div v-if="cards[3]" class="card-new card-background card-layout"></div>
+    <div class="card-3 card-background card-layout"></div>
+    <div class="card-new card-background card-layout"></div>
   </div>
 </template>
 
@@ -126,7 +125,7 @@ export default {
       function cardSwipeRightAnimationWatcher (value) {
         if (!value) return
         animationTimelineSwipe('right')
-          .play()
+          .restart()
           .then(clearAnimationPropsAndSendEvent)
       },
       { layz: true }
@@ -138,7 +137,7 @@ export default {
       function cardSwipeLeftAnimationWatcher (value) {
         if (!value) return
         animationTimelineSwipe('left')
-          .play()
+          .restart()
           .then(clearAnimationPropsAndSendEvent)
       },
       { layz: true }
@@ -151,6 +150,7 @@ export default {
         gsap
           .to('.card', {
             x: 0,
+            opacity: 1,
             duration: 0.3,
           })
           .then(function swipeAnimationEnd () {
@@ -199,7 +199,11 @@ export default {
       xMovement.value = xMovement.value + movement
       cardElement.value.style.transform = `translate(${xMovement.value}px, 0)`
 
-      if (Math.abs(xMovement.value) > (window.innerWidth / 4)) {
+      const checkPoint = window.innerWidth / 4
+      // console.log(xMovement.value / checkPoint * 0.5)
+      cardElement.value.style.opacity = 1 - (xMovement.value / checkPoint * 0.3)
+
+      if (Math.abs(xMovement.value) > checkPoint) {
         canDrag.value = false
         props.service.send('NEXT_CARD', {
           addToEnhancement: !(xMovement.value > 0),
@@ -214,8 +218,13 @@ export default {
     }
 
     function animationTimelineSwipe (direction) {
-      return gsap
-        .timeline({ paused: true })
+      const tl = gsap.timeline({ paused: true })
+
+      return tl
+        .to('.card .card-question, .card .card-answer', {
+          opacity: 0,
+          duration: 0,
+        })
         .to('.card', {
           x: `${direction == 'left' ? '-' : '+'}=${window.innerWidth}`,
           duration: 0.5,
@@ -225,19 +234,19 @@ export default {
           y: '-=10px',
           backgroundColor: '#ffffff',
         }, '-=0.5')
-        .to('.card-2-question', {
-          opacity: 1,
-          duration: 0.5,
-        }, '-=0.5')
         .to('.card-3', {
           x: '-=10px',
           y: '-=10px',
           duration: 0.5,
         }, '-=0.5')
         .to('.card-new', {
-          opacity: 1,
+          opacity: props.cards[2] ? 1 : 0,
           x: '-=10px',
           y: '-=10px',
+          duration: 0.5,
+        }, '-=0.5')
+        .to('.card-2-question', {
+          opacity: 1,
           duration: 0.5,
         }, '-=0.5')
         .to('.card', {
@@ -246,9 +255,12 @@ export default {
         }, '-=0.5')
     }
 
-    function clearAnimationPropsAndSendEvent () {
+    function clearAnimationPropsAndSendEvent (tl) {
       props.service.send('CARD_SWIPE_ANIMATION_END')
-      gsap.set('.card, .card-2, .card-3, .card-new, .card-answer, .card-2-question', { clearProps: 'all' })
+      gsap.set('.card, .card-2, .card-3, .card-new, .card-answer, .card-2-question, .card .card-question, .card .card-answer', { clearProps: 'all' })
+      if (!props.cards[0]) gsap.set('.card', { opacity: 0 })
+      if (!props.cards[1]) gsap.set('.card-2', { opacity: 0 })
+      if (!props.cards[2]) gsap.set('.card-3', { opacity: 0 })
     }
   },
 }

@@ -62,11 +62,11 @@ const machine = Machine({
                         NEXT_CARD: [
                           {
                             cond: 'addToEnhancement',
-                            actions: ['addCardsToEnhancement', send('CLEAR_CANVAS')],
+                            actions: ['addCardsToEnhancement', 'nextCard', send('CLEAR_CANVAS')],
                             target: 'cardSwipeLeftAnimation',
                           },
                           {
-                            actions: [send('CLEAR_CANVAS')],
+                            actions: ['nextCard', send('CLEAR_CANVAS')],
                             target: 'cardSwipeRightAnimation',
                           },
                         ],
@@ -78,7 +78,6 @@ const machine = Machine({
                       },
                     },
                     cardSwipeRightAnimation: {
-                      exit: ['nextCard'],
                       on: {
                         CARD_SWIPE_ANIMATION_END: [
                           {
@@ -92,7 +91,6 @@ const machine = Machine({
                       },
                     },
                     cardSwipeLeftAnimation: {
-                      exit: ['nextCard'],
                       on: {
                         CARD_SWIPE_ANIMATION_END: [
                           {
@@ -142,11 +140,11 @@ const machine = Machine({
                         NEXT_CARD: [
                           {
                             cond: 'addToEnhancement',
-                            actions: [send('CLEAR_CANVAS')],
+                            actions: ['nextCard', send('CLEAR_CANVAS')],
                             target: 'cardSwipeLeftAnimation',
                           },
                           {
-                            actions: [send('CLEAR_CANVAS')],
+                            actions: ['nextCard', send('CLEAR_CANVAS')],
                             target: 'cardSwipeRightAnimation',
                           },
                         ],
@@ -158,7 +156,6 @@ const machine = Machine({
                       },
                     },
                     cardSwipeRightAnimation: {
-                      exit: ['nextCard'],
                       on: {
                         CARD_SWIPE_ANIMATION_END: [
                           {
@@ -172,7 +169,6 @@ const machine = Machine({
                       },
                     },
                     cardSwipeLeftAnimation: {
-                      exit: ['nextCard'],
                       on: {
                         CARD_SWIPE_ANIMATION_END: [
                           {
