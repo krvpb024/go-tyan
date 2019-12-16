@@ -139,6 +139,7 @@
                     >
                       {{ gojuon[0] }}
                     </span>
+
                     <span
                       lang="ja-JP"
                       class="katakana"
@@ -146,11 +147,13 @@
                     >
                       {{ gojuon[1] }}
                     </span>
+
                     <span
                       lang="ja-JP"
                       class="romanization"
                     >{{ gojuon[2] }}</span>
                   </template>
+
                   <template v-else>
                     無內容
                   </template>
@@ -306,7 +309,6 @@ td + td {
 
 .table-button {
   font-family: system-ui;
-  box-sizing: border-box;
   width: 100%;
   height: 100%;
   border-radius: 8px;

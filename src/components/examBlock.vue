@@ -6,22 +6,25 @@
       :cards="cards"
     ></exam-block-card>
 
-    <p>{{ progressValue }} / {{ progressMax }}</p>
+    <div class="exam-block-progress">
+      <exam-progress
+        :value="progressValue"
+        :max="progressMax"
+      ></exam-progress>
+    </div>
 
-    <progress
-      :value="progressValue"
-      :max="progressMax"
-    ></progress>
+    <p class="eb-status">{{ progressValue }} / {{ progressMax }}</p>
   </section>
 </template>
 
 <script>
 import { computed } from '@vue/composition-api'
 import examBlockCard from '@/components/examBlockCard.vue'
+import examProgress from '@/components/examProgress.vue'
 
 export default {
   name: 'examBlock',
-  components: { examBlockCard },
+  components: { examBlockCard, examProgress },
   props: {
     service: {
       type: Object,
@@ -89,5 +92,17 @@ export default {
 .exam-block-container {
   display: flex;
   flex-direction: column;
+  overflow: hidden;
+  align-items: center;
+}
+
+.exam-block-progress {
+  width: calc(var(--card-width) + var(--card-2-transform));
+}
+
+.eb-status {
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin: 5px;
 }
 </style>

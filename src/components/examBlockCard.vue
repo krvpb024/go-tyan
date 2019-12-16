@@ -254,21 +254,34 @@ export default {
 }
 </script>
 
+<style>
+:root {
+  --card-transform: 10px;
+  --card-2-transform: 20px;
+  --card-3-transform: 30px;
+  --card-width: 50%;
+}
+</style>
+
 <style scoped>
 .card-container {
+  position: relative;
+  margin: 5vh 0;
+  margin-bottom: calc(var(--card-2-transform) + 15px); /* add card-2 card-3 transfromY */
   width: 100%;
+  height: 30vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
+  transform: translateX(-10px); /* center cards because cards transition */
 }
 
 .card-layout {
-  width: 226px;
-  height: 262px;
+  height: 100%;
+  width: var(--card-width);
   border-radius: 6px;
   border: solid 2px var(--text-color);
-  font-size: 3.625rem;
+  font-size: 8vh;
   /* padding: 10% 0; */
   transform-origin: center;
   display: grid;
@@ -306,7 +319,7 @@ export default {
 
 .card-2 {
   z-index: 9;
-  transform: translate(10px, 10px);
+  transform: translate(var(--card-transform), var(--card-transform));
 }
 
 .card-2-question {
@@ -315,12 +328,12 @@ export default {
 
 .card-3 {
   z-index: 8;
-  transform: translate(20px, 20px);
+  transform: translate(var(--card-2-transform), var(--card-2-transform));
 }
 
 .card-new {
   z-index: 7;
   opacity: 0;
-  transform: translate(30px, 30px);
+  transform: translate(var(--card-3-transform), var(--card-3-transform));
 }
 </style>

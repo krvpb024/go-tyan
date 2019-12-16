@@ -38,7 +38,6 @@ body {
 }
 
 .root-sticky-top {
-  box-sizing: border-box;
   padding: 8px;
   background-color: #fff;
   padding-bottom: 0;

@@ -413,7 +413,7 @@ export default {
       containerElementAnimationTimeline.value = gsap.timeline({ paused: true })
       return containerElementAnimationTimeline.value
         .to('.table-drawing-board-container', {
-          height: '40vh',
+          height: '35vh',
           width: '100%',
           duration: 0.3,
           ease: 'circ.inOut',
@@ -470,7 +470,6 @@ export default {
 .table-drawing-board-container {
   position: sticky;
   padding: 6px 8px;
-  box-sizing: border-box;
   bottom: 0;
   width: 100px;
   height: 50px;
@@ -481,7 +480,6 @@ export default {
   position: relative;
   transition: width 0.3s ease-in-out, height 0.3s ease-in-out;
   will-change: auto;
-  box-sizing: border-box;
   box-shadow: 0 2px 20px 0 rgba(0, 0, 0, 0.13);
   border: solid 2px var(--text-color);
   background-color: #fff;
@@ -521,7 +519,6 @@ export default {
 }
 
 .table-drawing-board-active-show {
-  box-sizing: border-box;
   opacity: 0;
   position: absolute;
   display: none;
@@ -539,7 +536,6 @@ export default {
 }
 
 .second-column {
-  box-sizing: border-box;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -547,7 +543,6 @@ export default {
 }
 
 .tool-button {
-  box-sizing: border-box;
   background-color: transparent;
   border: solid var(--focus-border-width) transparent;
   font-weight: bold;

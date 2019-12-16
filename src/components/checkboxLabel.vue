@@ -29,7 +29,6 @@ export default {
 
 .display-label::before {
   content: "";
-  box-sizing: border-box;
   display: inline-block;
   width: 14px;
   height: 14px;

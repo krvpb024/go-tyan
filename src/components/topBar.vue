@@ -27,7 +27,6 @@ export default {
 
 <style scoped>
 .top-bar {
-  box-sizing: border-box;
   border-radius: 4px;
   background-color: var(--main-color);
   width: 100%;

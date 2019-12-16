@@ -64,12 +64,24 @@
         ></exam-mode-info-modal>
       </div>
 
-      <exam-block
-        v-if="current.matches('idle.exam.normalExam')"
-        examType="normalExam"
-        :service="service"
-        :current="current"
-      ></exam-block>
+      <div class="exam-block">
+        <div class="exam-block__normal-exam">
+          <exam-block
+            examType="normalExam"
+            :service="service"
+            :current="current"
+          ></exam-block>
+        </div>
+
+        <!-- <div class="exam-block__enhancement-exam">
+          <exam-block
+            examType="enhancementExam"
+            :service="service"
+            :current="current"
+          ></exam-block>
+        </div> -->
+
+      </div>
 
       <div class="exam-mode-drawing-board">
         <table-drawing-board :service="service" :current="current"></table-drawing-board>
@@ -79,9 +91,10 @@
 </template>
 
 <script>
-import { ref, computed, onMounted } from '@vue/composition-api'
+import { ref, watch, computed, onMounted } from '@vue/composition-api'
 import { machine } from '@/states/examModeState.js'
 import { useMachine } from '@/utils/useMachine.js'
+import { gsap } from 'gsap'
 import topBar from '@/components/topBar.vue'
 import examBlock from '@/components/examBlock.vue'
 import examModeInfoModal from '@/components/examModeInfoModal.vue'
@@ -126,6 +139,24 @@ export default {
       const { top, left, width, height } = examModeInfoModalButtonElement.value.getBoundingClientRect()
       examModeInfoModalButtonInfo.value = { top, left, width, height }
     })
+
+    watch(
+      () => current.value.matches('idle.exam.changeExamModeAnimation'),
+      function changeExamAnimationWatcher () {
+        gsap.timeline()
+          .to('.exam-block__normal-exam', {
+            position: 'absolute',
+            x: '100%',
+            duration: 0.5,
+          })
+          .to('.exam-block__enhancement-exam', {
+            position: 'relative',
+            x: '0%',
+            duration: 0.5,
+          }, '-=0.5')
+      },
+      { lazy: true }
+    )
 
     return {
       service,
@@ -174,6 +205,24 @@ export default {
 .exam-mode-info-modal-button:focus {
   border: var(--focus-border);
   outline: none;
+}
+
+.exam-block {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+.exam-block__normal-exam {
+  width: 100%;
+}
+
+.exam-block__enhancement-exam {
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform:  translateX(-100%);
 }
 
 .exam-mode-drawing-board {
