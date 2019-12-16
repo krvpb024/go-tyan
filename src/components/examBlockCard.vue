@@ -155,6 +155,7 @@ export default {
           })
           .then(function swipeAnimationEnd () {
             gsap.set('.card', { clearProps: 'all' })
+            xMovement.value = 0
             props.service.send('CARD_BACK_TO_POSITION_ANIMATION_END')
           })
       },
@@ -200,7 +201,6 @@ export default {
       cardElement.value.style.transform = `translate(${xMovement.value}px, 0)`
 
       const checkPoint = window.innerWidth / 4
-      // console.log(xMovement.value / checkPoint * 0.5)
       cardElement.value.style.opacity = 1 - (xMovement.value / checkPoint * 0.3)
 
       if (Math.abs(xMovement.value) > checkPoint) {
@@ -213,7 +213,6 @@ export default {
 
     function dragEnd () {
       canDrag.value = false
-      xMovement.value = 0
       props.service.send('CARD_BACK_TO_POSITION')
     }
 
@@ -261,6 +260,7 @@ export default {
       if (!props.cards[0]) gsap.set('.card', { opacity: 0 })
       if (!props.cards[1]) gsap.set('.card-2', { opacity: 0 })
       if (!props.cards[2]) gsap.set('.card-3', { opacity: 0 })
+      xMovement.value = 0
     }
   },
 }
