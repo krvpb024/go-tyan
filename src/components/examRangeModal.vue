@@ -8,7 +8,7 @@
   >
     <div class="exam-range-background" @click="service.send('HIDE_EXAM_RANGE_MODAL')"></div>
 
-    <form class="exam-range-modal" @submit.prevent="service.send('SET_EXAM_RANGE')">
+    <form class="exam-range-modal" ref="examRangeModalElement" @submit.prevent="service.send('SET_EXAM_RANGE')">
       <div class="top-bar">
         <top-bar :withBorder="false">
           <template #leftContainer>
@@ -134,6 +134,7 @@ export default {
   },
   setup (props, context) {
     const examRangeModalContainerElement = ref(null)
+    const examRangeModalElement = ref(null)
 
     const examRangeModalAnimationTimeline = ref(null)
 
@@ -174,6 +175,7 @@ export default {
     })
 
     return {
+      examRangeModalElement,
       examRangeModalContainerElement,
       generateTitle,
       getRowString,
@@ -200,13 +202,13 @@ export default {
     }
 
     function showModalAnimation () {
-      gsap.set('.exam-range-modal', { clearProps: 'all' })
-      gsap.set('.exam-range-modal-container', { display: 'block' })
+      gsap.set(examRangeModalElement.value, { clearProps: 'all' })
+      gsap.set(examRangeModalContainerElement.value, { display: 'block' })
 
       examRangeModalAnimationTimeline.value = gsap.timeline({ paused: true })
 
       return examRangeModalAnimationTimeline.value
-        .from('.exam-range-modal', {
+        .from(examRangeModalElement.value, {
           left: props.buttonInfo.left,
           top: props.buttonInfo.top,
           width: props.buttonInfo.width,
@@ -214,7 +216,7 @@ export default {
           duration: 0.3,
           ease: 'circ.inOut',
         })
-        .from('.exam-range-modal', {
+        .from(examRangeModalElement.value, {
           x: '+=50%',
           y: '+=50%',
           duration: 0.15,
@@ -237,7 +239,7 @@ export default {
     function hideModalAnimation () {
       return examRangeModalAnimationTimeline.value.reverse()
         .then(function hideModal () {
-          gsap.set('.exam-range-modal-container', { display: 'none' })
+          gsap.set(examRangeModalContainerElement.value, { display: 'none' })
         })
     }
   },

@@ -65,7 +65,7 @@
       </div>
 
       <div class="exam-block">
-        <div class="exam-block__normal-exam">
+        <div class="exam-block__normal-exam" ref="normalExamElement">
           <exam-block
             examType="normalExam"
             :service="service"
@@ -73,7 +73,7 @@
           ></exam-block>
         </div>
 
-        <div class="exam-block__enhancement-exam">
+        <div class="exam-block__enhancement-exam" ref="enhancementExamElement">
           <exam-block
             examType="enhancementExam"
             :service="service"
@@ -130,6 +130,9 @@ export default {
       }
     })
 
+    const normalExamElement = ref(null)
+    const enhancementExamElement = ref(null)
+
     const examModeInfoModalButtonElement = ref(null)
     const examModeInfoModalButtonInfo = ref(null)
 
@@ -144,12 +147,12 @@ export default {
       () => current.value.matches('idle.exam.changeExamModeAnimation'),
       function changeExamAnimationWatcher () {
         gsap.timeline()
-          .to('.exam-block__normal-exam', {
+          .to(normalExamElement.value, {
             position: 'absolute',
             x: '100%',
             duration: 0.5,
           })
-          .to('.exam-block__enhancement-exam', {
+          .to(enhancementExamElement.value, {
             position: 'relative',
             x: '0%',
             duration: 0.5,
@@ -165,6 +168,8 @@ export default {
       service,
       current,
       title,
+      normalExamElement,
+      enhancementExamElement,
       examModeInfoModalButtonElement,
       examModeInfoModalButtonInfo,
     }

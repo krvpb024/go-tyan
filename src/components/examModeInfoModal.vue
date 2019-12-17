@@ -2,10 +2,11 @@
   <div class="exam-mode-info-modal-container">
     <div
       class="exam-mode-info-modal-background"
+      ref="examModeInfoModalBackgroundElement"
       @click="service.send('HIDE_INFO_MODAL')"
     ></div>
 
-    <section class="exam-mode-info-modal">
+    <section class="exam-mode-info-modal" ref="examModeInfoModalElement">
       <button
         class="close-button"
         @click="service.send('HIDE_INFO_MODAL')"
@@ -123,6 +124,8 @@ export default {
     },
   },
   setup (props) {
+    const examModeInfoModalBackgroundElement = ref(null)
+    const examModeInfoModalElement = ref(null)
     const examModeInfoModalAnimationTimeline = ref(null)
 
     watch(
@@ -149,15 +152,20 @@ export default {
       }
     )
 
+    return {
+      examModeInfoModalBackgroundElement,
+      examModeInfoModalElement,
+    }
+
     function showInfoModalAnimation () {
-      gsap.set('.exam-mode-info-modal', { clearProps: 'all' })
-      gsap.set('.exam-mode-info-modal', { display: 'block' })
-      gsap.set('.exam-mode-info-modal-background', { display: 'block' })
+      gsap.set(examModeInfoModalElement.value, { clearProps: 'all' })
+      gsap.set(examModeInfoModalElement.value, { display: 'block' })
+      gsap.set(examModeInfoModalBackgroundElement.value, { display: 'block' })
 
       examModeInfoModalAnimationTimeline.value = gsap.timeline({ paused: true })
 
       return examModeInfoModalAnimationTimeline.value
-        .from('.exam-mode-info-modal', {
+        .from(examModeInfoModalElement.value, {
           left: props.buttonInfo.left,
           top: props.buttonInfo.top,
           width: props.buttonInfo.width,
@@ -165,7 +173,7 @@ export default {
           duration: 0.3,
           ease: 'circ.inOut',
         })
-        .from('.exam-mode-info-modal', {
+        .from(examModeInfoModalElement.value, {
           x: '+=50%',
           y: '+=50%',
           duration: 0.2,
@@ -176,8 +184,8 @@ export default {
     function hideInfoModalAnimation () {
       return examModeInfoModalAnimationTimeline.value.reverse()
         .then(function hideModal () {
-          gsap.set('.exam-mode-info-modal', { display: 'none' })
-          gsap.set('.exam-mode-info-modal-background', { display: 'none' })
+          gsap.set(examModeInfoModalElement.value, { display: 'none' })
+          gsap.set(examModeInfoModalBackgroundElement.value, { display: 'none' })
         })
     }
   },
