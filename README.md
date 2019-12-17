@@ -27,3 +27,10 @@ npm run lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+## Todos
+
+1. refactor css class name
+1. refactor gsap selector to ref element
+1. refactor vue setup split data, ref element, methods
+

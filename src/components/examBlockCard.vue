@@ -275,7 +275,7 @@ export default {
           y: '-=10px',
           duration: 0.5,
         }, '-=0.5')
-        .to(cardQuestionElement.value, {
+        .to(card2QuestionElement.value, {
           opacity: 1,
           duration: 0.5,
         }, '-=0.5')
