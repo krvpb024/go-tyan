@@ -9,6 +9,7 @@
     <div
       ref="modalElement"
       class="table-drawing-board-modal"
+      :style="{ backgroundColor: `rgba(255, 255, 255, ${opacity})` }"
       id="modal"
     >
       <button
@@ -254,6 +255,10 @@ export default {
       type: Number,
       default: null,
     },
+    opacity: {
+      type: String,
+      default: '1',
+    },
   },
   setup (props, context) {
     const autoFoucusButton = ref(null)
@@ -413,7 +418,7 @@ export default {
       containerElementAnimationTimeline.value = gsap.timeline({ paused: true })
       return containerElementAnimationTimeline.value
         .to('.table-drawing-board-container', {
-          height: '35vh',
+          height: '40vh',
           width: '100%',
           duration: 0.3,
           ease: 'circ.inOut',

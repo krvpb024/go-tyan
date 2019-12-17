@@ -84,7 +84,7 @@
       </div>
 
       <div class="exam-mode-drawing-board">
-        <table-drawing-board :service="service" :current="current"></table-drawing-board>
+        <table-drawing-board opacity="0.8" :service="service" :current="current"></table-drawing-board>
       </div>
     </div>
   </section>
