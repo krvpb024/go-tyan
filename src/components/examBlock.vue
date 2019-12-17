@@ -4,6 +4,7 @@
       :service="service"
       :current="current"
       :cards="cards"
+      :examType="examType"
     ></exam-block-card>
 
     <div class="exam-block-progress">

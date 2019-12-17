@@ -14,21 +14,21 @@
       @mouseup="dragEnd"
       @touchend="dragEnd"
     >
-      <span class="card-question">
+      <span class="card-question" ref="cardQuestionElement">
         {{ question }}
       </span>
-      <span class="card-answer">
+      <span class="card-answer" ref="cardAnswerElement">
         {{ answer }}
       </span>
     </div>
 
-    <div class="card-2 card-background card-layout">
-      <span class="card-question card-2-question">
+    <div class="card-2 card-background card-layout" ref="card2Element">
+      <span class="card-question card-2-question" ref="card2QuestionElement">
         {{ question }}
       </span>
     </div>
-    <div class="card-3 card-background card-layout"></div>
-    <div class="card-new card-background card-layout"></div>
+    <div class="card-3 card-background card-layout" ref="card3Element"></div>
+    <div class="card-new card-background card-layout" ref="cardNewElement"></div>
   </div>
 </template>
 
@@ -52,7 +52,26 @@ export default {
     },
   },
   setup (props, context) {
+    // element
     const cardElement = ref(null)
+    const cardQuestionElement = ref(null)
+    const cardAnswerElement = ref(null)
+    const card2Element = ref(null)
+    const card2QuestionElement = ref(null)
+    const card3Element = ref(null)
+    const cardNewElement = ref(null)
+    const animationElements = computed(function getAnimationElements () {
+      return [
+        cardElement.value,
+        card2Element.value,
+        card3Element.value,
+        cardNewElement.value,
+        cardAnswerElement.value,
+        cardQuestionElement.value,
+        card2QuestionElement.value,
+      ]
+    })
+    // data
     const canDrag = ref(false)
     const lastTouchX = ref(null)
     const xMovement = ref(0)
@@ -111,7 +130,7 @@ export default {
       function answerShowedAnimationWatcher (value) {
         if (!value) return
         gsap
-          .to('.card-answer', {
+          .to(cardAnswerElement.value, {
             opacity: 1,
             duration: 0.3,
           })
@@ -148,13 +167,13 @@ export default {
       function cardBackToPositionAnimationWatcher (value) {
         if (!value) return
         gsap
-          .to('.card', {
+          .to(cardElement.value, {
             x: 0,
             opacity: 1,
             duration: 0.3,
           })
           .then(function swipeAnimationEnd () {
-            gsap.set('.card', { clearProps: 'all' })
+            gsap.set(cardElement.value, { clearProps: 'all' })
             xMovement.value = 0
             props.service.send('CARD_BACK_TO_POSITION_ANIMATION_END')
           })
@@ -163,7 +182,15 @@ export default {
     )
 
     return {
+      // element
       cardElement,
+      cardQuestionElement,
+      cardAnswerElement,
+      card2Element,
+      card2QuestionElement,
+      card3Element,
+      cardNewElement,
+      // data
       canDrag,
       xMovement,
       examMode,
@@ -220,35 +247,39 @@ export default {
       const tl = gsap.timeline({ paused: true })
 
       return tl
-        .to('.card .card-question, .card .card-answer', {
+        .to(cardQuestionElement.value, {
           opacity: 0,
           duration: 0,
         })
-        .to('.card', {
+        .to(cardAnswerElement.value, {
+          opacity: 0,
+          duration: 0,
+        })
+        .to(cardElement.value, {
           x: `${direction == 'left' ? '-' : '+'}=${window.innerWidth}`,
           duration: 0.5,
         })
-        .to('.card-2', {
+        .to(card2Element.value, {
           x: '-=10px',
           y: '-=10px',
           backgroundColor: '#ffffff',
         }, '-=0.5')
-        .to('.card-3', {
+        .to(card3Element.value, {
           x: '-=10px',
           y: '-=10px',
           duration: 0.5,
         }, '-=0.5')
-        .to('.card-new', {
+        .to(cardNewElement.value, {
           opacity: props.cards[2] ? 1 : 0,
           x: '-=10px',
           y: '-=10px',
           duration: 0.5,
         }, '-=0.5')
-        .to('.card-2-question', {
+        .to(cardQuestionElement.value, {
           opacity: 1,
           duration: 0.5,
         }, '-=0.5')
-        .to('.card', {
+        .to(cardElement.value, {
           opacity: direction == 'left' ? 1 : 0,
           duration: 0.2,
         }, '-=0.5')
@@ -256,10 +287,13 @@ export default {
 
     function clearAnimationPropsAndSendEvent (tl) {
       props.service.send('CARD_SWIPE_ANIMATION_END')
-      gsap.set('.card, .card-2, .card-3, .card-new, .card-answer, .card-2-question, .card .card-question, .card .card-answer', { clearProps: 'all' })
-      if (!props.cards[0]) gsap.set('.card', { opacity: 0 })
-      if (!props.cards[1]) gsap.set('.card-2', { opacity: 0 })
-      if (!props.cards[2]) gsap.set('.card-3', { opacity: 0 })
+
+      animationElements.value.forEach(function clearAllAnimationProps (element) {
+        gsap.set(element, { clearProps: 'all' })
+      })
+      if (!props.cards[0]) gsap.set(cardElement.value, { opacity: 0 })
+      if (!props.cards[1]) gsap.set(card2Element.value, { opacity: 0 })
+      if (!props.cards[2]) gsap.set(card3Element.value, { opacity: 0 })
       xMovement.value = 0
     }
   },
