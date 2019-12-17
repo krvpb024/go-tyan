@@ -71,6 +71,7 @@ export default {
         card2QuestionElement.value,
       ]
     })
+
     // data
     const canDrag = ref(false)
     const lastTouchX = ref(null)
@@ -164,7 +165,8 @@ export default {
     )
 
     watch(
-      () => props.current.matches('idle.exam.normalExam.answerShowed.cardBackToPositionAnimation'),
+      () => props.current.matches('idle.exam.normalExam.answerShowed.cardBackToPositionAnimation') ||
+        props.current.matches('idle.exam.enhancementExam.answerShowed.cardBackToPositionAnimation'),
       function cardBackToPositionAnimationWatcher (value) {
         if (!value) return
         gsap
@@ -224,6 +226,8 @@ export default {
       } else {
         movement = e.movementX
       }
+
+      if (props.current.matches('idle.exam.enhancementExam') && movement < 0) return
 
       xMovement.value = xMovement.value + movement
       cardElement.value.style.transform = `translate(${xMovement.value}px, 0)`

@@ -4,6 +4,10 @@
   </div>
 </template>
 
+<script>
+export default {}
+</script>
+
 <style>
 :root {
   --main-color: #ffe65a;
