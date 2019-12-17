@@ -140,11 +140,11 @@ const machine = Machine({
                         NEXT_CARD: [
                           {
                             cond: 'addToEnhancement',
-                            actions: ['nextCard', send('CLEAR_CANVAS')],
+                            actions: ['nextEnhancementCard', send('CLEAR_CANVAS')],
                             target: 'cardSwipeLeftAnimation',
                           },
                           {
-                            actions: ['nextCard', send('CLEAR_CANVAS')],
+                            actions: ['nextEnhancementCard', send('CLEAR_CANVAS')],
                             target: 'cardSwipeRightAnimation',
                           },
                         ],
@@ -280,7 +280,7 @@ const machine = Machine({
       return enhancementCards.length == 0
     },
     noMoreEnhancementCards ({ enhancementCards, enhancementCursor }) {
-      return enhancementCursor == enhancementCards.length - 1
+      return enhancementCursor == enhancementCards.length
     },
   },
   actions: {
@@ -297,6 +297,11 @@ const machine = Machine({
     nextCard: assign(function cursorToNext ({ cursor }) {
       return {
         cursor: cursor + 1,
+      }
+    }),
+    nextEnhancementCard: assign(function cursorToNext ({ enhancementCursor }) {
+      return {
+        enhancementCursor: enhancementCursor + 1,
       }
     }),
   },

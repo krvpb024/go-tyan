@@ -126,7 +126,8 @@ export default {
     })
 
     watch(
-      () => props.current.matches('idle.exam.normalExam.answerShowed.idle'),
+      () => props.current.matches('idle.exam.normalExam.answerShowed.idle') ||
+        props.current.matches('idle.exam.enhancementExam.answerShowed.idle'),
       function answerShowedAnimationWatcher (value) {
         if (!value) return
         gsap

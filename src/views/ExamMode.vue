@@ -73,13 +73,13 @@
           ></exam-block>
         </div>
 
-        <!-- <div class="exam-block__enhancement-exam">
+        <div class="exam-block__enhancement-exam">
           <exam-block
             examType="enhancementExam"
             :service="service"
             :current="current"
           ></exam-block>
-        </div> -->
+        </div>
 
       </div>
 
@@ -154,6 +154,9 @@ export default {
             x: '0%',
             duration: 0.5,
           }, '-=0.5')
+          .then(function changeExamAnimationEnd () {
+            service.value.send('CHANGE_EXAM_MODE_ANIMATION_END')
+          })
       },
       { lazy: true }
     )

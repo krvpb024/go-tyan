@@ -1,12 +1,12 @@
 <template>
   <div class="ep-container">
-    <div class="ep-container__value-bar"></div>
+    <div class="ep-container__value-bar" ref="valueBarElement"></div>
   </div>
 </template>
 
 <script>
 import { gsap } from 'gsap'
-import { watch } from '@vue/composition-api'
+import { ref, watch } from '@vue/composition-api'
 
 export default {
   props: {
@@ -20,15 +20,20 @@ export default {
     },
   },
   setup (props) {
+    const valueBarElement = ref(null)
     watch(
       () => props.value,
       function valueWatcher () {
-        gsap.to('.ep-container__value-bar', {
+        gsap.to(valueBarElement.value, {
           width: `${props.value / props.max * 100}%`,
         })
       },
       { lazy: true }
     )
+
+    return {
+      valueBarElement,
+    }
   },
 }
 </script>
