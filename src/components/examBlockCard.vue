@@ -227,7 +227,7 @@ export default {
         movement = e.movementX
       }
 
-      if (props.current.matches('idle.exam.enhancementExam') && movement < 0) return
+      if (props.current.matches('idle.exam.enhancementExam') && movement < 0 && xMovement.value <= 0) return
 
       xMovement.value = xMovement.value + movement
       cardElement.value.style.transform = `translate(${xMovement.value}px, 0)`
@@ -317,7 +317,6 @@ export default {
 <style scoped>
 .card-container {
   position: relative;
-  margin: 5vh 0;
   margin-bottom: calc(var(--card-2-transform) + 15px); /* add card-2 card-3 transfromY */
   width: 100%;
   height: 30vh;

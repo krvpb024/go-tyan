@@ -219,6 +219,7 @@ export default {
   position: relative;
   width: 100%;
   overflow: hidden;
+  padding-top: 15vh;
 }
 
 .exam-block__normal-exam {
