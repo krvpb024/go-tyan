@@ -1,6 +1,6 @@
 <template>
   <section class="ex-root">
-    <section class="ex-root__container">
+    <div class="ex-root__container">
       <p class="ex-container__description">
         <slot name="transformFrom"></slot>
 
@@ -18,7 +18,7 @@
       <div class="ex-container__title">
         <slot name="title"></slot>
       </div>
-    </section>
+    </div>
   </section>
 </template>
 
@@ -29,6 +29,7 @@ export default {}
 <style scoped>
 .ex-root {
   position: relative;
+  z-index: 10;
 }
 
 .ex-root::after {
@@ -63,7 +64,7 @@ export default {}
 .ex-container__description {
   display: flex;
   margin-bottom: 25px;
-  font-size: 2.06rem;
+  font-size: 10vw;
   align-items: center;
 }
 
@@ -72,7 +73,8 @@ export default {}
 }
 
 .ex-container__title {
-  font-size: 1rem;
+  font-size: 2.5vw;
+  white-space: nowrap;
 }
 
 .ex-container__title span +  span {

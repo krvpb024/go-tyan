@@ -23,6 +23,11 @@ html {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
 *, *:before, *:after {
   box-sizing: inherit;
 }
@@ -56,6 +61,7 @@ p {
   padding-bottom: 0;
   position: sticky;
   top: 0;
+  z-index: 11;
 }
 
 .root-top-bar-link-icon {

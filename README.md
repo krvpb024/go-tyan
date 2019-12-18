@@ -15,22 +15,11 @@ npm run serve
 npm run build
 ```
 
-### Run your tests
-```
-npm run test
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
-
 ## Todos
 
-1. refactor css class name
-1. refactor gsap selector to ref element
-1. refactor vue setup split data, ref element, methods
-
+- [ ] refactor css class name to BEM style
+- [ ] refactor component css size by parent instead it self
+- [x] refactor gsap selector to ref element
+- [ ] refactor vue setup split data, ref element, methods
+- [ ] abstract modal logic use composition api
+- [ ] abstract tooltips logic use composition api

@@ -56,61 +56,126 @@
       </top-bar>
     </div>
 
-    <nav>
-      <exam-card>
-        <template #transformFrom>
-          <span>あ</span>
-        </template>
+    <nav class="exam-nav">
+      <router-link to="/exam/hiragana_to_romanization">
+        <exam-card>
+          <template #transformFrom>
+            <span>あ</span>
+          </template>
 
-        <template #transformTo>
-          <span>a</span>
-        </template>
+          <template #transformTo>
+            <span>a</span>
+          </template>
 
-        <template #title>
-          <h2>
-            <span>平假名</span>
-            <span>轉</span>
-            <span>拼音</span>
-          </h2>
-        </template>
-      </exam-card>
-      <ul>
-        <li>
-          <router-link to="/exam/hiragana_to_romanization">
-            平假名轉拼音
-          </router-link>
-        </li>
+          <template #title>
+            <h2>
+              <span>平假名</span>
+              <span>轉</span>
+              <span>拼音</span>
+            </h2>
+          </template>
+        </exam-card>
+      </router-link>
 
-        <li>
-          <router-link to="/exam/katakana_to_romanization">
-            片假名轉拼音
-          </router-link>
-        </li>
+      <router-link to="/exam/romanization_to_hiragana">
+        <exam-card>
+          <template #transformFrom>
+            <span>a</span>
+          </template>
 
-        <li>
-          <router-link to="/exam/romanization_to_hiragana">
-            拼音轉平假名
-          </router-link>
-        </li>
+          <template #transformTo>
+            <span>あ</span>
+          </template>
 
-        <li>
-          <router-link to="/exam/romanization_to_katakana">
-            拼音轉片假名
-          </router-link>
-        </li>
+          <template #title>
+            <h2>
+              <span>拼音</span>
+              <span>轉</span>
+              <span>平假名</span>
+            </h2>
+          </template>
+        </exam-card>
+      </router-link>
 
-        <li>
-          <router-link to="/exam/hiragana_to_katakana">
-            平假名轉片假名
-          </router-link>
-        </li>
+      <router-link to="/exam/katakana_to_romanization">
+        <exam-card>
+          <template #transformFrom>
+            <span>ア</span>
+          </template>
 
-        <li>
-          <router-link to="/exam/katakana_to_hiragana">
-            片假名轉平假名
-          </router-link>
-        </li>
-      </ul>
+          <template #transformTo>
+            <span>a</span>
+          </template>
+
+          <template #title>
+            <h2>
+              <span>片假名</span>
+              <span>轉</span>
+              <span>拼音</span>
+            </h2>
+          </template>
+        </exam-card>
+      </router-link>
+
+      <router-link to="/exam/romanization_to_katakana">
+        <exam-card>
+          <template #transformFrom>
+            <span>a</span>
+          </template>
+
+          <template #transformTo>
+            <span>ア</span>
+          </template>
+
+          <template #title>
+            <h2>
+              <span>拼音</span>
+              <span>轉</span>
+              <span>片假名</span>
+            </h2>
+          </template>
+        </exam-card>
+      </router-link>
+
+      <router-link to="/exam/hiragana_to_katakana">
+        <exam-card>
+          <template #transformFrom>
+            <span>あ</span>
+          </template>
+
+          <template #transformTo>
+            <span>ア</span>
+          </template>
+
+          <template #title>
+            <h2>
+              <span>平假名</span>
+              <span>轉</span>
+              <span>片假名</span>
+            </h2>
+          </template>
+        </exam-card>
+      </router-link>
+
+      <router-link to="/exam/katakana_to_hiragana">
+        <exam-card>
+          <template #transformFrom>
+            <span>ア</span>
+          </template>
+
+          <template #transformTo>
+            <span>あ</span>
+          </template>
+
+          <template #title>
+            <h2>
+              <span>片假名</span>
+              <span>轉</span>
+              <span>平假名</span>
+            </h2>
+          </template>
+        </exam-card>
+      </router-link>
     </nav>
   </section>
 </template>
@@ -159,3 +224,15 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+.exam-nav {
+  display: grid;
+  grid-auto-flow: row;
+  grid-column-gap: 5vw;
+  grid-row-gap: 5vw;
+  grid-template-columns: 40% 40%;
+  justify-content: center;
+  margin: 31px 0;
+}
+</style>
