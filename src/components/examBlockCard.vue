@@ -330,7 +330,7 @@ export default {
   height: 100%;
   width: var(--card-width);
   border-radius: 6px;
-  border: solid 2px var(--text-color);
+  border: solid 2px var(--card-border-color);
   font-size: 8vh;
   /* padding: 10% 0; */
   transform-origin: center;

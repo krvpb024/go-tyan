@@ -57,6 +57,23 @@
     </div>
 
     <nav>
+      <exam-card>
+        <template #transformFrom>
+          <span>あ</span>
+        </template>
+
+        <template #transformTo>
+          <span>a</span>
+        </template>
+
+        <template #title>
+          <h2>
+            <span>平假名</span>
+            <span>轉</span>
+            <span>拼音</span>
+          </h2>
+        </template>
+      </exam-card>
       <ul>
         <li>
           <router-link to="/exam/hiragana_to_romanization">
@@ -104,10 +121,11 @@ import { machine } from '@/states/examState.js'
 import { useMachine } from '@/utils/useMachine.js'
 import topBar from '@/components/topBar.vue'
 import examRangeModal from '@/components/examRangeModal.vue'
+import examCard from '@/components/examCard.vue'
 
 export default {
   name: 'Exam',
-  components: { topBar, examRangeModal },
+  components: { topBar, examRangeModal, examCard },
   setup (props, context) {
     const localExamRange = JSON.parse(window.localStorage.getItem('examRange'))
     const localSubmittedGojuon = JSON.parse(window.localStorage.getItem('submittedGojuon'))

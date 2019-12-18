@@ -12,6 +12,7 @@ export default {}
 :root {
   --main-color: #ffe65a;
   --text-color: #313131;
+  --card-border-color: #1d1d1d;
   --title-bg-color: #f5f5f5;
   --focus-border-width: 2.5px;
   --focus-border: solid var(--focus-border-width) var(--main-color);
@@ -28,6 +29,14 @@ html {
 
 body {
   color: var(--text-color);
+}
+
+h1, h2, h3, h4, h5 {
+  margin: 0;
+}
+
+p {
+  margin: 0;
 }
 
 .visual-hidden {
