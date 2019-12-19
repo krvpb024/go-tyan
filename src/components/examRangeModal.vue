@@ -53,15 +53,16 @@
           <template #rightContainer>
             <button class="exam-range-modal__save-button"  @click="service.send('SET_EXAM_RANGE')" type="submit">
               儲存
-
             </button>
 
             <table-tooltips
+              v-show="current.matches('examRangeModal.show.error')"
               class="exam-range-modal-save-button__tooltips"
               :service="service"
               :current="current"
+              showState="examRangeModal.show.error"
               showAnimationState="examRangeModal.show.error.showTooltipsAnimation"
-              hideState="examRangeModal.show.error.showTooltips"
+              idleState="examRangeModal.show.error.showTooltips"
               hideAnimationState="examRangeModal.show.error.hideTooltipsAnimation"
               :anglePosition="{ right: 0, top: 0 }"
               angleTransformX="-20px"

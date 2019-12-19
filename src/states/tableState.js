@@ -160,6 +160,7 @@ const machine = Machine({
       },
     },
     drawingBoard: {
+      id: 'drawingBoard',
       initial: 'hide',
       states: {
         openDrawingBoardAnimation: {
@@ -203,22 +204,27 @@ const machine = Machine({
           states: {
             idle: {
               on: {
-                SHOW_TOOLTIPS: 'showTooltipsAnimation',
-              },
-            },
-            showTooltipsAnimation: {
-              on: {
-                SHOW_TOOLTIPS_ANIMATION_END: 'tooltips',
+                SHOW_TOOLTIPS: 'tooltips.showTooltipsAnimation',
               },
             },
             tooltips: {
-              on: {
-                HIDE_TOOLTIPS: 'hideTooltipsAnimation',
-              },
-            },
-            hideTooltipsAnimation: {
-              on: {
-                HIDE_TOOLTIPS_ANIMATION_END: 'idle',
+              initial: 'showTooltipsAnimation',
+              states: {
+                showTooltipsAnimation: {
+                  on: {
+                    SHOW_TOOLTIPS_ANIMATION_END: 'showTooltips',
+                  },
+                },
+                showTooltips: {
+                  on: {
+                    HIDE_TOOLTIPS: 'hideTooltipsAnimation',
+                  },
+                },
+                hideTooltipsAnimation: {
+                  on: {
+                    HIDE_TOOLTIPS_ANIMATION_END: '#drawingBoard.hide.idle',
+                  },
+                },
               },
             },
           },

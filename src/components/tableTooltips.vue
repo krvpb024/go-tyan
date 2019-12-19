@@ -1,5 +1,5 @@
 <template>
-  <div class="tooltips-container" ref="tooltipsElement">
+  <div v-if="current.matches(showState)" class="tooltips-container" ref="tooltipsElement">
     <span class="text">
       <slot></slot>
     </span>
@@ -28,11 +28,15 @@ export default {
       type: Object,
       required: true,
     },
+    showState: {
+      type: String,
+      required: true,
+    },
     showAnimationState: {
       type: String,
       required: true,
     },
-    hideState: {
+    idleState: {
       type: String,
       required: true,
     },
@@ -54,26 +58,43 @@ export default {
     },
   },
   setup (props) {
+    // element
     const tooltipsElement = ref(null)
-
+    // data
     const tooltipsElementAnimationTimeline = ref(null)
     const tooltipsTimeout = ref(null)
 
     watch(
       () => props.current.matches(props.showAnimationState),
       function startShowTooltipsAnimation (value) {
-        if (value) {
-          clearTimeout(tooltipsTimeout.value)
-          showTooltips().then(function animationEnd () {
-            props.service.send('SHOW_TOOLTIPS_ANIMATION_END')
-          })
+        if (!value) return
+
+        clearTimeout(tooltipsTimeout.value)
+        showTooltips().then(function animationEnd () {
+          props.service.send('SHOW_TOOLTIPS_ANIMATION_END')
+        })
+
+        function showTooltips () {
+          gsap.set(tooltipsElement.value, { clearProps: 'all' })
+
+          tooltipsElementAnimationTimeline.value = gsap.timeline({ paused: true })
+          return tooltipsElementAnimationTimeline.value
+            .to(tooltipsElement.value, {
+              display: 'flex',
+              duration: 0,
+            })
+            .to(tooltipsElement.value, {
+              opacity: 1,
+              duration: 0.3,
+            })
+            .play()
         }
       },
       { lazy: true }
     )
 
     watch(
-      () => props.current.matches(props.hideState),
+      () => props.current.matches(props.idleState),
       function startHideTooltipsAnimation (value) {
         tooltipsTimeout.value = setTimeout(function closeTooltipsTimeout () {
           props.service.send('HIDE_TOOLTIPS')
@@ -85,37 +106,18 @@ export default {
     watch(
       () => props.current.matches(props.hideAnimationState),
       function startHideTooltipsAnimation (value) {
-        if (value) {
-          hideTooltips().then(function animationEnd () {
+        if (!value) return
+
+        tooltipsElementAnimationTimeline.value.reverse()
+          .then(function animationEnd () {
             props.service.send('HIDE_TOOLTIPS_ANIMATION_END')
           })
-        }
       },
       { lazy: true }
     )
 
     return {
       tooltipsElement,
-    }
-
-    function showTooltips () {
-      gsap.set(tooltipsElement.value, { clearProps: 'all' })
-
-      tooltipsElementAnimationTimeline.value = gsap.timeline({ paused: true })
-      return tooltipsElementAnimationTimeline.value
-        .to(tooltipsElement.value, {
-          display: 'flex',
-          duration: 0,
-        })
-        .to(tooltipsElement.value, {
-          opacity: 1,
-          duration: 0.3,
-        })
-        .play()
-    }
-
-    function hideTooltips () {
-      return tooltipsElementAnimationTimeline.value.reverse()
     }
   },
 }
