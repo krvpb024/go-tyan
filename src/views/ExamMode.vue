@@ -206,6 +206,10 @@ export default {
   z-index: 110;
 }
 
+.exam-mode-info-modal-button:hover, .exam-mode-info-modal-button:active {
+  color: var(--text-color);
+}
+
 .exam-mode-info-modal-button:active {
   color: var(--main-color);
 }

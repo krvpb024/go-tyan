@@ -310,7 +310,9 @@ export default {
   --card-transform: 10px;
   --card-2-transform: 20px;
   --card-3-transform: 30px;
-  --card-width: 50%;
+  --card-width: 30vw;
+  --card-min-size: 200px;
+  --card-max-size: 300px;
 }
 </style>
 
@@ -319,7 +321,6 @@ export default {
   position: relative;
   margin-bottom: calc(var(--card-2-transform) + 15px); /* add card-2 card-3 transfromY */
   width: 100%;
-  height: 30vh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -329,10 +330,14 @@ export default {
 .card-layout {
   height: 100%;
   width: var(--card-width);
+  height: var(--card-width);
+  min-height: var(--card-min-size);
+  min-width: var(--card-min-size);
+  max-height: var(--card-max-size);
+  max-width: var(--card-max-size);
   border-radius: 6px;
   border: solid 2px var(--card-border-color);
   font-size: 8vh;
-  /* padding: 10% 0; */
   transform-origin: center;
   display: grid;
   grid-template:

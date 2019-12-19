@@ -99,6 +99,8 @@ export default {
 
 .exam-block-progress {
   width: calc(var(--card-width) + var(--card-2-transform));
+  min-width: calc(var(--card-min-size) + var(--card-2-transform));
+  max-width: calc(var(--card-max-size) + var(--card-2-transform));
 }
 
 .eb-status {
