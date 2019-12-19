@@ -20,16 +20,25 @@
             ? 'OPEN_DRAWING_BOARD'
             : 'SHOW_TOOLTIPS')"
       >
-        <table-tooltips
-          class="table-tooltips"
-          :service="service"
-          :current="current"
-        >請先點選五十音</table-tooltips>
 
         <h1 id="table-drawing-board-title">
           手寫板
         </h1>
       </button>
+
+      <table-tooltips
+        class="table-tooltips"
+        :service="service"
+        :current="current"
+        showAnimationState="drawingBoard.hide.showTooltipsAnimation"
+        hideState="drawingBoard.hide.tooltips"
+        hideAnimationState="drawingBoard.hide.hideTooltipsAnimation"
+        :anglePosition="{ left: 0, bottom: 0 }"
+        angleTransformX="20px"
+        angleTransformY="50%"
+      >
+        請先點選五十音
+      </table-tooltips>
 
       <div
         class="table-drawing-board-active-show"

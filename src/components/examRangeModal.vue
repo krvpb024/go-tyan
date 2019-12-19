@@ -51,7 +51,26 @@
           <h1 id="exam-range-modal-title">設定</h1>
 
           <template #rightContainer>
-            <button @click="service.send('SET_EXAM_RANGE')" type="submit">儲存</button>
+            <button class="exam-range-modal__save-button"  @click="service.send('SET_EXAM_RANGE')" type="submit">
+              儲存
+
+            </button>
+
+            <table-tooltips
+              class="exam-range-modal-save-button__tooltips"
+              :service="service"
+              :current="current"
+              showAnimationState="examRangeModal.show.error.showTooltipsAnimation"
+              hideState="examRangeModal.show.error.showTooltips"
+              hideAnimationState="examRangeModal.show.error.hideTooltipsAnimation"
+              :anglePosition="{ right: 0, top: 0 }"
+              angleTransformX="-20px"
+              angleTransformY="-50%"
+             >
+              {{ current.meta['examRangeView.examRangeModal.show.error']
+                  ? current.meta['examRangeView.examRangeModal.show.error'].message
+                  : null }}
+            </table-tooltips>
           </template>
         </top-bar>
       </div>
@@ -61,15 +80,6 @@
         <h2 class="subtitle">設定測驗範圍</h2>
 
         <div>
-          <section v-show="current.matches('examRangeModal.show.error')">
-            <div
-              role="alert"
-              v-if="current.meta['examRangeView.examRangeModal.show.error']"
-            >
-              <p>{{ current.meta['examRangeView.examRangeModal.show.error'].message }}</p>
-            </div>
-          </section>
-
           <section
             v-for="([groupName, rows]) in Object.entries(current.context.gojuon)"
             :key="groupName"
@@ -116,9 +126,10 @@ import { useModalNavigation } from '@/utils/useModalNavigation.js'
 import topBar from '@/components/topBar.vue'
 import gojuonTitle from '@/components/gojuonTitle.vue'
 import checkboxLabel from '@/components/checkboxLabel.vue'
+import tableTooltips from '@/components/tableTooltips.vue'
 
 export default {
-  components: { topBar, gojuonTitle, checkboxLabel },
+  components: { topBar, gojuonTitle, checkboxLabel, tableTooltips },
   props: {
     service: {
       type: Object,
@@ -283,6 +294,17 @@ export default {
   border-radius: 4px;
   overflow: hidden;
   will-change: auto;
+}
+
+.exam-range-modal__save-button {
+  position: relative;
+}
+
+.exam-range-modal-save-button__tooltips {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  transform:  translate(0, 125%);
 }
 
 .scroll-container {

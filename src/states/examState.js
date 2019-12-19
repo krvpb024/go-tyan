@@ -36,6 +36,7 @@ const machine = Machine({
     },
     idle: {},
     examRangeModal: {
+      id: 'examRangeModal',
       initial: 'hide',
       states: {
         showAnimation: {
@@ -73,8 +74,26 @@ const machine = Machine({
           states: {
             idle: {},
             error: {
+              initial: 'showTooltipsAnimation',
               meta: {
-                message: '測驗範圍不能爲空',
+                message: '請至少選擇一項',
+              },
+              states: {
+                showTooltipsAnimation: {
+                  on: {
+                    SHOW_TOOLTIPS_ANIMATION_END: 'showTooltips',
+                  },
+                },
+                showTooltips: {
+                  on: {
+                    HIDE_TOOLTIPS: 'hideTooltipsAnimation',
+                  },
+                },
+                hideTooltipsAnimation: {
+                  on: {
+                    HIDE_TOOLTIPS_ANIMATION_END: '#examRangeModal.show.idle',
+                  },
+                },
               },
             },
           },

@@ -3,6 +3,14 @@
     <span class="text">
       <slot></slot>
     </span>
+
+    <div
+      class="tooltips-container__angle"
+      :style="{
+        ...anglePosition,
+        transform: `translate(${angleTransformX}, ${angleTransformY}) rotate(45deg)`
+      }"
+     ></div>
   </div>
 </template>
 
@@ -20,16 +28,42 @@ export default {
       type: Object,
       required: true,
     },
+    showAnimationState: {
+      type: String,
+      required: true,
+    },
+    hideState: {
+      type: String,
+      required: true,
+    },
+    hideAnimationState: {
+      type: String,
+      required: true,
+    },
+    anglePosition: {
+      type: Object,
+      default: () => ({ left: 0, top: 0 }),
+    },
+    angleTransformX: {
+      type: String,
+      default: '0',
+    },
+    angleTransformY: {
+      type: String,
+      default: '0',
+    },
   },
   setup (props) {
     const tooltipsElement = ref(null)
 
     const tooltipsElementAnimationTimeline = ref(null)
+    const tooltipsTimeout = ref(null)
 
     watch(
-      () => props.current.matches('drawingBoard.hide.showTooltipsAnimation'),
+      () => props.current.matches(props.showAnimationState),
       function startShowTooltipsAnimation (value) {
         if (value) {
+          clearTimeout(tooltipsTimeout.value)
           showTooltips().then(function animationEnd () {
             props.service.send('SHOW_TOOLTIPS_ANIMATION_END')
           })
@@ -39,17 +73,17 @@ export default {
     )
 
     watch(
-      () => props.current.matches('drawingBoard.hide.tooltips'),
+      () => props.current.matches(props.hideState),
       function startHideTooltipsAnimation (value) {
-        setTimeout(function closeTooltipsTimeout () {
+        tooltipsTimeout.value = setTimeout(function closeTooltipsTimeout () {
           props.service.send('HIDE_TOOLTIPS')
-        }, 1000)
+        }, 1500)
       },
       { lazy: true }
     )
 
     watch(
-      () => props.current.matches('drawingBoard.hide.hideTooltipsAnimation'),
+      () => props.current.matches(props.hideAnimationState),
       function startHideTooltipsAnimation (value) {
         if (value) {
           hideTooltips().then(function animationEnd () {
@@ -101,16 +135,13 @@ export default {
   opacity: 0;
 }
 
-.tooltips-container::after {
+.tooltips-container__angle {
   position: absolute;
   content: "";
   display: block;
   width: 10px;
   height: 10px;
   background-color: var(--main-color);
-  transform: translate(20px, 50%) rotate(45deg);
-  bottom: 0;
-  left: 0;
 }
 
 .text {
