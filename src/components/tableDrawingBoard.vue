@@ -92,7 +92,7 @@
           <button
             class="tool-button close-button"
             @click="service.send('HIDE_DRAWING_BOARD')"
-            ref="autoFoucusButton"
+            ref="autoFoucusButtonElement"
             aria-controls="modal"
             aria-labelledby="close-icon-title"
           >
@@ -271,7 +271,7 @@ export default {
     },
   },
   setup (props, context) {
-    const autoFoucusButton = ref(null)
+    const autoFoucusButtonElement = ref(null)
     const modalElement = ref(null)
     const activeShowElement = ref(null)
     const drawingBoardTitleElement = ref(null)
@@ -325,7 +325,7 @@ export default {
       if (value) {
         openModalAnimation().then(function animationEnd () {
           canvasInitialSettings()
-          autoFoucusButton.value && autoFoucusButton.value.focus()
+          autoFoucusButtonElement.value && autoFoucusButtonElement.value.focus()
           props.service.send('OPEN_DRAWING_BOARD_ANIMATION_END')
         })
       }
@@ -363,7 +363,7 @@ export default {
       containerElement,
       canvasContainerElement,
       activeShowElement,
-      autoFoucusButton,
+      autoFoucusButtonElement,
       modalElement,
       canvas,
       ctx,
@@ -423,7 +423,7 @@ export default {
     }
 
     function openModalAnimation () {
-      drawingBoardTitleElement.value.classList.add('visual-hidden')
+      drawingBoardTitleElement.value.classList.add('app-visual-hidden')
 
       containerElementAnimationTimeline.value = gsap.timeline({ paused: true })
       return containerElementAnimationTimeline.value
@@ -464,7 +464,7 @@ export default {
         }, '-=0.3')
         .play()
         .then(function animationEnd () {
-          drawingBoardTitleElement.value.classList.remove('visual-hidden')
+          drawingBoardTitleElement.value.classList.remove('app-visual-hidden')
         })
     }
 

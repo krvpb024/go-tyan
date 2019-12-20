@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" class="app-container">
     <router-view></router-view>
   </div>
 </template>
@@ -45,7 +45,7 @@ p {
   margin: 0;
 }
 
-.visual-hidden {
+.app-visual-hidden {
   clip-path: inset(100%);
   clip: rect(1px 1px 1px 1px); /* IE 6/7 */
   clip: rect(1px, 1px, 1px, 1px);
@@ -56,7 +56,7 @@ p {
   width: 1px;
 }
 
-.root-sticky-top {
+.app-sticky-top {
   padding: 8px;
   background-color: #fff;
   padding-bottom: 0;
@@ -65,13 +65,13 @@ p {
   z-index: 11;
 }
 
-.root-top-bar-link-icon {
+.app-top-bar-link-icon {
   display:flex;
   align-items: center;
   justify-content: center;
 }
 
-#app {
+.app-container {
   max-width: var(--app-max-width);
   margin: 0 auto;
 }

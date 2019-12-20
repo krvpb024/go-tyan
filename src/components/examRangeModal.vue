@@ -96,7 +96,7 @@
             >
               <input
                 type="checkbox"
-                class="visual-hidden"
+                class="app-visual-hidden"
                 :id="`${groupName}-row-${rowIndex}-select-all`"
                 :checked="current.context.selectedGojuon.includes(`${groupName}-${rowIndex}`)"
                 @input="updateSelectedGojuon({ groupName, rowIndex }, $event)"

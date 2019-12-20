@@ -1,14 +1,14 @@
 <template>
   <section class="exam-mode-container">
     <div
-      class="root-sticky-top"
+      class="app-sticky-top"
       ref="topStickyElement"
     >
       <top-bar>
         <template #leftContainer>
           <router-link
             to="/exam"
-            class="root-top-bar-link-icon"
+            class="app-top-bar-link-icon"
             aria-labelledby="nav-return-label"
           >
             <svg

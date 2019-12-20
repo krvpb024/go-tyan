@@ -1,7 +1,7 @@
 <template>
-  <section class="table-view">
+  <section class="table-view-container">
     <div
-      class="root-sticky-top"
+      class="table-view-container__top-bar-container app-sticky-top"
       ref="topStickyElement"
     >
       <top-bar>
@@ -56,7 +56,7 @@
         :key="groupName"
         role="region"
         :aria-labelledby="`${groupName}-title`"
-        class="table-section"
+        class="table-view-container__group"
       >
         <gojuon-title fontSize="1.25rem">
           <h2 :id="`${groupName}-title`">{{ generateTitle(groupName) }}</h2>
@@ -64,47 +64,66 @@
 
         <table
           :id="groupName"
+          class="table-view-group__table"
           :aria-labelledby="`${groupName}-title`"
           data-wrap-cols="true"
           data-wrap-rows="false"
           :aria-rowcount="rows.length"
           aria-colcount="5"
         >
-          <tr>
-            <th scope="col">
-              <span class="th-text">a</span>
+          <tr class="table-view-table__table-row">
+            <th
+              scope="col"
+              class="table-view-table-row__table-head"
+            >
+              <span class="table-view-table-head__text">a</span>
             </th>
-            <th scope="col">
-              <span class="th-text">i</span>
+            <th
+              scope="col"
+              class="table-view-table-row__table-head"
+            >
+              <span class="table-view-table-head__text">i</span>
             </th>
-            <th scope="col">
-              <span class="th-text">u</span>
+            <th
+              scope="col"
+              class="table-view-table-row__table-head"
+            >
+              <span class="table-view-table-head__text">u</span>
             </th>
-            <th scope="col">
-              <span class="th-text">e</span>
+            <th
+              scope="col"
+              class="table-view-table-row__table-head"
+            >
+              <span class="table-view-table-head__text">e</span>
             </th>
-            <th scope="col">
-              <span class="th-text">o</span>
+            <th
+              scope="col"
+              class="table-view-table-row__table-head"
+            >
+              <span class="table-view-table-head__text">o</span>
             </th>
           </tr>
 
           <tr
+            class="table-view-table__table-row"
             v-for="(row, rowIndex) in rows"
             :key="rowIndex"
             role="rowgroup"
             :aria-rowindex="rowIndex + 1"
-            class="table-row"
           >
             <td
+              class="table-view-table-row__table-data"
               v-for="(gojuon /* [hiragana, katakana, romanization] */, columnIndex) in row"
-              :key="gojuon != 'empty' ? `${gojuon[0]}-${gojuon[1]}-${gojuon[2]}` : `empty-${rowIndex}-${columnIndex}`"
+              :key="gojuon != 'empty'
+                ? `${gojuon[0]}-${gojuon[1]}-${gojuon[2]}`
+                : `empty-${rowIndex}-${columnIndex}`"
               role="gridcell"
               :aria-colindex="columnIndex + 1"
             >
               <button
                 :id="`${groupName}-${rowIndex}-${columnIndex}`"
-                class="table-button"
-                :class="{'empty-button': gojuon == 'empty'}"
+                class="table-view-table-data__data-button"
+                :class="{'table-view-table-data__data-button--empty': gojuon == 'empty'}"
                 :aria-pressed="isCursorPosition(groupName, rowIndex, columnIndex) ? 'true' : false"
                 @keydown.prevent.up="service.send('FOCUS_COUSOR_UP')"
                 @keydown.prevent.down="service.send('FOCUS_COUSOR_DOWN')"
@@ -128,13 +147,15 @@
                 })"
               >
                 <div
-                  class="table-button__content"
-                  :class="[groupName == 'yoon' ? 'three-row' : 'two-row']"
+                  class="table-view-data-button__button-content"
+                  :class="[groupName == 'yoon'
+                    ? 'table-view-data-button__button-content--three-row'
+                    : 'table-view-data-button__button-content--two-row']"
                 >
                   <template v-if="gojuon != 'empty'">
                     <span
                       lang="ja-JP"
-                      class="hiragana"
+                      class="table-view-button-content__hiragana"
                       v-show="checkDisplayAndPeek('hiragana', groupName, rowIndex, columnIndex)"
                     >
                       {{ gojuon[0] }}
@@ -142,7 +163,7 @@
 
                     <span
                       lang="ja-JP"
-                      class="katakana"
+                      class="table-view-button-content__katakana"
                       v-show="checkDisplayAndPeek('katakana', groupName, rowIndex, columnIndex)"
                     >
                       {{ gojuon[1] }}
@@ -150,7 +171,7 @@
 
                     <span
                       lang="ja-JP"
-                      class="romanization"
+                      class="table-view-button-content__romanization"
                     >{{ gojuon[2] }}</span>
                   </template>
 
@@ -266,24 +287,24 @@ export default {
 </script>
 
 <style scoped>
-.table-view {
+.table-view-container {
   position: relative;
 }
 
-table {
+.table-view-group__table {
   padding: 10px 12px;
   width: 100%;
 }
 
-tr {
+.table-view-table__table-row {
   display: flex;
   align-items: center;
   justify-content: center;
   margin-bottom: 4px;
 }
 
-th,
-td {
+.table-view-table-row__table-head,
+.table-view-table-row__table-data {
   display: flex;
   flex: 1;
   align-items: center;
@@ -292,22 +313,22 @@ td {
   height: 64px;
 }
 
-th {
+.table-view-table-row__table-head {
   height: auto;
 }
 
-th + th,
-td + td {
+.table-view-table-row__table-head + .table-view-table-row__table-head,
+.table-view-table-row__table-data + .table-view-table-row__table-data {
   margin-left: 4px;
 }
 
-.th-text {
+.table-view-table-head__text {
   display: inline-block;
   width: 100%;
   height: 100%;
 }
 
-.table-button {
+.table-view-table-data__data-button {
   font-family: system-ui;
   width: 100%;
   height: 100%;
@@ -318,48 +339,48 @@ td + td {
   padding: 3px;
 }
 
-.table-button__content {
+.table-view-table-data__data-button:focus {
+  border: var(--focus-border);
+  outline: none;
+}
+
+.table-view-table-data__data-button[aria-pressed="true"] {
+  background-color: var(--main-color);
+  border: var(--focus-border);
+}
+
+.table-view-table-data__data-button--empty {
+  color: transparent;
+}
+
+.table-view-data-button__button-content {
   display: grid;
   align-items: center;
   justify-items: center;
 }
 
-.table-button__content.two-row {
+.table-view-data-button__button-content--two-row {
   grid-template:
     "hiragana     katakana    " 1fr
     "romanization romanization" 1fr / 1fr 1fr;
 }
 
-.table-button__content.three-row {
+.table-view-data-button__button-content--three-row {
   grid-template:
     "hiragana    " 1fr
     "katakana    " 1fr
     "romanization" 1fr / 1fr;
 }
 
-.hiragana {
+.table-view-button-content__hiragana {
   grid-area: hiragana;
 }
 
-.katakana {
+.table-view-button-content__katakana {
   grid-area: katakana;
 }
 
-.romanization {
+.table-view-button-content__romanization {
   grid-area: romanization;
-}
-
-.table-button:focus {
-  border: var(--focus-border);
-  outline: none;
-}
-
-.table-button[aria-pressed="true"] {
-  background-color: var(--main-color);
-  border: var(--focus-border);
-}
-
-.empty-button {
-  color: transparent;
 }
 </style>

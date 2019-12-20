@@ -4,7 +4,7 @@
       <input
         type="checkbox"
         id="hiragana"
-        class="visual-hidden"
+        class="app-visual-hidden"
         @input="service.send({type: 'HIRAGANA_TOGGLE_DISPLAY', data: $event.target.checked})"
         :checked="current.matches('displayPanel.hiragana.show')"
       >
@@ -16,7 +16,7 @@
       <input
         type="checkbox"
         id="katakana"
-        class="visual-hidden"
+        class="app-visual-hidden"
         @input="service.send({type: 'KATAKANA_TOGGLE_DISPLAY', data: $event.target.checked})"
         :checked="current.matches('displayPanel.katakana.show')"
       >
