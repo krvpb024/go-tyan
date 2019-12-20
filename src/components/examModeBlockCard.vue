@@ -259,7 +259,7 @@ export default {
       xMovement.value = xMovement.value + movement
       cardElement.value.style.transform = `translate(${xMovement.value}px, 0)`
 
-      const checkPoint = window.innerWidth / 4
+      const checkPoint = document.getElementById('app').offsetWidth / 4
       cardElement.value.style.opacity = 1 - (xMovement.value / checkPoint * 0.3)
 
       if (Math.abs(xMovement.value) > checkPoint) {
@@ -389,13 +389,19 @@ export default {
 
 .exam-mode-block-card__card--third {
   z-index: 8;
-  transform: translate(var(--card-second-transform), var(--card-second-transform));
+  transform: translate(
+    var(--card-second-transform),
+    var(--card-second-transform)
+  );
 }
 
 .exam-mode-block-card__card--new {
   z-index: 7;
   opacity: 0;
-  transform: translate(var(--card-third-transform), var(--card-third-transform));
+  transform: translate(
+    var(--card-third-transform),
+    var(--card-third-transform)
+  );
 }
 
 .exam-mode-block-card__question {

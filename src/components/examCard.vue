@@ -4,11 +4,45 @@
       <p class="exam-card-container__description">
         <slot name="transformFrom"></slot>
 
-        <svg class="exam-card-description__arrow-icon" xmlns="http://www.w3.org/2000/svg" width="16.521" height="17.011" viewBox="0 0 16.521 17.011">
-          <g id="Group_286" data-name="Group 286" transform="rotate(180 46.5 154.406)">
-            <rect id="Rectangle_541" width="16" height="2.3" fill="#313131" data-name="Rectangle 541" rx="1.15" transform="translate(77 299.1)"/>
-            <rect id="Rectangle_542" width="12" height="2.3" fill="#313131" data-name="Rectangle 542" rx="1.15" transform="rotate(-45 400.718 57.825)"/>
-            <rect id="Rectangle_543" width="12" height="2.3" fill="#313131" data-name="Rectangle 543" rx="1.15" transform="rotate(45 -321.512 243.632)"/>
+        <svg
+          class="exam-card-description__arrow-icon"
+          xmlns="http://www.w3.org/2000/svg"
+          width="16.521"
+          height="17.011"
+          viewBox="0 0 16.521 17.011"
+        >
+          <g
+            id="Group_286"
+            data-name="Group 286"
+            transform="rotate(180 46.5 154.406)"
+          >
+            <rect
+              id="Rectangle_541"
+              width="16"
+              height="2.3"
+              fill="#313131"
+              data-name="Rectangle 541"
+              rx="1.15"
+              transform="translate(77 299.1)"
+            />
+            <rect
+              id="Rectangle_542"
+              width="12"
+              height="2.3"
+              fill="#313131"
+              data-name="Rectangle 542"
+              rx="1.15"
+              transform="rotate(-45 400.718 57.825)"
+            />
+            <rect
+              id="Rectangle_543"
+              width="12"
+              height="2.3"
+              fill="#313131"
+              data-name="Rectangle 543"
+              rx="1.15"
+              transform="rotate(45 -321.512 243.632)"
+            />
           </g>
         </svg>
 
@@ -44,7 +78,7 @@ export default {}
   z-index: 9;
   border: solid 2px var(--card-border-color);
   background-color: var(--main-color);
-  transform:  translate(7px, 7px);
+  transform: translate(7px, 7px);
   border-radius: 4px;
 }
 
@@ -77,8 +111,7 @@ export default {}
   white-space: nowrap;
 }
 
-.exam-card-container__title span +  span {
+.exam-card-container__title span + span {
   margin-left: 10px;
 }
-
 </style>
