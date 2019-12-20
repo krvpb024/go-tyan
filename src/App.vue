@@ -1,5 +1,8 @@
 <template>
-  <div id="app" class="app-container">
+  <div
+    id="app"
+    class="app-container"
+  >
     <router-view></router-view>
   </div>
 </template>
@@ -22,7 +25,8 @@ export default {}
 
 html {
   box-sizing: border-box;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
 }
 
 a {
@@ -30,7 +34,9 @@ a {
   text-decoration: none;
 }
 
-*, *:before, *:after {
+*,
+*:before,
+*:after {
   box-sizing: inherit;
 }
 
@@ -38,7 +44,17 @@ body {
   color: var(--text-color);
 }
 
-h1, h2, h3, h4, h5 {
+.app-prevent-scroll {
+  overflow: hidden;
+  position: relative;
+  height: 100%;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
   margin: 0;
 }
 
@@ -67,7 +83,7 @@ p {
 }
 
 .app-top-bar-link-icon {
-  display:flex;
+  display: flex;
   align-items: center;
   justify-content: center;
 }

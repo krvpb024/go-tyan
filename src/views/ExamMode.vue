@@ -162,11 +162,13 @@ export default {
 
     onMounted(function examModeOnMounted () {
       service.value.send('PAGE_MOUNTED')
-      document.body.style.overflow = 'hidden'
+      document.body.classList.add('app-prevent-scroll')
+      document.querySelector('html').classList.add('app-prevent-scroll')
     })
 
     onUnmounted(function examModeOnUnmounted () {
-      document.body.style.overflow = ''
+      document.body.classList.remove('app-prevent-scroll')
+      document.querySelector('html').classList.remove('app-prevent-scroll')
     })
 
     return {

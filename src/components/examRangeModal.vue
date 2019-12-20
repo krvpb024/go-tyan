@@ -329,6 +329,7 @@ export default {
   bottom: 0;
   right: 0;
   transform: translate(0, 125%);
+  z-index: 10;
 }
 
 .exam-range-modal-form__scroll-content {
