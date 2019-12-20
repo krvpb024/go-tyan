@@ -101,8 +101,9 @@ export default {
     })
     const canDrag = ref(false)
     const lastTouchX = ref(null)
-    const xMovement = ref(0)
     const swipeCheckPoint = ref(null)
+    let xMovement = 0
+    let accelarator = 1
 
     const examMode = computed(function getExamMode () {
       return context.root.$route.name
@@ -242,7 +243,8 @@ export default {
       if (!props.cards[0]) gsap.set(cardElement.value, { opacity: 0 })
       if (!props.cards[1]) gsap.set(cardSecondElement.value, { opacity: 0 })
       if (!props.cards[2]) gsap.set(cardThirdElement.value, { opacity: 0 })
-      xMovement.value = 0
+      xMovement = 0
+      accelarator = 1
     }
 
     watch(
@@ -258,7 +260,8 @@ export default {
           })
           .then(function swipeAnimationEnd () {
             gsap.set(cardElement.value, { clearProps: 'all' })
-            xMovement.value = 0
+            xMovement = 0
+            accelarator = 1
             props.service.send('CARD_BACK_TO_POSITION_ANIMATION_END')
           })
       },
@@ -281,7 +284,6 @@ export default {
       // data
       animationElements,
       canDrag,
-      xMovement,
       examMode,
       question,
       answer,
@@ -313,17 +315,24 @@ export default {
         movement = e.movementX
       }
 
-      if (props.current.matches('idle.exam.enhancementExam') && movement < 0 && xMovement.value <= 0) return
+      if (
+        props.current.matches('idle.exam.enhancementExam') &&
+        movement < 0 &&
+        xMovement <= 0
+      ) {
+        xMovement = xMovement + movement * accelarator
+        accelarator = 0.5 - Math.abs(xMovement / swipeCheckPoint.value)
+      } else {
+        xMovement += movement
+      }
 
-      xMovement.value = xMovement.value + movement
-      cardElement.value.style.transform = `translate(${xMovement.value}px, 0)`
+      cardElement.value.style.transform = `translate(${xMovement}px, 0)`
+      cardElement.value.style.opacity = 1 - (xMovement / swipeCheckPoint.value * 0.3)
 
-      cardElement.value.style.opacity = 1 - (xMovement.value / swipeCheckPoint.value * 0.3)
-
-      if (Math.abs(xMovement.value) > swipeCheckPoint.value) {
+      if (Math.abs(xMovement) > swipeCheckPoint.value) {
         canDrag.value = false
         props.service.send('NEXT_CARD', {
-          addToEnhancement: !(xMovement.value > 0),
+          addToEnhancement: !(xMovement > 0),
         })
       }
     }
@@ -359,11 +368,15 @@ export default {
 }
 
 .exam-mode-block-card__card {
-  width: 100%;
-  height: 100%;
+  width: var(--card-width);
+  height: var(--card-width);
+  min-height: var(--card-min-size);
+  min-width: var(--card-min-size);
+  max-height: var(--card-max-size);
+  max-width: var(--card-max-size);
   border-radius: 6px;
   border: solid 2px var(--card-border-color);
-  font-size: 8vh;
+  font-size: 4rem;
   transform-origin: center;
   display: grid;
   grid-template:

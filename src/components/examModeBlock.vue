@@ -93,14 +93,6 @@ export default {
 }
 </script>
 
-<style>
-:root {
-  --card-width: 30vw;
-  --card-min-size: 200px;
-  --card-max-size: 300px;
-}
-</style>
-
 <style scoped>
 .exam-mode-block {
   display: flex;
@@ -110,15 +102,12 @@ export default {
 }
 
 .exam-mode-block__card {
-  width: var(--card-width);
-  height: var(--card-width);
-  min-height: var(--card-min-size);
-  min-width: var(--card-min-size);
-  max-height: var(--card-max-size);
-  max-width: var(--card-max-size);
+  width: 100%;
+  height: 100%;
+  /* add card-second card-third transfromY */
   margin-bottom: calc(
     var(--card-second-transform) + 15px
-  ); /* add card-second card-third transfromY */
+  );
 }
 
 .exam-mode-block__progress {
