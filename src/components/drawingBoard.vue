@@ -50,183 +50,185 @@
         ref="activeShowElement"
       >
 
-        <div class="drawing-board-tool-block__first-column">
-          <button
-            class="drawing-board-first-column__tool-button"
-            @click="service.send('CLEAR_CANVAS')"
-            aria-controls="canvas"
-          >
-            清除
-          </button>
+        <div
+          class="drawing-board-second-column__canvas-container"
+          ref="canvasContainerElement"
+        >
+          <canvas
+            tabindex="-1"
+            class="drawing-board-canvas-container__canvas-element"
+            id="canvas"
+            ref="canvasElement"
+            :width="width"
+            :height="height"
+            @mousedown="startDrawing"
+            @touchstart.prevent="startDrawing"
+            @mouseup="stopDrawing"
+            @touchend.prevent="stopDrawing"
+            @mousemove="drawLine"
+            @touchmove.prevent="drawLine"
+          ></canvas>
+        </div>
 
-          <button
-            class="drawing-board-first-column__tool-button"
-            v-if="service.id == 'tableView' && !current.matches('displayPanel.hiragana.show')"
-            :aria-controls="`${current.context.activeGroupName}-${current.context.activeRow}-${current.context.activeColumn}`"
-            @mousedown="service.send('PEEK_HIRAGANA')"
-            @touchstart="service.send('PEEK_HIRAGANA')"
-            @keydown.space="service.send('PEEK_HIRAGANA')"
-            @mouseup="service.send('COVER_HIRAGANA')"
-            @touchend="service.send('COVER_HIRAGANA')"
-            @keyup.space="service.send('COVER_HIRAGANA')"
-          >
-            偷看平假名
-          </button>
+        <button
+          class="drawing-board-first-column__tool-button
+            drawing-board-first-column__tool-button--clear-button"
+          @click="service.send('CLEAR_CANVAS')"
+          aria-controls="canvas"
+        >
+          清除
+        </button>
 
-          <button
-            class="drawing-board-first-column__tool-button"
-            v-if="service.id =='tableView' && !current.matches('displayPanel.katakana.show')"
-            :aria-controls="
+        <button
+          class="drawing-board-first-column__tool-button
+            drawing-board-first-column__tool-button--peak-hiragana-button"
+          v-if="service.id == 'tableView' && !current.matches('displayPanel.hiragana.show')"
+          :aria-controls="`${current.context.activeGroupName}-${current.context.activeRow}-${current.context.activeColumn}`"
+          @mousedown="service.send('PEEK_HIRAGANA')"
+          @touchstart="service.send('PEEK_HIRAGANA')"
+          @keydown.space="service.send('PEEK_HIRAGANA')"
+          @mouseup="service.send('COVER_HIRAGANA')"
+          @touchend="service.send('COVER_HIRAGANA')"
+          @keyup.space="service.send('COVER_HIRAGANA')"
+        >
+          偷看平假名
+        </button>
+
+        <button
+          class="drawing-board-first-column__tool-button
+            drawing-board-first-column__tool-button--peak-katakana-button"
+          v-if="service.id =='tableView' && !current.matches('displayPanel.katakana.show')"
+          :aria-controls="
               (current.context.activeGroupName &&
               current.context.activeRow &&
               current.context.activeColumn)
                 ? `${current.context.activeGroupName}-${current.context.activeRow}-${current.context.activeColumn}`
                 : false
             "
-            @mousedown="service.send('PEEK_KATAKANA')"
-            @touchstart="service.send('PEEK_KATAKANA')"
-            @keydown.space="service.send('PEEK_KATAKANA')"
-            @mouseup="service.send('COVER_KATAKANA')"
-            @touchend="service.send('COVER_KATAKANA')"
-            @keyup.space="service.send('COVER_KATAKANA')"
-          >
-            偷看片假名
-          </button>
+          @mousedown="service.send('PEEK_KATAKANA')"
+          @touchstart="service.send('PEEK_KATAKANA')"
+          @keydown.space="service.send('PEEK_KATAKANA')"
+          @mouseup="service.send('COVER_KATAKANA')"
+          @touchend="service.send('COVER_KATAKANA')"
+          @keyup.space="service.send('COVER_KATAKANA')"
+        >
+          偷看片假名
+        </button>
 
-          <button
-            class="drawing-board-first-column__tool-button drawing-board-first-column__tool-button--close-button"
-            @click="service.send('HIDE_DRAWING_BOARD')"
-            ref="autoFoucusButtonElement"
-            aria-controls="modal"
+        <button
+          class="drawing-board-first-column__tool-button
+            drawing-board-first-column__tool-button--close-button"
+          @click="service.send('HIDE_DRAWING_BOARD')"
+          ref="autoFoucusButtonElement"
+          aria-controls="modal"
+          aria-labelledby="close-icon-title"
+        >
+          <svg
             aria-labelledby="close-icon-title"
+            xmlns="http://www.w3.org/2000/svg"
+            width="14.729"
+            height="14.727"
+            viewBox="0 0 14.729 14.727"
           >
-            <svg
+            <title id="close-icon-title">關閉</title>
+
+            <g
               aria-labelledby="close-icon-title"
-              xmlns="http://www.w3.org/2000/svg"
-              width="14.729"
-              height="14.727"
-              viewBox="0 0 14.729 14.727"
+              id="Group_101"
+              data-name="Group 101"
+              transform="translate(-.414 -.415)"
             >
-              <title id="close-icon-title">關閉</title>
-
-              <g
+              <path
                 aria-labelledby="close-icon-title"
-                id="Group_101"
-                data-name="Group 101"
-                transform="translate(-.414 -.415)"
-              >
-                <path
-                  aria-labelledby="close-icon-title"
-                  id="Union_10"
-                  d="M-11781.959-9448.151l-5.657-5.657-5.656 5.657a1 1 0 0 1-1.415 0 1 1 0 0 1 0-1.415l5.657-5.656-5.657-5.657a1 1 0 0 1 0-1.412 1 1 0 0 1 1.415 0l5.656 5.656 5.657-5.656a1 1 0 0 1 1.415 0 1 1 0 0 1 0 1.412l-5.658 5.658 5.655 5.655a1 1 0 0 1 0 1.415.991.991 0 0 1-.705.293 1 1 0 0 1-.707-.293z"
-                  fill="#313131"
-                  data-name="Union 10"
-                  transform="translate(11795.395 9463)"
-                />
-              </g>
-            </svg>
-          </button>
-        </div>
+                id="Union_10"
+                d="M-11781.959-9448.151l-5.657-5.657-5.656 5.657a1 1 0 0 1-1.415 0 1 1 0 0 1 0-1.415l5.657-5.656-5.657-5.657a1 1 0 0 1 0-1.412 1 1 0 0 1 1.415 0l5.656 5.656 5.657-5.656a1 1 0 0 1 1.415 0 1 1 0 0 1 0 1.412l-5.658 5.658 5.655 5.655a1 1 0 0 1 0 1.415.991.991 0 0 1-.705.293 1 1 0 0 1-.707-.293z"
+                fill="#313131"
+                data-name="Union 10"
+                transform="translate(11795.395 9463)"
+              />
+            </g>
+          </svg>
+        </button>
 
-        <div class="drawing-board-tool-block__second-column">
-          <button
-            v-if="service.id == 'tableView'"
-            class="drawing-board-first-column__tool-button"
-            @click="service.send('ACTIVE_CURSOR_TO_PREVIOUS')"
+        <button
+          v-if="service.id == 'tableView'"
+          class="drawing-board-first-column__tool-button
+            drawing-board-first-column__tool-button--previous-button"
+          @click="service.send('ACTIVE_CURSOR_TO_PREVIOUS')"
+          aria-labelledby="drawing-board-nav-previous"
+          :aria-controls="current.context.activeGroupName"
+        >
+          <svg
             aria-labelledby="drawing-board-nav-previous"
-            :aria-controls="current.context.activeGroupName"
+            xmlns="http://www.w3.org/2000/svg"
+            width="17.049"
+            height="19.324"
+            viewBox="0 0 17.049 19.324"
           >
-            <svg
+            <title id="drawing-board-nav-previous">往上一個儲存格</title>
+
+            <g
               aria-labelledby="drawing-board-nav-previous"
-              xmlns="http://www.w3.org/2000/svg"
-              width="17.049"
-              height="19.324"
-              viewBox="0 0 17.049 19.324"
+              id="Path_55"
+              fill="#ffffff"
+              data-name="Path 55"
             >
-              <title id="drawing-board-nav-previous">往上一個儲存格</title>
-
-              <g
+              <path
                 aria-labelledby="drawing-board-nav-previous"
-                id="Path_55"
-                fill="#ffffff"
-                data-name="Path 55"
-              >
-                <path
-                  aria-labelledby="drawing-board-nav-previous"
-                  d="M18.811 18.2H3.493c-.436 0-.825-.226-1.041-.604a1.187 1.187 0 0 1 .006-1.203l7.66-13.05a1.189 1.189 0 0 1 1.034-.592c.43 0 .817.222 1.035.593l7.66 13.049c.22.375.222.825.006 1.203a1.187 1.187 0 0 1-1.042.604z"
-                  stroke="none"
-                  transform="rotate(-90 9.432 11.383)"
-                />
-                <path
-                  aria-labelledby="drawing-board-nav-previous"
-                  d="M11.152 3.551a.382.382 0 0 0-.345.198L3.148 16.798a.382.382 0 0 0-.002.4.382.382 0 0 0 .347.202h15.318c.192 0 .295-.11.347-.201a.382.382 0 0 0-.002-.401l-7.659-13.05a.382.382 0 0 0-.345-.197m0-1.6c.67 0 1.339.33 1.725.988l7.66 13.049C21.318 17.32 20.356 19 18.81 19H3.493c-1.546 0-2.507-1.68-1.725-3.012l7.66-13.05a1.982 1.982 0 0 1 1.724-.987z"
-                  stroke="none"
-                  fill="#2c2c2c"
-                  transform="rotate(-90 9.432 11.383)"
-                />
-              </g>
-            </svg>
-          </button>
+                d="M18.811 18.2H3.493c-.436 0-.825-.226-1.041-.604a1.187 1.187 0 0 1 .006-1.203l7.66-13.05a1.189 1.189 0 0 1 1.034-.592c.43 0 .817.222 1.035.593l7.66 13.049c.22.375.222.825.006 1.203a1.187 1.187 0 0 1-1.042.604z"
+                stroke="none"
+                transform="rotate(-90 9.432 11.383)"
+              />
+              <path
+                aria-labelledby="drawing-board-nav-previous"
+                d="M11.152 3.551a.382.382 0 0 0-.345.198L3.148 16.798a.382.382 0 0 0-.002.4.382.382 0 0 0 .347.202h15.318c.192 0 .295-.11.347-.201a.382.382 0 0 0-.002-.401l-7.659-13.05a.382.382 0 0 0-.345-.197m0-1.6c.67 0 1.339.33 1.725.988l7.66 13.049C21.318 17.32 20.356 19 18.81 19H3.493c-1.546 0-2.507-1.68-1.725-3.012l7.66-13.05a1.982 1.982 0 0 1 1.724-.987z"
+                stroke="none"
+                fill="#2c2c2c"
+                transform="rotate(-90 9.432 11.383)"
+              />
+            </g>
+          </svg>
+        </button>
 
-          <div
-            class="drawing-board-second-column__canvas-container"
-            ref="canvasContainerElement"
-          >
-            <canvas
-              tabindex="-1"
-              class="drawing-board-canvas-container__canvas-element"
-              id="canvas"
-              ref="canvasElement"
-              :width="width"
-              :height="height"
-              @mousedown="startDrawing"
-              @touchstart.prevent="startDrawing"
-              @mouseup="stopDrawing"
-              @touchend.prevent="stopDrawing"
-              @mousemove="drawLine"
-              @touchmove.prevent="drawLine"
-            ></canvas>
-          </div>
-
-          <button
-            v-if="service.id == 'tableView'"
-            class="drawing-board-first-column__tool-button"
-            @click="service.send('ACTIVE_CURSOR_TO_NEXT')"
+        <button
+          v-if="service.id == 'tableView'"
+          class="drawing-board-first-column__tool-button
+            drawing-board-first-column__tool-button--next-button"
+          @click="service.send('ACTIVE_CURSOR_TO_NEXT')"
+          aria-labelledby="drawing-board-nav-next"
+          :aria-controls="current.context.activeGroupName"
+        >
+          <svg
             aria-labelledby="drawing-board-nav-next"
-            :aria-controls="current.context.activeGroupName"
+            xmlns="http://www.w3.org/2000/svg"
+            width="17.049"
+            height="19.324"
+            viewBox="0 0 17.049 19.324"
           >
-            <svg
-              aria-labelledby="drawing-board-nav-next"
-              xmlns="http://www.w3.org/2000/svg"
-              width="17.049"
-              height="19.324"
-              viewBox="0 0 17.049 19.324"
-            >
-              <title id="drawing-board-nav-next">往下一個儲存格</title>
+            <title id="drawing-board-nav-next">往下一個儲存格</title>
 
-              <g
+            <g
+              aria-labelledby="drawing-board-nav-next"
+              id="Path_57"
+              fill="#ffffff"
+              data-name="Path 57"
+            >
+              <path
                 aria-labelledby="drawing-board-nav-next"
-                id="Path_57"
-                fill="#ffffff"
-                data-name="Path 57"
-              >
-                <path
-                  aria-labelledby="drawing-board-nav-next"
-                  d="M18.811 18.2H3.493c-.436 0-.825-.226-1.041-.604a1.187 1.187 0 0 1 .006-1.203l7.66-13.05a1.189 1.189 0 0 1 1.034-.592c.43 0 .817.222 1.035.593l7.66 13.049c.22.375.222.825.006 1.203a1.187 1.187 0 0 1-1.042.604z"
-                  stroke="none"
-                  transform="rotate(90 10.245 8.755)"
-                />
-                <path
-                  aria-labelledby="drawing-board-nav-next"
-                  d="M11.152 3.551a.382.382 0 0 0-.345.198L3.148 16.798a.382.382 0 0 0-.002.4.382.382 0 0 0 .347.202h15.318c.192 0 .295-.11.347-.201a.382.382 0 0 0-.002-.401l-7.659-13.05a.382.382 0 0 0-.345-.197m0-1.6c.67 0 1.339.33 1.725.988l7.66 13.049C21.318 17.32 20.356 19 18.81 19H3.493c-1.546 0-2.507-1.68-1.725-3.012l7.66-13.05a1.982 1.982 0 0 1 1.724-.987z"
-                  stroke="none"
-                  fill="#2c2c2c"
-                  transform="rotate(90 10.245 8.755)"
-                />
-              </g>
-            </svg>
-          </button>
-        </div>
+                d="M18.811 18.2H3.493c-.436 0-.825-.226-1.041-.604a1.187 1.187 0 0 1 .006-1.203l7.66-13.05a1.189 1.189 0 0 1 1.034-.592c.43 0 .817.222 1.035.593l7.66 13.049c.22.375.222.825.006 1.203a1.187 1.187 0 0 1-1.042.604z"
+                stroke="none"
+                transform="rotate(90 10.245 8.755)"
+              />
+              <path
+                aria-labelledby="drawing-board-nav-next"
+                d="M11.152 3.551a.382.382 0 0 0-.345.198L3.148 16.798a.382.382 0 0 0-.002.4.382.382 0 0 0 .347.202h15.318c.192 0 .295-.11.347-.201a.382.382 0 0 0-.002-.401l-7.659-13.05a.382.382 0 0 0-.345-.197m0-1.6c.67 0 1.339.33 1.725.988l7.66 13.049C21.318 17.32 20.356 19 18.81 19H3.493c-1.546 0-2.507-1.68-1.725-3.012l7.66-13.05a1.982 1.982 0 0 1 1.724-.987z"
+                stroke="none"
+                fill="#2c2c2c"
+                transform="rotate(90 10.245 8.755)"
+              />
+            </g>
+          </svg>
+        </button>
       </div>
     </div>
   </div>
@@ -348,7 +350,7 @@ export default {
             ease: 'circ.inOut',
           })
           .to(activeShowElement.value, {
-            display: 'flex',
+            display: 'grid',
             position: 'relative',
           }, '-=0.3')
           .to(activeShowElement.value, {
@@ -554,19 +556,8 @@ export default {
   will-change: auto;
   display: none;
   flex-direction: column;
-}
-
-.drawing-board-tool-block__first-column {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-}
-
-.drawing-board-tool-block__second-column {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex: 1;
+  grid-template-columns: auto auto auto auto 1fr auto;
+  grid-template-rows: auto 1fr auto 1fr;
 }
 
 .drawing-board-first-column__tool-button {
@@ -580,10 +571,39 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
+}
+
+.drawing-board-first-column__tool-button--clear-button {
+  grid-column: 1 / 2;
+  grid-row: 1;
+}
+
+.drawing-board-first-column__tool-button--peak-hiragana-button {
+  grid-column: 3;
+  grid-row: 1;
+}
+
+.drawing-board-first-column__tool-button--peak-katakana-button {
+  grid-column: 4;
+  grid-row: 1;
 }
 
 .drawing-board-first-column__tool-button--close-button {
-  margin-left: auto;
+  grid-column: 6;
+  grid-row: 1;
+}
+
+.drawing-board-first-column__tool-button--previous-button {
+  grid-row: 3;
+  grid-column: 1;
+  justify-self: start;
+}
+
+.drawing-board-first-column__tool-button--next-button {
+  grid-row: 3;
+  grid-column: 6;
+  justify-self: end;
 }
 
 .drawing-board-second-column__canvas-container {
@@ -592,6 +612,8 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
+  grid-row: 1 / -1;
+  grid-column: 1 / -1;
 }
 
 .drawing-board-canvas-container__canvas-element {
