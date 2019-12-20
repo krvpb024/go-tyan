@@ -185,13 +185,13 @@
         </table>
       </section>
 
-      <table-drawing-board
+      <drawing-board
         :service="service"
         :current="current"
         :activeGroupName="current.context.activeGroupName"
         :activeRow="current.context.activeRow"
         :activeColumn="current.context.activeColumn"
-      ></table-drawing-board>
+      ></drawing-board>
 
     </main>
   </section>
@@ -203,7 +203,7 @@ import { machine } from '@/states/tableState.js'
 import { useMachine } from '@/utils/useMachine.js'
 import { generateTitle } from '@/states/gojuon.js'
 import tableDisplayControl from '@/components/tableDisplayControl.vue'
-import tableDrawingBoard from '@/components/tableDrawingBoard.vue'
+import drawingBoard from '@/components/drawingBoard.vue'
 import topBar from '@/components/topBar.vue'
 import gojuonTitle from '@/components/gojuonTitle.vue'
 
@@ -211,7 +211,7 @@ export default {
   name: 'Table',
   components: {
     tableDisplayControl,
-    tableDrawingBoard,
+    drawingBoard,
     topBar,
     gojuonTitle,
   },

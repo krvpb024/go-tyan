@@ -1,19 +1,19 @@
 <template>
   <div
     role="dialog"
-    aria-labelledby="table-drawing-board-title"
+    aria-labelledby="drawing-board-title"
     aria-modal="true"
-    class="table-drawing-board-container"
-    ref="containerElement"
+    class="drawing-board"
+    ref="drawingBoardElement"
   >
     <div
-      ref="modalElement"
-      class="table-drawing-board-modal"
+      ref="contentBlockElement"
+      class="drawing-board__content-block"
       :style="{ backgroundColor: `rgba(255, 255, 255, ${opacity})` }"
       id="modal"
     >
       <button
-        class="title-button fake-drawing-board-button"
+        class="drawing-board-content-block__title-button fake-drawing-board-button"
         ref="drawingBoardTitleElement"
         @click="service.send(
           service.id == 'examMode'
@@ -21,34 +21,38 @@
             : 'SHOW_TOOLTIPS')"
       >
 
-        <h1 id="table-drawing-board-title">
+        <h1
+          id="drawing-board-title"
+          class="drawing-board-title-button__title"
+        >
           手寫板
         </h1>
       </button>
 
-      <table-tooltips
-        class="table-tooltips"
-        :service="service"
-        :current="current"
-        showState="drawingBoard.hide.tooltips"
-        showAnimationState="drawingBoard.hide.tooltips.showTooltipsAnimation"
-        idleState="drawingBoard.hide.tooltips.showTooltips"
-        hideAnimationState="drawingBoard.hide.tooltips.hideTooltipsAnimation"
-        :anglePosition="{ left: 0, bottom: 0 }"
-        angleTransformX="20px"
-        angleTransformY="50%"
-      >
-        請先點選五十音
-      </table-tooltips>
+      <div class="drawing-board-content-block__tooltips">
+        <tooltips
+          :service="service"
+          :current="current"
+          showState="drawingBoard.hide.tooltips"
+          showAnimationState="drawingBoard.hide.tooltips.showTooltipsAnimation"
+          idleState="drawingBoard.hide.tooltips.showTooltips"
+          hideAnimationState="drawingBoard.hide.tooltips.hideTooltipsAnimation"
+          :anglePosition="{ left: 0, bottom: 0 }"
+          angleTransformX="20px"
+          angleTransformY="50%"
+        >
+          請先點選五十音
+        </tooltips>
+      </div>
 
       <div
-        class="table-drawing-board-active-show"
+        class="drawing-board-content-block__tool-block"
         ref="activeShowElement"
       >
 
-        <div class="first-column">
+        <div class="drawing-board-tool-block__first-column">
           <button
-            class="tool-button"
+            class="drawing-board-first-column__tool-button"
             @click="service.send('CLEAR_CANVAS')"
             aria-controls="canvas"
           >
@@ -56,7 +60,7 @@
           </button>
 
           <button
-            class="tool-button"
+            class="drawing-board-first-column__tool-button"
             v-if="service.id == 'tableView' && !current.matches('displayPanel.hiragana.show')"
             :aria-controls="`${current.context.activeGroupName}-${current.context.activeRow}-${current.context.activeColumn}`"
             @mousedown="service.send('PEEK_HIRAGANA')"
@@ -70,7 +74,7 @@
           </button>
 
           <button
-            class="tool-button"
+            class="drawing-board-first-column__tool-button"
             v-if="service.id =='tableView' && !current.matches('displayPanel.katakana.show')"
             :aria-controls="
               (current.context.activeGroupName &&
@@ -90,7 +94,7 @@
           </button>
 
           <button
-            class="tool-button close-button"
+            class="drawing-board-first-column__tool-button drawing-board-first-column__tool-button--close-button"
             @click="service.send('HIDE_DRAWING_BOARD')"
             ref="autoFoucusButtonElement"
             aria-controls="modal"
@@ -124,10 +128,10 @@
           </button>
         </div>
 
-        <div class="second-column">
+        <div class="drawing-board-tool-block__second-column">
           <button
             v-if="service.id == 'tableView'"
-            class="tool-button"
+            class="drawing-board-first-column__tool-button"
             @click="service.send('ACTIVE_CURSOR_TO_PREVIOUS')"
             aria-labelledby="drawing-board-nav-previous"
             :aria-controls="current.context.activeGroupName"
@@ -165,13 +169,14 @@
           </button>
 
           <div
-            class="canvas-container"
+            class="drawing-board-second-column__canvas-container"
             ref="canvasContainerElement"
           >
             <canvas
               tabindex="-1"
+              class="drawing-board-canvas-container__canvas-element"
               id="canvas"
-              ref="canvas"
+              ref="canvasElement"
               :width="width"
               :height="height"
               @mousedown="startDrawing"
@@ -185,7 +190,7 @@
 
           <button
             v-if="service.id == 'tableView'"
-            class="tool-button"
+            class="drawing-board-first-column__tool-button"
             @click="service.send('ACTIVE_CURSOR_TO_NEXT')"
             aria-labelledby="drawing-board-nav-next"
             :aria-controls="current.context.activeGroupName"
@@ -231,11 +236,11 @@
 import { ref, watch, onMounted, onUpdated } from '@vue/composition-api'
 import { gsap } from 'gsap'
 import { useModalNavigation } from '@/utils/useModalNavigation.js'
-import tableTooltips from '@/components/tableTooltips.vue'
+import tooltips from '@/components/tooltips.vue'
 
 export default {
   name: 'tableDrawingBoard',
-  components: { tableTooltips },
+  components: { tooltips },
   props: {
     service: {
       type: Object,
@@ -271,14 +276,17 @@ export default {
     },
   },
   setup (props, context) {
+    // element
+    const drawingBoardElement = ref(null)
     const autoFoucusButtonElement = ref(null)
-    const modalElement = ref(null)
+    const contentBlockElement = ref(null)
     const activeShowElement = ref(null)
     const drawingBoardTitleElement = ref(null)
-
-    const containerElement = ref(null)
     const canvasContainerElement = ref(null)
-    const canvas = ref(null)
+    const canvasElement = ref(null)
+    const modalButtonsElement = ref(null)
+
+    // data
     const ctx = ref(null)
     const lastX = ref(0)
     const lastY = ref(0)
@@ -286,27 +294,26 @@ export default {
     const canDraw = ref(false)
     const keypressed = ref(false)
 
-    const modalButtons = ref(null)
-
-    useModalNavigation(modalButtons, props.current)
+    useModalNavigation(modalButtonsElement, props.current)
 
     const containerElementAnimationTimeline = ref(null)
 
+    // effect
     watch(
       () => props.current.matches('drawingBoard.show.clearCanvas') ||
-          props.current.matches('drawingBoard.clearCanvasBeforeAnimation'),
+        props.current.matches('drawingBoard.clearCanvasBeforeAnimation'),
       clearCanvas,
       { lazy: true }
     )
     watch(
       () => props.current.matches('idle.drawingBoard.show.clearCanvas') ||
-          props.current.matches('idle.drawingBoard.clearCanvasBeforeAnimation'),
+        props.current.matches('idle.drawingBoard.clearCanvasBeforeAnimation'),
       clearCanvas,
       { lazy: true }
     )
     function clearCanvas (value) {
       if (value) {
-        ctx.value.clearRect(0, 0, canvas.value.width, canvas.value.height)
+        ctx.value.clearRect(0, 0, canvasElement.value.width, canvasElement.value.height)
         props.service.send('CANVAS_CLREAR_FINISHED')
       }
     }
@@ -322,12 +329,44 @@ export default {
       { lazy: true }
     )
     function startOpenDrawingBoardAnimation (value) {
-      if (value) {
-        openModalAnimation().then(function animationEnd () {
-          canvasInitialSettings()
-          autoFoucusButtonElement.value && autoFoucusButtonElement.value.focus()
-          props.service.send('OPEN_DRAWING_BOARD_ANIMATION_END')
-        })
+      if (!value) return
+      openModalAnimation().then(function animationEnd () {
+        canvasInitialSettings()
+        autoFoucusButtonElement.value && autoFoucusButtonElement.value.focus()
+        props.service.send('OPEN_DRAWING_BOARD_ANIMATION_END')
+      })
+
+      function openModalAnimation () {
+        drawingBoardTitleElement.value.classList.add('app-visual-hidden')
+
+        containerElementAnimationTimeline.value = gsap.timeline({ paused: true })
+        return containerElementAnimationTimeline.value
+          .to(drawingBoardElement.value, {
+            height: '40vh',
+            width: '100%',
+            duration: 0.3,
+            ease: 'circ.inOut',
+          })
+          .to(activeShowElement.value, {
+            display: 'flex',
+            position: 'relative',
+          }, '-=0.3')
+          .to(activeShowElement.value, {
+            opacity: 1,
+            duration: 0.1,
+          }, '-=0.3')
+          .play()
+      }
+
+      function canvasInitialSettings () {
+        // this api will round floating points, it will cause canvas keep growing
+        canvasElement.value.width = canvasContainerElement.value.clientWidth - 10
+        canvasElement.value.height = canvasContainerElement.value.clientHeight - 10
+        ctx.value = canvasElement.value.getContext('2d')
+        ctx.value.lineWidth = 10
+        ctx.value.strokeStyle = '#313131'
+        ctx.value.lineJoin = 'round'
+        ctx.value.lineCap = 'round'
       }
     }
 
@@ -343,29 +382,58 @@ export default {
     )
 
     function startCloseDrawingBoardAnimation (value) {
-      if (value) {
-        closeModalAnimation().then(function animationEnd () {
-          props.service.send('CLOSE_DRAWING_BOARD_ANIMATION_END')
-        })
+      if (!value) return
+      closeModalAnimation().then(function animationEnd () {
+        props.service.send('CLOSE_DRAWING_BOARD_ANIMATION_END')
+      })
+
+      function closeModalAnimation () {
+        containerElementAnimationTimeline.value = gsap.timeline({ paused: true })
+
+        return containerElementAnimationTimeline.value
+          .to(drawingBoardElement.value, {
+            height: '50px',
+            width: '100px',
+            duration: 0.3,
+            ease: 'circ.inOut',
+          })
+          .to(activeShowElement.value, {
+            opacity: 0,
+            duration: 0.1,
+          }, '-=0.3')
+          .to(activeShowElement.value, {
+            display: 'none',
+            duration: 0,
+          }, '-=0.3')
+          .play()
+          .then(function animationEnd () {
+            drawingBoardTitleElement.value.classList.remove('app-visual-hidden')
+          })
       }
     }
 
     onMounted(function tableDrawingBoardOnMounted () {
-      modalButtons.value = modalElement.value.querySelectorAll('button:not(.fake-drawing-board-button)')
+      modalButtonsElement.value = contentBlockElement.value.querySelectorAll(
+        'button:not(.fake-drawing-board-button)'
+      )
     })
 
     onUpdated(function tableDrawingBoardOUpdate () {
-      modalButtons.value = modalElement.value.querySelectorAll('button:not(.fake-drawing-board-button)')
+      modalButtonsElement.value = contentBlockElement.value.querySelectorAll(
+        'button:not(.fake-drawing-board-button)'
+      )
     })
 
     return {
+      // element
       drawingBoardTitleElement,
-      containerElement,
+      drawingBoardElement,
       canvasContainerElement,
       activeShowElement,
       autoFoucusButtonElement,
-      modalElement,
-      canvas,
+      contentBlockElement,
+      canvasElement,
+      // data
       ctx,
       lastX,
       lastY,
@@ -416,73 +484,17 @@ export default {
     }
 
     function getMousePosition (clientX, clientY) {
-      const { left, top } = canvas.value.getBoundingClientRect()
+      const { left, top } = canvasElement.value.getBoundingClientRect()
       const x = clientX - left
       const y = clientY - top
       return [x, y]
-    }
-
-    function openModalAnimation () {
-      drawingBoardTitleElement.value.classList.add('app-visual-hidden')
-
-      containerElementAnimationTimeline.value = gsap.timeline({ paused: true })
-      return containerElementAnimationTimeline.value
-        .to('.table-drawing-board-container', {
-          height: '40vh',
-          width: '100%',
-          duration: 0.3,
-          ease: 'circ.inOut',
-        })
-        .to('.table-drawing-board-active-show', {
-          display: 'flex',
-          position: 'relative',
-        }, '-=0.3')
-        .to('.table-drawing-board-active-show', {
-          opacity: 1,
-          duration: 0.1,
-        }, '-=0.3')
-        .play()
-    }
-
-    function closeModalAnimation () {
-      containerElementAnimationTimeline.value = gsap.timeline({ paused: true })
-
-      return containerElementAnimationTimeline.value
-        .to('.table-drawing-board-container', {
-          height: '50px',
-          width: '100px',
-          duration: 0.3,
-          ease: 'circ.inOut',
-        })
-        .to('.table-drawing-board-active-show', {
-          opacity: 0,
-          duration: 0.1,
-        }, '-=0.3')
-        .to('.table-drawing-board-active-show', {
-          display: 'none',
-          duration: 0,
-        }, '-=0.3')
-        .play()
-        .then(function animationEnd () {
-          drawingBoardTitleElement.value.classList.remove('app-visual-hidden')
-        })
-    }
-
-    function canvasInitialSettings () {
-      canvas.value.width = canvasContainerElement.value.clientWidth * 0.99
-      canvas.value.height = canvasContainerElement.value.clientHeight * 0.99
-      ctx.value = canvas.value.getContext('2d')
-      ctx.value.lineWidth = 10
-      ctx.value.strokeStyle = '#313131'
-      ctx.value.lineJoin = 'round'
-      ctx.value.lineCap = 'round'
     }
   },
 }
 </script>
 
 <style scoped>
-.table-drawing-board-container {
+.drawing-board {
   position: sticky;
   padding: 6px 8px;
   bottom: 0;
@@ -491,7 +503,7 @@ export default {
   will-change: auto;
 }
 
-.table-drawing-board-modal {
+.drawing-board__content-block {
   position: relative;
   transition: width 0.3s ease-in-out, height 0.3s ease-in-out;
   will-change: auto;
@@ -509,7 +521,7 @@ export default {
   will-change: auto;
 }
 
-.title-button {
+.drawing-board-content-block__title-button {
   border: none;
   background-color: transparent;
   padding: 0;
@@ -520,20 +532,20 @@ export default {
   left: 0;
 }
 
-.table-tooltips {
-  position: absolute;
-  top: 0;
-  left: 0;
-  transform: translate(0, calc(-100% - 10px));
-}
-
-#table-drawing-board-title {
+.drawing-board-title-button__title {
   margin: 0;
   font-size: 1rem;
   text-align: center;
 }
 
-.table-drawing-board-active-show {
+.drawing-board-content-block__tooltips {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translateY(-120%);
+}
+
+.drawing-board-content-block__tool-block {
   opacity: 0;
   position: absolute;
   display: none;
@@ -544,20 +556,20 @@ export default {
   flex-direction: column;
 }
 
-.first-column {
+.drawing-board-tool-block__first-column {
   display: flex;
   align-items: center;
   justify-content: flex-start;
 }
 
-.second-column {
+.drawing-board-tool-block__second-column {
   display: flex;
   align-items: center;
   justify-content: center;
   flex: 1;
 }
 
-.tool-button {
+.drawing-board-first-column__tool-button {
   background-color: transparent;
   border: solid var(--focus-border-width) transparent;
   font-weight: bold;
@@ -570,11 +582,11 @@ export default {
   justify-content: center;
 }
 
-.tool-button.close-button {
+.drawing-board-first-column__tool-button--close-button {
   margin-left: auto;
 }
 
-.canvas-container {
+.drawing-board-second-column__canvas-container {
   flex: 1;
   height: 100%;
   display: flex;
@@ -582,13 +594,14 @@ export default {
   justify-content: center;
 }
 
-#canvas {
+.drawing-board-canvas-container__canvas-element {
   margin: 0;
   padding: 0;
   border: solid var(--focus-border-width) transparent;
 }
 
-#canvas:focus, .tool-button:focus {
+.drawing-board-canvas-container__canvas-element:focus,
+.drawing-board-first-column__tool-button:focus {
   border: var(--focus-border);
   border-radius: 4px;
   outline: none;

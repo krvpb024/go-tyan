@@ -1,6 +1,6 @@
 <template>
-  <div class="container">
-    <div class="field">
+  <div class="table-display-control">
+    <div class="table-display-control__field">
       <input
         type="checkbox"
         id="hiragana"
@@ -8,10 +8,12 @@
         @input="service.send({type: 'HIRAGANA_TOGGLE_DISPLAY', data: $event.target.checked})"
         :checked="current.matches('displayPanel.hiragana.show')"
       >
+
       <checkbox-label forId="hiragana">
-        <span class="label-text">顯示平假名</span>
+        <span class="table-display-control__label-text">顯示平假名</span>
       </checkbox-label>
     </div>
+
     <div class="field">
       <input
         type="checkbox"
@@ -20,8 +22,9 @@
         @input="service.send({type: 'KATAKANA_TOGGLE_DISPLAY', data: $event.target.checked})"
         :checked="current.matches('displayPanel.katakana.show')"
       >
+
       <checkbox-label forId="katakana">
-        <span class="label-text">顯示片假名</span>
+        <span class="table-display-control__label-text">顯示片假名</span>
       </checkbox-label>
     </div>
   </div>
@@ -46,23 +49,24 @@ export default {
 </script>
 
 <style scoped>
-.container {
+.table-display-control {
   height: 40px;
   display: flex;
   justify-content: flex-end;
   background-color: #fff;
+  align-items: center;
 }
 
-.field {
+.table-display-control__field {
   display: flex;
   align-items: center;
 }
 
-.field + .field {
+.table-display-control__field + .table-display-control__field {
   margin-left: 12px;
 }
 
-.label-text {
+.table-display-control__label-text {
   font-weight: bold;
   vertical-align: middle;
 }

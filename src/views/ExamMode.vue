@@ -85,11 +85,11 @@
         </div>
       </main>
 
-      <table-drawing-board
+      <drawing-board
         opacity="0.8"
         :service="service"
         :current="current"
-      ></table-drawing-board>
+      ></drawing-board>
     </div>
   </section>
 </template>
@@ -102,11 +102,11 @@ import { gsap } from 'gsap'
 import topBar from '@/components/topBar.vue'
 import examModeBlock from '@/components/examModeBlock.vue'
 import examModeInfoModal from '@/components/examModeInfoModal.vue'
-import tableDrawingBoard from '@/components/tableDrawingBoard.vue'
+import drawingBoard from '@/components/drawingBoard.vue'
 
 export default {
   name: 'ExamMode',
-  components: { topBar, examModeBlock, examModeInfoModal, tableDrawingBoard },
+  components: { topBar, examModeBlock, examModeInfoModal, drawingBoard },
   setup (props, context) {
     // element
     const normalExamElement = ref(null)

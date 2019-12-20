@@ -1,11 +1,11 @@
 <template>
-  <div v-if="current.matches(showState)" class="tooltips-container" ref="tooltipsElement">
-    <span class="text">
+  <div v-if="current.matches(showState)" class="tooltips" ref="tooltipsElement">
+    <span class="tooltips__text">
       <slot></slot>
     </span>
 
     <div
-      class="tooltips-container__angle"
+      class="tooltips__angle"
       :style="{
         ...anglePosition,
         transform: `translate(${angleTransformX}, ${angleTransformY}) rotate(45deg)`
@@ -124,7 +124,7 @@ export default {
 </script>
 
 <style scoped>
-.tooltips-container {
+.tooltips {
   position: relative;
   background-color: var(--main-color);
   border-radius: 8px;
@@ -137,7 +137,7 @@ export default {
   opacity: 0;
 }
 
-.tooltips-container__angle {
+.tooltips__angle {
   position: absolute;
   content: "";
   display: block;
@@ -146,7 +146,7 @@ export default {
   background-color: var(--main-color);
 }
 
-.text {
+.tooltips__text {
   text-align: center;
 }
 </style>

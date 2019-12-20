@@ -70,23 +70,24 @@
             儲存
           </button>
 
-          <table-tooltips
-            v-show="current.matches('examRangeModal.show.error')"
-            class="exam-range-modal-save-button__tooltips"
-            :service="service"
-            :current="current"
-            showState="examRangeModal.show.error"
-            showAnimationState="examRangeModal.show.error.showTooltipsAnimation"
-            idleState="examRangeModal.show.error.showTooltips"
-            hideAnimationState="examRangeModal.show.error.hideTooltipsAnimation"
-            :anglePosition="{ right: 0, top: 0 }"
-            angleTransformX="-20px"
-            angleTransformY="-50%"
-          >
-            {{ current.meta['examRangeView.examRangeModal.show.error']
+          <div class="exam-range-modal-save-button__tooltips">
+            <tooltips
+              v-show="current.matches('examRangeModal.show.error')"
+              :service="service"
+              :current="current"
+              showState="examRangeModal.show.error"
+              showAnimationState="examRangeModal.show.error.showTooltipsAnimation"
+              idleState="examRangeModal.show.error.showTooltips"
+              hideAnimationState="examRangeModal.show.error.hideTooltipsAnimation"
+              :anglePosition="{ right: 0, top: 0 }"
+              angleTransformX="-20px"
+              angleTransformY="-50%"
+            >
+              {{ current.meta['examRangeView.examRangeModal.show.error']
                 ? current.meta['examRangeView.examRangeModal.show.error'].message
                 : null }}
-          </table-tooltips>
+            </tooltips>
+          </div>
         </template>
       </top-bar>
 
@@ -142,10 +143,10 @@ import { useModalNavigation } from '@/utils/useModalNavigation.js'
 import topBar from '@/components/topBar.vue'
 import gojuonTitle from '@/components/gojuonTitle.vue'
 import checkboxLabel from '@/components/checkboxLabel.vue'
-import tableTooltips from '@/components/tableTooltips.vue'
+import tooltips from '@/components/tooltips.vue'
 
 export default {
-  components: { topBar, gojuonTitle, checkboxLabel, tableTooltips },
+  components: { topBar, gojuonTitle, checkboxLabel, tooltips },
   props: {
     service: {
       type: Object,
@@ -345,7 +346,7 @@ export default {
   margin: 0;
 }
 
-.exam-range-modal-group__group-content{
+.exam-range-modal-group__group-content {
   border-bottom: 0.5px solid #d3d3d3;
   padding: 10px;
 }
@@ -358,7 +359,8 @@ export default {
   margin-left: 10px;
 }
 
-.exam-range-modal-group-content__label-text + .exam-range-modal-group-content__label-text {
+.exam-range-modal-group-content__label-text
+  + .exam-range-modal-group-content__label-text {
   margin-left: 1rem;
 }
 </style>
