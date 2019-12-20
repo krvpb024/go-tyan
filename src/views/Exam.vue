@@ -56,7 +56,7 @@
       </top-bar>
     </div>
 
-    <nav class="exam-nav">
+    <nav class="exam-container__nav">
       <router-link to="/exam/hiragana_to_romanization">
         <exam-card>
           <template #transformFrom>
@@ -226,7 +226,7 @@ export default {
 </script>
 
 <style scoped>
-.exam-nav {
+.exam-container__nav {
   display: grid;
   grid-auto-flow: row;
   grid-column-gap: 25px;
