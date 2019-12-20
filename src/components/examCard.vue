@@ -1,10 +1,10 @@
 <template>
-  <section class="ex-root">
-    <div class="ex-root__container">
-      <p class="ex-container__description">
+  <section class="exam-card-root">
+    <div class="exam-card-root__container">
+      <p class="exam-card-container__description">
         <slot name="transformFrom"></slot>
 
-        <svg class="ex-description__arrow-icon" xmlns="http://www.w3.org/2000/svg" width="16.521" height="17.011" viewBox="0 0 16.521 17.011">
+        <svg class="exam-card-description__arrow-icon" xmlns="http://www.w3.org/2000/svg" width="16.521" height="17.011" viewBox="0 0 16.521 17.011">
           <g id="Group_286" data-name="Group 286" transform="rotate(180 46.5 154.406)">
             <rect id="Rectangle_541" width="16" height="2.3" fill="#313131" data-name="Rectangle 541" rx="1.15" transform="translate(77 299.1)"/>
             <rect id="Rectangle_542" width="12" height="2.3" fill="#313131" data-name="Rectangle 542" rx="1.15" transform="rotate(-45 400.718 57.825)"/>
@@ -15,7 +15,7 @@
         <slot name="transformTo"></slot>
       </p>
 
-      <div class="ex-container__title">
+      <div class="exam-card-container__title">
         <slot name="title"></slot>
       </div>
     </div>
@@ -27,12 +27,12 @@ export default {}
 </script>
 
 <style scoped>
-.ex-root {
+.exam-card-root {
   position: relative;
   z-index: 10;
 }
 
-.ex-root::after {
+.exam-card-root::after {
   top: 0;
   left: 0;
   position: absolute;
@@ -48,7 +48,7 @@ export default {}
   border-radius: 4px;
 }
 
-.ex-root__container {
+.exam-card-root__container {
   position: relative;
   border-radius: 4px;
   border: solid 2px var(--card-border-color);
@@ -61,23 +61,23 @@ export default {}
   z-index: 10;
 }
 
-.ex-container__description {
+.exam-card-container__description {
   display: flex;
   margin-bottom: 25px;
   font-size: 2rem;
   align-items: center;
 }
 
-.ex-description__arrow-icon {
+.exam-card-description__arrow-icon {
   margin: 0 15px;
 }
 
-.ex-container__title {
+.exam-card-container__title {
   font-size: 0.7rem;
   white-space: nowrap;
 }
 
-.ex-container__title span +  span {
+.exam-card-container__title span +  span {
   margin-left: 10px;
 }
 
