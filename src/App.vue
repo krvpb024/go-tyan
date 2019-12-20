@@ -16,6 +16,7 @@ export default {}
   --title-bg-color: #f5f5f5;
   --focus-border-width: 2.5px;
   --focus-border: solid var(--focus-border-width) var(--main-color);
+  --app-max-width: 768px;
 }
 
 html {
@@ -68,5 +69,10 @@ p {
   display:flex;
   align-items: center;
   justify-content: center;
+}
+
+#app {
+  max-width: var(--app-max-width);
+  margin: 0 auto;
 }
 </style>

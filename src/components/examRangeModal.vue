@@ -286,6 +286,7 @@ export default {
   transform: translate(-50%, -50%);
   width: 80%;
   height: 80%;
+  max-width: calc(var(--app-max-width) * 0.8);
   display: flex;
   flex-direction: column;
   justify-content: flex-start;

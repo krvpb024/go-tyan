@@ -209,6 +209,7 @@ export default {
 
 .exam-mode-info-modal {
   width: 70%;
+  max-width: calc(var(--app-max-width) * 0.7);
   border-radius: 6px;
   box-shadow: 0 3px 20px 0 rgba(0, 0, 0, 0.16);
   border: solid 3px var(--text-color);

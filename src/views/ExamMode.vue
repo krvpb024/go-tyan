@@ -83,15 +83,13 @@
 
       </div>
 
-      <div class="exam-mode-drawing-board">
-        <table-drawing-board opacity="0.8" :service="service" :current="current"></table-drawing-board>
-      </div>
+      <table-drawing-board opacity="0.8" :service="service" :current="current"></table-drawing-board>
     </div>
   </section>
 </template>
 
 <script>
-import { ref, watch, computed, onMounted } from '@vue/composition-api'
+import { ref, watch, computed, onMounted, onUnmounted } from '@vue/composition-api'
 import { machine } from '@/states/examModeState.js'
 import { useMachine } from '@/utils/useMachine.js'
 import { gsap } from 'gsap'
@@ -141,6 +139,12 @@ export default {
 
       const { top, left, width, height } = examModeInfoModalButtonElement.value.getBoundingClientRect()
       examModeInfoModalButtonInfo.value = { top, left, width, height }
+
+      document.body.style.overflow = 'hidden'
+    })
+
+    onUnmounted(function examModeOnUnmounted () {
+      document.body.style.overflow = ''
     })
 
     watch(
@@ -224,6 +228,7 @@ export default {
   width: 100%;
   overflow: hidden;
   padding-top: 15vh;
+  margin-bottom: 100vh;
 }
 
 .exam-block__normal-exam {
@@ -236,11 +241,5 @@ export default {
   top: 0;
   left: 0;
   transform:  translateX(-100%);
-}
-
-.exam-mode-drawing-board {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
 }
 </style>

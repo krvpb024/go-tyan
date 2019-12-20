@@ -229,10 +229,11 @@ export default {
 .exam-nav {
   display: grid;
   grid-auto-flow: row;
-  grid-column-gap: 5vw;
-  grid-row-gap: 5vw;
-  grid-template-columns: 40% 40%;
+  grid-column-gap: 25px;
+  grid-row-gap: 25px;
+  grid-template-columns: repeat(auto-fill, 150px);
   justify-content: center;
-  margin: 31px 0;
+  margin: 31px auto;
+  padding: 0 20px;
 }
 </style>

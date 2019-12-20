@@ -64,7 +64,7 @@ export default {}
 .ex-container__description {
   display: flex;
   margin-bottom: 25px;
-  font-size: 10vw;
+  font-size: 2rem;
   align-items: center;
 }
 
@@ -73,7 +73,7 @@ export default {}
 }
 
 .ex-container__title {
-  font-size: 2.5vw;
+  font-size: 0.7rem;
   white-space: nowrap;
 }
 
