@@ -1,7 +1,7 @@
 <template>
   <label
     :for="forId"
-    class="display-label"
+    class="checkbox-label"
   >
     <slot></slot>
   </label>
@@ -18,7 +18,7 @@ export default {
 </script>
 
 <style scoped>
-.display-label {
+.checkbox-label {
   border: solid 2.5px transparent;
   border-radius: 4px;
   display: flex;
@@ -27,7 +27,7 @@ export default {
   padding: 2px;
 }
 
-.display-label::before {
+.checkbox-label::before {
   content: "";
   display: inline-block;
   width: 14px;
@@ -38,11 +38,11 @@ export default {
   vertical-align: middle;
 }
 
-input[type="checkbox"]:checked + .display-label::before {
+input[type="checkbox"]:checked + .checkbox-label::before {
   background-color: var(--main-color);
 }
 
-input[type="checkbox"]:focus + .display-label {
+input[type="checkbox"]:focus + .checkbox-label {
   border: var(--focus-border);
   outline: none;
   border-radius: 4px;

@@ -1,34 +1,60 @@
 <template>
   <div
-    class="card-container"
+    class="exam-mode-block-card"
     @mousemove="dragging"
     @touchmove="dragging"
     @mouseup="dragEnd"
     @touchend="dragEnd"
   >
     <div
-      class="card card-layout"
+      class="exam-mode-block-card__card
+        exam-mode-block-card__card--first"
       ref="cardElement"
       @mousedown="dragStart"
       @touchstart="dragStart"
       @mouseup="dragEnd"
       @touchend="dragEnd"
     >
-      <span class="card-question" ref="cardQuestionElement">
+      <span
+        class="exam-mode-block-card__question"
+        ref="cardQuestionElement"
+      >
         {{ question }}
       </span>
-      <span class="card-answer" ref="cardAnswerElement">
+      <span
+        class="exam-mode-block-card__answer"
+        ref="cardAnswerElement"
+      >
         {{ answer }}
       </span>
     </div>
 
-    <div class="card-2 card-background card-layout" ref="card2Element">
-      <span class="card-question card-2-question" ref="card2QuestionElement">
+    <div
+      class="exam-mode-block-card__card
+        exam-mode-block-card__card--second
+        exam-mode-block-card__card--background"
+      ref="cardSecondElement"
+    >
+      <span
+        class="exam-mode-block-card__question
+          exam-mode-block-card__question--second"
+        ref="cardSecondQuestionElement"
+      >
         {{ question }}
       </span>
     </div>
-    <div class="card-3 card-background card-layout" ref="card3Element"></div>
-    <div class="card-new card-background card-layout" ref="cardNewElement"></div>
+    <div
+      class="exam-mode-block-card__card
+        exam-mode-block-card__card--third
+        exam-mode-block-card__card--background"
+      ref="cardThirdElement"
+    ></div>
+    <div
+      class="exam-mode-block-card__card
+        exam-mode-block-card__card--new
+        exam-mode-block-card__card--background"
+      ref="cardNewElement"
+    ></div>
   </div>
 </template>
 
@@ -56,23 +82,23 @@ export default {
     const cardElement = ref(null)
     const cardQuestionElement = ref(null)
     const cardAnswerElement = ref(null)
-    const card2Element = ref(null)
-    const card2QuestionElement = ref(null)
-    const card3Element = ref(null)
+    const cardSecondElement = ref(null)
+    const cardSecondQuestionElement = ref(null)
+    const cardThirdElement = ref(null)
     const cardNewElement = ref(null)
+
+    // data
     const animationElements = computed(function getAnimationElements () {
       return [
         cardElement.value,
-        card2Element.value,
-        card3Element.value,
+        cardSecondElement.value,
+        cardThirdElement.value,
         cardNewElement.value,
         cardAnswerElement.value,
         cardQuestionElement.value,
-        card2QuestionElement.value,
+        cardSecondQuestionElement.value,
       ]
     })
-
-    // data
     const canDrag = ref(false)
     const lastTouchX = ref(null)
     const xMovement = ref(0)
@@ -189,11 +215,12 @@ export default {
       cardElement,
       cardQuestionElement,
       cardAnswerElement,
-      card2Element,
-      card2QuestionElement,
-      card3Element,
+      cardSecondElement,
+      cardSecondQuestionElement,
+      cardThirdElement,
       cardNewElement,
       // data
+      animationElements,
       canDrag,
       xMovement,
       examMode,
@@ -264,12 +291,12 @@ export default {
           x: `${direction == 'left' ? '-' : '+'}=${window.innerWidth}`,
           duration: 0.5,
         })
-        .to(card2Element.value, {
+        .to(cardSecondElement.value, {
           x: '-=10px',
           y: '-=10px',
           backgroundColor: '#ffffff',
         }, '-=0.5')
-        .to(card3Element.value, {
+        .to(cardThirdElement.value, {
           x: '-=10px',
           y: '-=10px',
           duration: 0.5,
@@ -280,7 +307,7 @@ export default {
           y: '-=10px',
           duration: 0.5,
         }, '-=0.5')
-        .to(card2QuestionElement.value, {
+        .to(cardSecondQuestionElement.value, {
           opacity: 1,
           duration: 0.5,
         }, '-=0.5')
@@ -297,8 +324,8 @@ export default {
         gsap.set(element, { clearProps: 'all' })
       })
       if (!props.cards[0]) gsap.set(cardElement.value, { opacity: 0 })
-      if (!props.cards[1]) gsap.set(card2Element.value, { opacity: 0 })
-      if (!props.cards[2]) gsap.set(card3Element.value, { opacity: 0 })
+      if (!props.cards[1]) gsap.set(cardSecondElement.value, { opacity: 0 })
+      if (!props.cards[2]) gsap.set(cardThirdElement.value, { opacity: 0 })
       xMovement.value = 0
     }
   },
@@ -308,8 +335,8 @@ export default {
 <style>
 :root {
   --card-transform: 10px;
-  --card-2-transform: 20px;
-  --card-3-transform: 30px;
+  --card-second-transform: 20px;
+  --card-third-transform: 30px;
   --card-width: 30vw;
   --card-min-size: 200px;
   --card-max-size: 300px;
@@ -317,24 +344,19 @@ export default {
 </style>
 
 <style scoped>
-.card-container {
+.exam-mode-block-card {
   position: relative;
-  margin-bottom: calc(var(--card-2-transform) + 15px); /* add card-2 card-3 transfromY */
   width: 100%;
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
   transform: translateX(-10px); /* center cards because cards transition */
 }
 
-.card-layout {
+.exam-mode-block-card__card {
+  width: 100%;
   height: 100%;
-  width: var(--card-width);
-  height: var(--card-width);
-  min-height: var(--card-min-size);
-  min-width: var(--card-min-size);
-  max-height: var(--card-max-size);
-  max-width: var(--card-max-size);
   border-radius: 6px;
   border: solid 2px var(--card-border-color);
   font-size: 8vh;
@@ -347,12 +369,12 @@ export default {
   justify-items: center;
 }
 
-.card-background {
+.exam-mode-block-card__card--background {
   background-color: var(--main-color);
   position: absolute;
 }
 
-.card {
+.exam-mode-block-card__card--first {
   will-change: auto;
   position: relative;
   user-select: none;
@@ -360,35 +382,35 @@ export default {
   background-color: #fff;
 }
 
-.card-question {
+.exam-mode-block-card__card--second {
+  z-index: 9;
+  transform: translate(var(--card-transform), var(--card-transform));
+}
+
+.exam-mode-block-card__card--third {
+  z-index: 8;
+  transform: translate(var(--card-second-transform), var(--card-second-transform));
+}
+
+.exam-mode-block-card__card--new {
+  z-index: 7;
+  opacity: 0;
+  transform: translate(var(--card-third-transform), var(--card-third-transform));
+}
+
+.exam-mode-block-card__question {
   grid-area: question;
   align-self: end;
   margin-bottom: 10px;
 }
 
-.card-answer {
+.exam-mode-block-card__question--second {
+  opacity: 0;
+}
+
+.exam-mode-block-card__answer {
   grid-area: answer;
   opacity: 0;
   align-self: start;
-}
-
-.card-2 {
-  z-index: 9;
-  transform: translate(var(--card-transform), var(--card-transform));
-}
-
-.card-2-question {
-  opacity: 0;
-}
-
-.card-3 {
-  z-index: 8;
-  transform: translate(var(--card-2-transform), var(--card-2-transform));
-}
-
-.card-new {
-  z-index: 7;
-  opacity: 0;
-  transform: translate(var(--card-3-transform), var(--card-3-transform));
 }
 </style>

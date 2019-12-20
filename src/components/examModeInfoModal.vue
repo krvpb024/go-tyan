@@ -1,14 +1,17 @@
 <template>
-  <div class="exam-mode-info-modal-container">
+  <div class="exam-mode-info-modal">
     <div
-      class="exam-mode-info-modal-background"
+      class="exam-mode-info-modal__background"
       ref="examModeInfoModalBackgroundElement"
       @click="service.send('HIDE_INFO_MODAL')"
     ></div>
 
-    <section class="exam-mode-info-modal" ref="examModeInfoModalElement">
+    <section
+      class="exam-mode-info-modal__content-block"
+      ref="examModeInfoModalElement"
+    >
       <button
-        class="close-button"
+        class="exam-mode-info-modal-content-block__close-button"
         @click="service.send('HIDE_INFO_MODAL')"
       >
         <svg
@@ -33,12 +36,12 @@
         </svg>
       </button>
 
-      <div class="title-block">
-        <h2 class="title">操作方式</h2>
+      <div class="exam-mode-info-modal-content-block__title-block">
+        <h2 class="exam-mode-info-modal-title-block__title">操作方式</h2>
       </div>
 
-      <div class="content-block">
-        <div class="content">
+      <div class="exam-mode-info-modal-content-block__description-block">
+        <div class="exam-mode-info-modal-description-block__description">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="32.503"
@@ -61,9 +64,10 @@
             </g>
           </svg>
 
-          <span class="content-text">點擊解答</span>
+          <span class="exam-mode-info-modal-description__text">點擊解答</span>
         </div>
-        <div class="content">
+
+        <div class="exam-mode-info-modal-description-block__description">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="39.603"
@@ -79,9 +83,10 @@
             />
           </svg>
 
-          <span class="content-text">左滑置後</span>
+          <span class="exam-mode-info-modal-description__text">左滑置後</span>
         </div>
-        <div class="content">
+
+        <div class="exam-mode-info-modal-description-block__description">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="41.125"
@@ -97,7 +102,7 @@
             />
           </svg>
 
-          <span class="content-text">右滑消除</span>
+          <span class="exam-mode-info-modal-description__text">右滑消除</span>
         </div>
       </div>
     </section>
@@ -124,18 +129,45 @@ export default {
     },
   },
   setup (props) {
+    // element
     const examModeInfoModalBackgroundElement = ref(null)
     const examModeInfoModalElement = ref(null)
+
+    // data
     const examModeInfoModalAnimationTimeline = ref(null)
 
+    // effect
     watch(
       () => props.current.matches('idle.infoModal.showInfoModalAnimation'),
       function showInfoModalAnimationWatcher (value) {
-        if (value) {
-          showInfoModalAnimation()
-            .then(function showAnimationEnd () {
-              props.service.send('SHOW_INFO_MODAL_ANIMATION_END')
+        if (!value) return
+        showInfoModalAnimation()
+          .then(function showAnimationEnd () {
+            props.service.send('SHOW_INFO_MODAL_ANIMATION_END')
+          })
+
+        function showInfoModalAnimation () {
+          gsap.set(examModeInfoModalElement.value, { clearProps: 'all' })
+          gsap.set(examModeInfoModalElement.value, { display: 'block' })
+          gsap.set(examModeInfoModalBackgroundElement.value, { display: 'block' })
+
+          examModeInfoModalAnimationTimeline.value = gsap.timeline({ paused: true })
+
+          return examModeInfoModalAnimationTimeline.value
+            .from(examModeInfoModalElement.value, {
+              left: props.buttonInfo.left,
+              top: props.buttonInfo.top,
+              width: props.buttonInfo.width,
+              height: props.buttonInfo.height,
+              duration: 0.3,
+              ease: 'circ.inOut',
             })
+            .from(examModeInfoModalElement.value, {
+              x: '+=50%',
+              y: '+=50%',
+              duration: 0.2,
+            }, '-=0.3')
+            .play()
         }
       }
     )
@@ -143,62 +175,40 @@ export default {
     watch(
       () => props.current.matches('idle.infoModal.hideInfoModalAnimation'),
       function hideInfoModalAnimationWatcher (value) {
-        if (value) {
-          hideInfoModalAnimation()
-            .then(function hideAnimationEnd () {
-              props.service.send('HIDE_INFO_MODAL_ANIMATION_END')
+        if (!value) return
+        hideInfoModalAnimation()
+          .then(function hideAnimationEnd () {
+            props.service.send('HIDE_INFO_MODAL_ANIMATION_END')
+          })
+
+        function hideInfoModalAnimation () {
+          return examModeInfoModalAnimationTimeline.value.reverse()
+            .then(function hideModal () {
+              gsap.set(examModeInfoModalElement.value, { display: 'none' })
+              gsap.set(examModeInfoModalBackgroundElement.value, { display: 'none' })
             })
         }
       }
     )
 
     return {
-      examModeInfoModalBackgroundElement,
+      // element
       examModeInfoModalElement,
-    }
-
-    function showInfoModalAnimation () {
-      gsap.set(examModeInfoModalElement.value, { clearProps: 'all' })
-      gsap.set(examModeInfoModalElement.value, { display: 'block' })
-      gsap.set(examModeInfoModalBackgroundElement.value, { display: 'block' })
-
-      examModeInfoModalAnimationTimeline.value = gsap.timeline({ paused: true })
-
-      return examModeInfoModalAnimationTimeline.value
-        .from(examModeInfoModalElement.value, {
-          left: props.buttonInfo.left,
-          top: props.buttonInfo.top,
-          width: props.buttonInfo.width,
-          height: props.buttonInfo.height,
-          duration: 0.3,
-          ease: 'circ.inOut',
-        })
-        .from(examModeInfoModalElement.value, {
-          x: '+=50%',
-          y: '+=50%',
-          duration: 0.2,
-        }, '-=0.3')
-        .play()
-    }
-
-    function hideInfoModalAnimation () {
-      return examModeInfoModalAnimationTimeline.value.reverse()
-        .then(function hideModal () {
-          gsap.set(examModeInfoModalElement.value, { display: 'none' })
-          gsap.set(examModeInfoModalBackgroundElement.value, { display: 'none' })
-        })
+      examModeInfoModalBackgroundElement,
     }
   },
 }
 </script>
 
 <style scoped>
-.exam-mode-info-modal-container {
+.exam-mode-info-modal {
   position: absolute;
   z-index: 100;
+  width: 100%;
+  height: 100%;
 }
 
-.exam-mode-info-modal-background {
+.exam-mode-info-modal__background {
   display: none;
   position: fixed;
   left: 0;
@@ -207,14 +217,14 @@ export default {
   height: 100%;
 }
 
-.exam-mode-info-modal {
+.exam-mode-info-modal__content-block {
+  position: fixed;
   width: 70%;
   max-width: calc(var(--app-max-width) * 0.7);
   border-radius: 6px;
   box-shadow: 0 3px 20px 0 rgba(0, 0, 0, 0.16);
   border: solid 3px var(--text-color);
   background-color: #fff;
-  position: fixed;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
@@ -224,7 +234,7 @@ export default {
   will-change: auto;
 }
 
-.close-button {
+.exam-mode-info-modal-content-block__close-button {
   position: absolute;
   right: 10px;
   top: 10px;
@@ -233,13 +243,13 @@ export default {
   border: var(--focus-border-width) solid transparent;
 }
 
-.close-button:focus {
+.exam-mode-info-modal-content-block__close-button:focus {
   border: var(--focus-border);
   border-radius: 4px;
   outline: none;
 }
 
-.title-block {
+.exam-mode-info-modal-content-block__title-block {
   text-align: center;
   border-bottom: 3px solid var(--text-color);
   width: 80%;
@@ -248,26 +258,26 @@ export default {
   padding-bottom: 22px;
 }
 
-.title {
+.exam-mode-info-modal-title-block__title {
   font-size: 1.25rem;
   margin: 0;
 }
 
-.content-block {
+.exam-mode-info-modal-content-block__description-block {
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.content {
+.exam-mode-info-modal-description-block__description {
   margin: 30px 0;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.content-text {
+.exam-mode-info-modal-description__text {
   margin-left: 30px;
   font-size: 1rem;
   font-weight: bold;

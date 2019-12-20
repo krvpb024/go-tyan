@@ -66,22 +66,22 @@
           class="exam-mode-main-block__normal-exam"
           ref="normalExamElement"
         >
-          <exam-block
+          <exam-mode-block
             examType="normalExam"
             :service="service"
             :current="current"
-          ></exam-block>
+          ></exam-mode-block>
         </div>
 
         <div
           class="exam-mode-main-block__enhancement-exam"
           ref="enhancementExamElement"
         >
-          <exam-block
+          <exam-mode-block
             examType="enhancementExam"
             :service="service"
             :current="current"
-          ></exam-block>
+          ></exam-mode-block>
         </div>
       </main>
 
@@ -100,13 +100,13 @@ import { machine } from '@/states/examModeState.js'
 import { useMachine } from '@/utils/useMachine.js'
 import { gsap } from 'gsap'
 import topBar from '@/components/topBar.vue'
-import examBlock from '@/components/examBlock.vue'
+import examModeBlock from '@/components/examModeBlock.vue'
 import examModeInfoModal from '@/components/examModeInfoModal.vue'
 import tableDrawingBoard from '@/components/tableDrawingBoard.vue'
 
 export default {
   name: 'ExamMode',
-  components: { topBar, examBlock, examModeInfoModal, tableDrawingBoard },
+  components: { topBar, examModeBlock, examModeInfoModal, tableDrawingBoard },
   setup (props, context) {
     // element
     const normalExamElement = ref(null)
@@ -141,6 +141,7 @@ export default {
     })
     const examModeInfoModalButtonInfo = ref(null)
 
+    // effect
     watch(
       () => current.value.matches('idle.exam.changeExamModeAnimation'),
       function changeExamAnimationWatcher () {
@@ -165,10 +166,21 @@ export default {
     onMounted(function examModeOnMounted () {
       service.value.send('PAGE_MOUNTED')
 
-      const { top, left, width, height } = examModeInfoModalButtonElement.value.getBoundingClientRect()
+      const { top, left, width, height } = getOffset(examModeInfoModalButtonElement.value)
       examModeInfoModalButtonInfo.value = { top, left, width, height }
 
       document.body.style.overflow = 'hidden'
+
+      function getOffset (el) {
+        const { top, left, width, height } = el.getBoundingClientRect()
+
+        return {
+          left: left + window.scrollX,
+          top: top + window.scrollY,
+          width,
+          height,
+        }
+      }
     })
 
     onUnmounted(function examModeOnUnmounted () {
@@ -196,16 +208,18 @@ export default {
 }
 
 .exam-mode-content__info-modal {
-  right: 0;
+  top: var(--root-padding-size);
+  right: var(--root-padding-size);
+  width: 28px;
+  height: 28px;
   position: absolute;
   display: flex;
   justify-content: flex-end;
-  margin-bottom: 10px;
 }
 
 .exam-mode-info-modal__modal-trigger-button {
-  width: 28px;
-  height: 28px;
+  width: 100%;
+  height: 100%;
   border-radius: 6px;
   box-shadow: 0 3px 20px 0 rgba(0, 0, 0, 0.16);
   border: solid 2px var(--text-color);
@@ -214,7 +228,6 @@ export default {
   align-items: center;
   justify-content: center;
   padding: 0;
-  margin: 12px;
   font-weight: bold;
   z-index: 110;
 }

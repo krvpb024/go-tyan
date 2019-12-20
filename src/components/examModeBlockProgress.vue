@@ -1,6 +1,6 @@
 <template>
-  <div class="ep-container">
-    <div class="ep-container__value-bar" ref="valueBarElement"></div>
+  <div class="exam-mode-block-progress">
+    <div class="exam-mode-block-progress__value-bar" ref="valueBarElement"></div>
   </div>
 </template>
 
@@ -20,7 +20,10 @@ export default {
     },
   },
   setup (props) {
+    // element
     const valueBarElement = ref(null)
+
+    // effect
     watch(
       () => props.value,
       function valueWatcher () {
@@ -32,6 +35,7 @@ export default {
     )
 
     return {
+      // element
       valueBarElement,
     }
   },
@@ -39,7 +43,7 @@ export default {
 </script>
 
 <style scoped>
-.ep-container {
+.exam-mode-block-progress {
   height: 22px;
   border-radius: 4px;
   box-shadow: 1px 2px 9px 0 rgba(0, 0, 0, 0.16);
@@ -47,7 +51,7 @@ export default {
   background-color: #fff;
 }
 
-.ep-container__value-bar {
+.exam-mode-block-progress__value-bar {
   width: 0;
   height: 100%;
   background-color: #ffe65a;

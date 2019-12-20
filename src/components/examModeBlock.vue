@@ -1,31 +1,33 @@
 <template>
-  <section class="exam-block-container">
-    <exam-block-card
-      :service="service"
-      :current="current"
-      :cards="cards"
-      :examType="examType"
-    ></exam-block-card>
-
-    <div class="exam-block-progress">
-      <exam-progress
-        :value="progressValue"
-        :max="progressMax"
-      ></exam-progress>
+  <section class="exam-mode-block">
+    <div class="exam-mode-block__card">
+      <exam-mode-block-card
+        :service="service"
+        :current="current"
+        :cards="cards"
+        :examType="examType"
+      ></exam-mode-block-card>
     </div>
 
-    <p class="eb-status">{{ progressValue }} / {{ progressMax }}</p>
+    <div class="exam-mode-block__progress">
+      <exam-mode-block-progress
+        :value="progressValue"
+        :max="progressMax"
+      ></exam-mode-block-progress>
+    </div>
+
+    <p class="exam-mode-block__status">{{ progressValue }} / {{ progressMax }}</p>
   </section>
 </template>
 
 <script>
 import { computed } from '@vue/composition-api'
-import examBlockCard from '@/components/examBlockCard.vue'
-import examProgress from '@/components/examProgress.vue'
+import examModeBlockCard from '@/components/examModeBlockCard.vue'
+import examModeBlockProgress from '@/components/examModeBlockProgress.vue'
 
 export default {
   name: 'examBlock',
-  components: { examBlockCard, examProgress },
+  components: { examModeBlockCard, examModeBlockProgress },
   props: {
     service: {
       type: Object,
@@ -41,6 +43,7 @@ export default {
     },
   },
   setup (props) {
+    // data
     const cards = computed(function getCards () {
       switch (props.examType) {
         case 'normalExam':
@@ -81,6 +84,7 @@ export default {
     })
 
     return {
+      // data
       cards,
       progressValue,
       progressMax,
@@ -89,21 +93,41 @@ export default {
 }
 </script>
 
+<style>
+:root {
+  --card-width: 30vw;
+  --card-min-size: 200px;
+  --card-max-size: 300px;
+}
+</style>
+
 <style scoped>
-.exam-block-container {
+.exam-mode-block {
   display: flex;
   flex-direction: column;
   overflow: hidden;
   align-items: center;
 }
 
-.exam-block-progress {
-  width: calc(var(--card-width) + var(--card-2-transform));
-  min-width: calc(var(--card-min-size) + var(--card-2-transform));
-  max-width: calc(var(--card-max-size) + var(--card-2-transform));
+.exam-mode-block__card {
+  width: var(--card-width);
+  height: var(--card-width);
+  min-height: var(--card-min-size);
+  min-width: var(--card-min-size);
+  max-height: var(--card-max-size);
+  max-width: var(--card-max-size);
+  margin-bottom: calc(
+    var(--card-second-transform) + 15px
+  ); /* add card-second card-third transfromY */
 }
 
-.eb-status {
+.exam-mode-block__progress {
+  width: calc(var(--card-width) + var(--card-second-transform));
+  min-width: calc(var(--card-min-size) + var(--card-second-transform));
+  max-width: calc(var(--card-max-size) + var(--card-second-transform));
+}
+
+.exam-mode-block__status {
   font-size: 1.25rem;
   font-weight: bold;
   margin: 5px;

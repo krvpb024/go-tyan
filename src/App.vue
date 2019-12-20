@@ -17,6 +17,7 @@ export default {}
   --focus-border-width: 2.5px;
   --focus-border: solid var(--focus-border-width) var(--main-color);
   --app-max-width: 768px;
+  --root-padding-size: 8px;
 }
 
 html {
@@ -57,7 +58,7 @@ p {
 }
 
 .app-sticky-top {
-  padding: 8px;
+  padding: var(--root-padding-size);
   background-color: #fff;
   padding-bottom: 0;
   position: sticky;

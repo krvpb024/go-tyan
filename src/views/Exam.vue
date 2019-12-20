@@ -192,6 +192,10 @@ export default {
   name: 'Exam',
   components: { topBar, examRangeModal, examCard },
   setup (props, context) {
+    // element
+    const settingButtonElement = ref(null)
+
+    // data
     const localExamRange = JSON.parse(window.localStorage.getItem('examRange'))
     const localSubmittedGojuon = JSON.parse(window.localStorage.getItem('submittedGojuon'))
 
@@ -202,19 +206,20 @@ export default {
       selectedGojuon: localSubmittedGojuon || machine.context.selectedGojuon,
     }))
 
-    const settingButtonElement = ref(null)
     const settingButtonBoundingClientRect = ref(null)
 
+    // effect
     onMounted(function examOnMounted () {
       const { top, left, width, height } = settingButtonElement.value.getBoundingClientRect()
       settingButtonBoundingClientRect.value = { top, left, width, height }
     })
 
     return {
+      // element
+      settingButtonElement,
       // data
       service,
       current,
-      settingButtonElement,
       settingButtonBoundingClientRect,
       // methods
       modalHide,
