@@ -43,10 +43,9 @@
     </div>
 
     <div class="exam-mode-container__content">
-      <div class="exam-mode-content__info-modal">
+      <div class="exam-mode-content__info-modal" ref="examModeInfoModalButtonElement">
         <button
           class="exam-mode-info-modal__modal-trigger-button"
-          ref="examModeInfoModalButtonElement"
           @click="current.matches('idle.infoModal.hide')
             ? service.send('SHOW_INFO_MODAL')
             : service.send('HIDE_INFO_MODAL')"
@@ -55,7 +54,6 @@
         </button>
 
         <exam-mode-info-modal
-          :buttonInfo="examModeInfoModalButtonInfo"
           :service="service"
           :current="current"
         ></exam-mode-info-modal>
@@ -139,7 +137,6 @@ export default {
           return ''
       }
     })
-    const examModeInfoModalButtonInfo = ref(null)
 
     // effect
     watch(
@@ -165,22 +162,7 @@ export default {
 
     onMounted(function examModeOnMounted () {
       service.value.send('PAGE_MOUNTED')
-
-      const { top, left, width, height } = getOffset(examModeInfoModalButtonElement.value)
-      examModeInfoModalButtonInfo.value = { top, left, width, height }
-
       document.body.style.overflow = 'hidden'
-
-      function getOffset (el) {
-        const { top, left, width, height } = el.getBoundingClientRect()
-
-        return {
-          left: left + window.scrollX,
-          top: top + window.scrollY,
-          width,
-          height,
-        }
-      }
     })
 
     onUnmounted(function examModeOnUnmounted () {
@@ -196,7 +178,6 @@ export default {
       service,
       current,
       title,
-      examModeInfoModalButtonInfo,
     }
   },
 }

@@ -1,5 +1,5 @@
 <template>
-  <div class="exam-mode-info-modal">
+  <div class="exam-mode-info-modal" ref="examModeInfoModalContainerElement">
     <div
       class="exam-mode-info-modal__background"
       ref="examModeInfoModalBackgroundElement"
@@ -130,6 +130,7 @@ export default {
   },
   setup (props) {
     // element
+    const examModeInfoModalContainerElement = ref(null)
     const examModeInfoModalBackgroundElement = ref(null)
     const examModeInfoModalElement = ref(null)
 
@@ -141,6 +142,19 @@ export default {
       () => props.current.matches('idle.infoModal.showInfoModalAnimation'),
       function showInfoModalAnimationWatcher (value) {
         if (!value) return
+        const { top, left, width, height } = getOffset(examModeInfoModalContainerElement.value)
+
+        function getOffset (el) {
+          const { top, left, width, height } = el.getBoundingClientRect()
+
+          return {
+            left: left + window.scrollX,
+            top: top + window.scrollY,
+            width,
+            height,
+          }
+        }
+
         showInfoModalAnimation()
           .then(function showAnimationEnd () {
             props.service.send('SHOW_INFO_MODAL_ANIMATION_END')
@@ -153,20 +167,21 @@ export default {
 
           examModeInfoModalAnimationTimeline.value = gsap.timeline({ paused: true })
 
+          const duration = 0.3
           return examModeInfoModalAnimationTimeline.value
             .from(examModeInfoModalElement.value, {
-              left: props.buttonInfo.left,
-              top: props.buttonInfo.top,
-              width: props.buttonInfo.width,
-              height: props.buttonInfo.height,
-              duration: 0.3,
+              left,
+              top,
+              width,
+              height,
+              duration,
               ease: 'circ.inOut',
             })
             .from(examModeInfoModalElement.value, {
               x: '+=50%',
               y: '+=50%',
-              duration: 0.2,
-            }, '-=0.3')
+              duration: duration - 0.1,
+            }, `-=${duration}`)
             .play()
         }
       }
@@ -193,6 +208,7 @@ export default {
 
     return {
       // element
+      examModeInfoModalContainerElement,
       examModeInfoModalElement,
       examModeInfoModalBackgroundElement,
     }

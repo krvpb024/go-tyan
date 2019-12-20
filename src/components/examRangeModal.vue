@@ -190,6 +190,7 @@ export default {
           gsap.set(examRangeModalContainerElement.value, { display: 'block' })
 
           examRangeModalAnimationTimeline.value = gsap.timeline({ paused: true })
+          const duration = 0.3
 
           return examRangeModalAnimationTimeline.value
             .from(examRangeModalElement.value, {
@@ -197,16 +198,16 @@ export default {
               top: props.buttonInfo.top,
               width: props.buttonInfo.width,
               height: props.buttonInfo.height,
-              duration: 0.3,
+              duration,
               ease: 'circ.inOut',
             })
             .from(examRangeModalElement.value, {
               x: '+=50%',
               y: '+=50%',
-              duration: 0.15,
+              duration: duration / 2,
             }, '-=0.3')
             .to(examRangeModalBackground.value, {
-              duration: 0.3,
+              duration,
               opacity: 0.5,
             }, '-=0.3')
             .to(examRangeModalScrollContentElement.value, {
@@ -214,7 +215,7 @@ export default {
               duration: 0,
             })
             .to(examRangeModalScrollContentElement.value, {
-              duration: 0.15,
+              duration: duration / 2,
               opacity: 1,
             })
             .play()
