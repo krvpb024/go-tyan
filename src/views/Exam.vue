@@ -211,10 +211,12 @@ export default {
     })
 
     return {
+      // data
       service,
       current,
       settingButtonElement,
       settingButtonBoundingClientRect,
+      // methods
       modalHide,
     }
 

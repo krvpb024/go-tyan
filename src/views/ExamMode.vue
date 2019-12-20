@@ -1,9 +1,6 @@
 <template>
   <section class="exam-mode-container">
-    <div
-      class="app-sticky-top"
-      ref="topStickyElement"
-    >
+    <div class="app-sticky-top">
       <top-bar>
         <template #leftContainer>
           <router-link
@@ -45,10 +42,10 @@
       </top-bar>
     </div>
 
-    <div class="exam-content">
-      <div class="exam-mode-info-modal-wrap">
+    <div class="exam-mode-container__content">
+      <div class="exam-mode-content__info-modal">
         <button
-          class="exam-mode-info-modal-button"
+          class="exam-mode-info-modal__modal-trigger-button"
           ref="examModeInfoModalButtonElement"
           @click="current.matches('idle.infoModal.hide')
             ? service.send('SHOW_INFO_MODAL')
@@ -64,8 +61,11 @@
         ></exam-mode-info-modal>
       </div>
 
-      <div class="exam-block">
-        <div class="exam-block__normal-exam" ref="normalExamElement">
+      <main class="exam-mode-content__main-block">
+        <div
+          class="exam-mode-main-block__normal-exam"
+          ref="normalExamElement"
+        >
           <exam-block
             examType="normalExam"
             :service="service"
@@ -73,17 +73,23 @@
           ></exam-block>
         </div>
 
-        <div class="exam-block__enhancement-exam" ref="enhancementExamElement">
+        <div
+          class="exam-mode-main-block__enhancement-exam"
+          ref="enhancementExamElement"
+        >
           <exam-block
             examType="enhancementExam"
             :service="service"
             :current="current"
           ></exam-block>
         </div>
+      </main>
 
-      </div>
-
-      <table-drawing-board opacity="0.8" :service="service" :current="current"></table-drawing-board>
+      <table-drawing-board
+        opacity="0.8"
+        :service="service"
+        :current="current"
+      ></table-drawing-board>
     </div>
   </section>
 </template>
@@ -102,6 +108,12 @@ export default {
   name: 'ExamMode',
   components: { topBar, examBlock, examModeInfoModal, tableDrawingBoard },
   setup (props, context) {
+    // element
+    const normalExamElement = ref(null)
+    const enhancementExamElement = ref(null)
+    const examModeInfoModalButtonElement = ref(null)
+
+    // data
     const localExamRange = JSON.parse(window.localStorage.getItem('examRange'))
 
     const { service, current } = useMachine(machine.withContext({
@@ -127,25 +139,7 @@ export default {
           return ''
       }
     })
-
-    const normalExamElement = ref(null)
-    const enhancementExamElement = ref(null)
-
-    const examModeInfoModalButtonElement = ref(null)
     const examModeInfoModalButtonInfo = ref(null)
-
-    onMounted(function examModeOnMounted () {
-      service.value.send('PAGE_MOUNTED')
-
-      const { top, left, width, height } = examModeInfoModalButtonElement.value.getBoundingClientRect()
-      examModeInfoModalButtonInfo.value = { top, left, width, height }
-
-      document.body.style.overflow = 'hidden'
-    })
-
-    onUnmounted(function examModeOnUnmounted () {
-      document.body.style.overflow = ''
-    })
 
     watch(
       () => current.value.matches('idle.exam.changeExamModeAnimation'),
@@ -168,13 +162,28 @@ export default {
       { lazy: true }
     )
 
+    onMounted(function examModeOnMounted () {
+      service.value.send('PAGE_MOUNTED')
+
+      const { top, left, width, height } = examModeInfoModalButtonElement.value.getBoundingClientRect()
+      examModeInfoModalButtonInfo.value = { top, left, width, height }
+
+      document.body.style.overflow = 'hidden'
+    })
+
+    onUnmounted(function examModeOnUnmounted () {
+      document.body.style.overflow = ''
+    })
+
     return {
-      service,
-      current,
-      title,
+      // element
       normalExamElement,
       enhancementExamElement,
       examModeInfoModalButtonElement,
+      // data
+      service,
+      current,
+      title,
       examModeInfoModalButtonInfo,
     }
   },
@@ -182,11 +191,11 @@ export default {
 </script>
 
 <style scoped>
-.exam-content {
+.exam-mode-container__content {
   position: relative;
 }
 
-.exam-mode-info-modal-wrap {
+.exam-mode-content__info-modal {
   right: 0;
   position: absolute;
   display: flex;
@@ -194,7 +203,7 @@ export default {
   margin-bottom: 10px;
 }
 
-.exam-mode-info-modal-button {
+.exam-mode-info-modal__modal-trigger-button {
   width: 28px;
   height: 28px;
   border-radius: 6px;
@@ -210,20 +219,21 @@ export default {
   z-index: 110;
 }
 
-.exam-mode-info-modal-button:hover, .exam-mode-info-modal-button:active {
+.exam-mode-info-modal__modal-trigger-button:hover,
+.exam-mode-info-modal__modal-trigger-button:active {
   color: var(--text-color);
 }
 
-.exam-mode-info-modal-button:active {
+.exam-mode-info-modal__modal-trigger-button:active {
   color: var(--main-color);
 }
 
-.exam-mode-info-modal-button:focus {
+.exam-mode-info-modal__modal-trigger-button:focus {
   border: var(--focus-border);
   outline: none;
 }
 
-.exam-block {
+.exam-mode-content__main-block {
   position: relative;
   width: 100%;
   overflow: hidden;
@@ -231,15 +241,15 @@ export default {
   margin-bottom: 100vh;
 }
 
-.exam-block__normal-exam {
+.exam-mode-main-block__normal-exam {
   width: 100%;
 }
 
-.exam-block__enhancement-exam {
+.exam-mode-main-block__enhancement-exam {
   width: 100%;
   position: absolute;
   top: 0;
   left: 0;
-  transform:  translateX(-100%);
+  transform: translateX(-100%);
 }
 </style>

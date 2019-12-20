@@ -216,8 +216,11 @@ export default {
     gojuonTitle,
   },
   setup () {
-    const { service, current } = useMachine(machine)
+    // element
     const topStickyElement = ref(null)
+
+    // data
+    const { service, current } = useMachine(machine)
 
     watch(
       () => current.value.matches('table.cellFocus.switchFocus'),
@@ -258,7 +261,9 @@ export default {
     )
 
     return {
+      // element
       topStickyElement,
+      // data
       service,
       current,
       // methods
