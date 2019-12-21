@@ -155,15 +155,14 @@ export default {
 
 <style scoped>
 .home__header {
-  margin: 0 20px;
   margin-top: 27px;
   display: grid;
   align-items: center;
   grid-gap: 10px;
   gap: 10px;
   grid-template:
-    "logo   title  .      install-button" auto
-    "stream stream stream stream        " auto / 70px auto 1fr auto;
+    ".      logo   title  .      install-button .     " auto
+    "stream stream stream stream stream         stream" auto / 20px 70px auto 1fr auto 20px;
 }
 
 .home-header__logo {
@@ -248,6 +247,7 @@ export default {
 }
 
 .home-stream__content-block {
+  padding: 0 20px;
   height: 100%;
   display: grid;
   grid-template-columns: 40px minmax(min-content, auto) 40px minmax(
