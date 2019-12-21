@@ -44,7 +44,10 @@
         <h1>測驗</h1>
 
         <template #rightContainer>
-          <button @click="service.send('SHOW_EXAM_RANGE_MODAL')" ref="settingButtonElement">設定</button>
+          <button
+            @click="service.send('SHOW_EXAM_RANGE_MODAL')"
+            ref="settingButtonElement"
+          >設定</button>
 
           <exam-range-modal
             :service="service"
@@ -57,7 +60,10 @@
     </div>
 
     <nav class="exam-container__nav">
-      <router-link to="/exam/hiragana_to_romanization">
+      <router-link
+        class="exam-nav__link"
+        to="/exam/hiragana_to_romanization"
+      >
         <exam-card>
           <template #transformFrom>
             <span>あ</span>
@@ -77,7 +83,10 @@
         </exam-card>
       </router-link>
 
-      <router-link to="/exam/romanization_to_hiragana">
+      <router-link
+        class="exam-nav__link"
+        to="/exam/romanization_to_hiragana"
+      >
         <exam-card>
           <template #transformFrom>
             <span>a</span>
@@ -97,7 +106,10 @@
         </exam-card>
       </router-link>
 
-      <router-link to="/exam/katakana_to_romanization">
+      <router-link
+        class="exam-nav__link"
+        to="/exam/katakana_to_romanization"
+      >
         <exam-card>
           <template #transformFrom>
             <span>ア</span>
@@ -117,7 +129,10 @@
         </exam-card>
       </router-link>
 
-      <router-link to="/exam/romanization_to_katakana">
+      <router-link
+        class="exam-nav__link"
+        to="/exam/romanization_to_katakana"
+      >
         <exam-card>
           <template #transformFrom>
             <span>a</span>
@@ -137,7 +152,10 @@
         </exam-card>
       </router-link>
 
-      <router-link to="/exam/hiragana_to_katakana">
+      <router-link
+        class="exam-nav__link"
+        to="/exam/hiragana_to_katakana"
+      >
         <exam-card>
           <template #transformFrom>
             <span>あ</span>
@@ -157,7 +175,10 @@
         </exam-card>
       </router-link>
 
-      <router-link to="/exam/katakana_to_hiragana">
+      <router-link
+        class="exam-nav__link"
+        to="/exam/katakana_to_hiragana"
+      >
         <exam-card>
           <template #transformFrom>
             <span>ア</span>
@@ -247,5 +268,10 @@ export default {
   justify-content: center;
   margin: 31px auto;
   padding: 0 20px;
+}
+
+.exam-nav__link:focus {
+  outline: 4px solid var(--main-color);
+  outline-offset: 10px;
 }
 </style>

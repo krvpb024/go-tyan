@@ -1,19 +1,19 @@
 <template>
   <div
     class="exam-mode-block-card"
-    @mousemove="dragging"
-    @touchmove="dragging"
-    @mouseup="dragEnd"
-    @touchend="dragEnd"
+    @mousemove="cardMoving"
+    @touchmove="cardMoving"
+    @mouseup="cardMoveEnd"
+    @touchend="cardMoveEnd"
   >
     <div
       class="exam-mode-block-card__card
         exam-mode-block-card__card--first"
       ref="cardElement"
-      @mousedown="dragStart"
-      @touchstart="dragStart"
-      @mouseup="dragEnd"
-      @touchend="dragEnd"
+      @mousedown="cardMoveStart"
+      @touchstart="cardMoveStart"
+      @mouseup="cardMoveEnd"
+      @touchend="cardMoveEnd"
     >
       <span
         class="exam-mode-block-card__question"
@@ -61,6 +61,7 @@
 <script>
 import { ref, computed, watch, onMounted } from '@vue/composition-api'
 import { gsap } from 'gsap'
+import { useDragToMove } from '@/utils/useDragToMove.js'
 
 export default {
   props: {
@@ -78,6 +79,8 @@ export default {
     },
   },
   setup (props, context) {
+    // composition
+    const { xMovement, dragStart, getDraggingMovement, dragEnd } = useDragToMove()
     // element
     const cardElement = ref(null)
     const cardQuestionElement = ref(null)
@@ -87,7 +90,6 @@ export default {
     const cardThirdElement = ref(null)
     const cardNewElement = ref(null)
 
-    // data
     const animationElements = computed(function getAnimationElements () {
       return [
         cardElement.value,
@@ -99,11 +101,8 @@ export default {
         cardSecondQuestionElement.value,
       ]
     })
-    const canDrag = ref(false)
-    const lastTouchX = ref(null)
     const swipeCheckPoint = ref(null)
-    let xMovement = 0
-    let accelarator = 1
+    const accelarator = ref(1)
 
     const examMode = computed(function getExamMode () {
       return context.root.$route.name
@@ -243,8 +242,8 @@ export default {
       if (!props.cards[0]) gsap.set(cardElement.value, { opacity: 0 })
       if (!props.cards[1]) gsap.set(cardSecondElement.value, { opacity: 0 })
       if (!props.cards[2]) gsap.set(cardThirdElement.value, { opacity: 0 })
-      xMovement = 0
-      accelarator = 1
+      xMovement.value = 0
+      accelarator.value = 1
     }
 
     watch(
@@ -260,8 +259,8 @@ export default {
           })
           .then(function swipeAnimationEnd () {
             gsap.set(cardElement.value, { clearProps: 'all' })
-            xMovement = 0
-            accelarator = 1
+            xMovement.value = 0
+            accelarator.value = 1
             props.service.send('CARD_BACK_TO_POSITION_ANIMATION_END')
           })
       },
@@ -283,63 +282,52 @@ export default {
       cardNewElement,
       // data
       animationElements,
-      canDrag,
       examMode,
       question,
       answer,
       nextQuestion,
+      xMovement,
       // methods
-      dragStart,
-      dragging,
-      dragEnd,
+      cardMoveStart,
+      cardMoving,
+      cardMoveEnd,
     }
 
-    function dragStart (e) {
+    function cardMoveStart (e) {
       props.service.send('SHOW_ANSWER')
-      canDrag.value = true
-
-      if (e.touches) {
-        lastTouchX.value = e.touches[0].pageX
-      }
+      dragStart(e)
     }
 
-    function dragging (e) {
-      if (!canDrag.value) return
+    function cardMoving (e) {
       props.service.send('CARD_MOVE')
-
-      let movement
-      if (e.touches) {
-        movement = e.touches[0].pageX - lastTouchX.value
-        lastTouchX.value = e.touches[0].pageX
-      } else {
-        movement = e.movementX
-      }
+      const movement = getDraggingMovement(e)
+      if (movement == 0) return
 
       if (
         props.current.matches('idle.exam.enhancementExam') &&
         movement < 0 &&
-        xMovement <= 0
+        xMovement.value <= 0
       ) {
-        xMovement = xMovement + movement * accelarator
-        accelarator = 0.5 - Math.abs(xMovement / swipeCheckPoint.value)
+        xMovement.value = xMovement.value + movement * accelarator.value
+        accelarator.value = 0.5 - Math.abs(xMovement.value / swipeCheckPoint.value)
       } else {
-        xMovement += movement
+        xMovement.value += movement
       }
 
-      cardElement.value.style.transform = `translate(${xMovement}px, 0)`
-      cardElement.value.style.opacity = 1 - (xMovement / swipeCheckPoint.value * 0.3)
+      cardElement.value.style.transform = `translate(${xMovement.value}px, 0)`
+      cardElement.value.style.opacity = 1 - (xMovement.value / swipeCheckPoint.value * 0.3)
 
-      if (Math.abs(xMovement) > swipeCheckPoint.value) {
-        canDrag.value = false
+      if (Math.abs(xMovement.value) > swipeCheckPoint.value) {
+        dragEnd()
         props.service.send('NEXT_CARD', {
-          addToEnhancement: !(xMovement > 0),
+          addToEnhancement: !(xMovement.value > 0),
         })
       }
     }
 
-    function dragEnd () {
-      canDrag.value = false
+    function cardMoveEnd () {
       props.service.send('CARD_BACK_TO_POSITION')
+      dragEnd()
     }
   },
 }
