@@ -21,7 +21,7 @@
         class="home-header__stream"
         ref="streamElement"
       >
-        <!-- chrome some times won't fire touchmove when listen on home-header__stream -->
+        <!-- chrome sometimes won't fire touchmove when listen on home-header__stream -->
         <div
           class="fix-touch"
           @touchstart="streamMoveStart"
@@ -176,8 +176,9 @@ export default {
     const streamContentBlockElement = ref(null)
 
     // data
-    const checkPoint = ref(0)
-    const rightBoundary = ref(0)
+    const crossLimit = ref(0)
+    const leftBoundary = ref(0)
+    const rightBoundary = ref(null)
     const accelerator = ref(1)
 
     const touchStartPoint = ref(0)
@@ -190,7 +191,7 @@ export default {
 
     // effect
     onMounted(function homeOnMounted () {
-      checkPoint.value = streamElement.value.offsetWidth / 4
+      crossLimit.value = streamElement.value.offsetWidth / 4
       rightBoundary.value = streamElement.value.offsetWidth - streamContentBlockElement.value.scrollWidth
     })
 
@@ -200,7 +201,7 @@ export default {
       streamContentBlockElement,
       // data
       xMovement,
-      checkPoint,
+      crossLimit,
       rightBoundary,
       touchStartPoint,
       touchEndPoint,
@@ -222,13 +223,15 @@ export default {
       if (movement == 0) return
       touchEndPoint.value = e.touches[0].pageX
 
-      if (movement > 0 && xMovement.value > 0) {
+      if (movement > 0 && xMovement.value > leftBoundary.value) {
         xMovement.value = xMovement.value + movement * accelerator.value
-        accelerator.value = 0.5 - Math.abs(xMovement.value / checkPoint.value)
-      } else if ((movement < 0 && xMovement.value < rightBoundary.value)) {
+        // check current position to crossLimit percentage
+        accelerator.value = 0.5 - Math.abs(xMovement.value / crossLimit.value)
+      } else if (movement < 0 && xMovement.value < rightBoundary.value) {
         xMovement.value = xMovement.value + movement * accelerator.value
         const extra = rightBoundary.value - xMovement.value
-        accelerator.value = 0.5 - Math.abs(extra / checkPoint.value)
+        // check current position to crossLimit percentage
+        accelerator.value = 0.5 - Math.abs(extra / crossLimit.value)
       } else {
         xMovement.value += movement
       }
@@ -240,7 +243,7 @@ export default {
       dragEnd()
       toucheEndTime.value = e.timeStamp
 
-      if (xMovement.value > 0) {
+      if (xMovement.value > leftBoundary.value) {
         gsap
           .to(streamContentBlockElement.value, {
             x: 0,
@@ -248,6 +251,7 @@ export default {
           })
           .then(function backToPositionAnimationEnd () {
             xMovement.value = 0
+            // don't know why if don't clear props, duration will be ignored
             gsap.set(streamContentBlockElement.value, { clearProps: true })
           })
       } else if (xMovement.value < rightBoundary.value) {
@@ -258,14 +262,17 @@ export default {
           })
           .then(function backToPositionAnimationEnd () {
             xMovement.value = rightBoundary.value
+            // don't know why if don't clear props, duration will be ignored
             gsap.set(streamContentBlockElement.value, { clearProps: true })
             streamContentBlockElement.value.style.transform = `translateX(${xMovement.value}px)`
           })
+      // if drag time too long, then ignore
       } else if (touchDuration.value <= 500) {
         const velocity = (touchEndPoint.value - touchStartPoint.value) / (touchDuration.value / 100)
 
         let addValue = xMovement.value + velocity
-        if (addValue > 0) {
+        // prevent inertia cross boundary
+        if (addValue > leftBoundary.value) {
           addValue = 0
         } else if (addValue < rightBoundary.value) {
           addValue = rightBoundary.value
@@ -278,6 +285,7 @@ export default {
           })
           .then(function inertiaAnimationEnd () {
             xMovement.value = addValue
+            // don't know why if don't clear props, duration will be ignored
             gsap.set(streamContentBlockElement.value, { clearProps: true })
             streamContentBlockElement.value.style.transform = `translateX(${xMovement.value}px)`
           })
