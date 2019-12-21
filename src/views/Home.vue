@@ -34,7 +34,7 @@
           ref="streamContentBlockElement"
         >
           <home-stream-item class="home-content-block__item--first">
-            <p>嗨！53阿五！</p>
+            <p>嗨！54 阿五！</p>
           </home-stream-item>
 
           <home-stream-item class="home-content-block__item--second">
