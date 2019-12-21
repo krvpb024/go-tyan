@@ -8,6 +8,7 @@ export function useDragToMove () {
 
   return {
     // data
+    canDrag,
     xMovement,
     // methods
     dragStart,

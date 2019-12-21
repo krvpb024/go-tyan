@@ -2,7 +2,7 @@
   <div
     class="exam-mode-block-card"
     @mousemove="cardMoving"
-    @touchmove="cardMoving"
+    @touchmove.prevent="cardMoving"
     @mouseup="cardMoveEnd"
     @touchend="cardMoveEnd"
   >
@@ -102,7 +102,7 @@ export default {
       ]
     })
     const swipeCheckPoint = ref(null)
-    const accelarator = ref(1)
+    const accelerator = ref(1)
 
     const examMode = computed(function getExamMode () {
       return context.root.$route.name
@@ -243,7 +243,7 @@ export default {
       if (!props.cards[1]) gsap.set(cardSecondElement.value, { opacity: 0 })
       if (!props.cards[2]) gsap.set(cardThirdElement.value, { opacity: 0 })
       xMovement.value = 0
-      accelarator.value = 1
+      accelerator.value = 1
     }
 
     watch(
@@ -260,7 +260,7 @@ export default {
           .then(function swipeAnimationEnd () {
             gsap.set(cardElement.value, { clearProps: 'all' })
             xMovement.value = 0
-            accelarator.value = 1
+            accelerator.value = 1
             props.service.send('CARD_BACK_TO_POSITION_ANIMATION_END')
           })
       },
@@ -308,8 +308,8 @@ export default {
         movement < 0 &&
         xMovement.value <= 0
       ) {
-        xMovement.value = xMovement.value + movement * accelarator.value
-        accelarator.value = 0.5 - Math.abs(xMovement.value / swipeCheckPoint.value)
+        xMovement.value = xMovement.value + movement * accelerator.value
+        accelerator.value = 0.5 - Math.abs(xMovement.value / swipeCheckPoint.value)
       } else {
         xMovement.value += movement
       }

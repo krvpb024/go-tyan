@@ -17,8 +17,22 @@
         </span>
       </button>
 
-      <div class="home-header__stream">
-        <div class="home-stream__content-block">
+      <div
+        class="home-header__stream"
+        ref="streamElement"
+      >
+        <!-- chrome some times won't fire touchmove when listen on home-header__stream -->
+        <div
+          class="fix-touch"
+          @touchstart="streamMoveStart"
+          @touchmove.prevent="streamMoving"
+          @touchend="streamMoveEnd"
+        ></div>
+
+        <div
+          class="home-stream__content-block"
+          ref="streamContentBlockElement"
+        >
           <home-stream-item class="home-content-block__item--first">
             <p>嗨！53阿五！</p>
           </home-stream-item>
@@ -144,12 +158,94 @@
 </template>
 
 <script>
+import { ref, onMounted } from '@vue/composition-api'
+import { gsap } from 'gsap'
+import { useDragToMove } from '@/utils/useDragToMove.js'
 import homeCard from '@/components/homeCard.vue'
 import homeStreamItem from '@/components/homeStreamItem.vue'
 
 export default {
   name: 'Home',
   components: { homeCard, homeStreamItem },
+  setup () {
+    // composition
+    const { xMovement, dragStart, getDraggingMovement, dragEnd } = useDragToMove()
+
+    // element
+    const streamElement = ref(null)
+    const streamContentBlockElement = ref(null)
+
+    // data
+    const checkPoint = ref(0)
+    const rightBoundary = ref(0)
+    const accelerator = ref(1)
+
+    // effect
+    onMounted(function homeOnMounted () {
+      checkPoint.value = streamElement.value.offsetWidth / 4
+      rightBoundary.value = streamElement.value.offsetWidth - streamContentBlockElement.value.scrollWidth
+    })
+
+    return {
+      // element
+      streamElement,
+      streamContentBlockElement,
+      // data
+      xMovement,
+      checkPoint,
+      rightBoundary,
+      // methods
+      streamMoveStart,
+      streamMoving,
+      streamMoveEnd,
+    }
+
+    function streamMoveStart (e) {
+      dragStart(e)
+    }
+    function streamMoving (e) {
+      const movement = getDraggingMovement(e)
+      if (movement == 0) return
+
+      if (movement > 0 && xMovement.value > 0) {
+        xMovement.value = xMovement.value + movement * accelerator.value
+        accelerator.value = 0.5 - Math.abs(xMovement.value / checkPoint.value)
+      } else if ((movement < 0 && xMovement.value < rightBoundary.value)) {
+        xMovement.value = xMovement.value + movement * accelerator.value
+        const extra = rightBoundary.value - xMovement.value
+        accelerator.value = 0.5 - Math.abs(extra / checkPoint.value)
+      } else {
+        xMovement.value += movement
+      }
+
+      streamContentBlockElement.value.style.transform = `translateX(${xMovement.value}px)`
+    }
+    function streamMoveEnd () {
+      dragEnd()
+      if (xMovement.value > 0) {
+        gsap
+          .to(streamContentBlockElement.value, {
+            x: 0,
+            duration: 0.3,
+          })
+          .then(function backToPositionAnimationEnd () {
+            xMovement.value = 0
+            gsap.set(streamContentBlockElement.value, { clearProps: true })
+          })
+      } else if (xMovement.value < rightBoundary.value) {
+        gsap
+          .to(streamContentBlockElement.value, {
+            x: rightBoundary.value,
+            duration: 0.3,
+          })
+          .then(function backToPositionAnimationEnd () {
+            xMovement.value = rightBoundary.value
+            gsap.set(streamContentBlockElement.value, { clearProps: true })
+            streamContentBlockElement.value.style.transform = `translateX(${xMovement.value}px)`
+          })
+      }
+    }
+  },
 }
 </script>
 
@@ -241,22 +337,29 @@ export default {
 }
 
 .home-header__stream {
+  position: relative;
   grid-area: stream;
   overflow: hidden;
   padding: 10px 0;
+}
+
+.fix-touch {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  z-index: 100;
 }
 
 .home-stream__content-block {
   padding: 0 20px;
   height: 100%;
   display: grid;
-  grid-template-columns: 40px minmax(min-content, auto) 40px minmax(
-      min-content,
-      auto
-    ) 40px minmax(min-content, auto) 40px minmax(min-content, auto) 40px minmax(
-      min-content,
-      auto
-    );
+  grid-template-columns:
+    40px minmax(min-content, auto) 40px minmax(min-content, auto)
+    40px minmax(min-content, auto) 40px minmax(min-content, auto) 40px minmax(min-content, auto);
   grid-auto-flow: column dense;
   justify-content: start;
   align-content: flex-start;
@@ -264,6 +367,7 @@ export default {
   row-gap: 30px;
   grid-column-gap: 30px;
   column-gap: 30px;
+  z-index: 9;
 }
 
 .home-content-block__item--first {
