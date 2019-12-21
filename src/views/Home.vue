@@ -158,7 +158,7 @@
 </template>
 
 <script>
-import { ref, onMounted } from '@vue/composition-api'
+import { ref, onMounted, computed } from '@vue/composition-api'
 import { gsap } from 'gsap'
 import { useDragToMove } from '@/utils/useDragToMove.js'
 import homeCard from '@/components/homeCard.vue'
@@ -180,6 +180,14 @@ export default {
     const rightBoundary = ref(0)
     const accelerator = ref(1)
 
+    const touchStartPoint = ref(0)
+    const toucheStartTime = ref(0)
+    const touchEndPoint = ref(0)
+    const toucheEndTime = ref(0)
+    const touchDuration = computed(function getTouchDuration () {
+      return toucheEndTime.value - toucheStartTime.value
+    })
+
     // effect
     onMounted(function homeOnMounted () {
       checkPoint.value = streamElement.value.offsetWidth / 4
@@ -194,6 +202,9 @@ export default {
       xMovement,
       checkPoint,
       rightBoundary,
+      touchStartPoint,
+      touchEndPoint,
+      touchDuration,
       // methods
       streamMoveStart,
       streamMoving,
@@ -202,10 +213,14 @@ export default {
 
     function streamMoveStart (e) {
       dragStart(e)
+      touchStartPoint.value = e.touches[0].pageX
+      toucheStartTime.value = e.timeStamp
     }
+
     function streamMoving (e) {
       const movement = getDraggingMovement(e)
       if (movement == 0) return
+      touchEndPoint.value = e.touches[0].pageX
 
       if (movement > 0 && xMovement.value > 0) {
         xMovement.value = xMovement.value + movement * accelerator.value
@@ -220,8 +235,11 @@ export default {
 
       streamContentBlockElement.value.style.transform = `translateX(${xMovement.value}px)`
     }
-    function streamMoveEnd () {
+
+    function streamMoveEnd (e) {
       dragEnd()
+      toucheEndTime.value = e.timeStamp
+
       if (xMovement.value > 0) {
         gsap
           .to(streamContentBlockElement.value, {
@@ -240,6 +258,26 @@ export default {
           })
           .then(function backToPositionAnimationEnd () {
             xMovement.value = rightBoundary.value
+            gsap.set(streamContentBlockElement.value, { clearProps: true })
+            streamContentBlockElement.value.style.transform = `translateX(${xMovement.value}px)`
+          })
+      } else if (touchDuration.value <= 500) {
+        const velocity = (touchEndPoint.value - touchStartPoint.value) / (touchDuration.value / 100)
+
+        let addValue = xMovement.value + velocity
+        if (addValue > 0) {
+          addValue = 0
+        } else if (addValue < rightBoundary.value) {
+          addValue = rightBoundary.value
+        }
+
+        gsap
+          .to(streamContentBlockElement.value, {
+            x: addValue,
+            duration: 0.3,
+          })
+          .then(function inertiaAnimationEnd () {
+            xMovement.value = addValue
             gsap.set(streamContentBlockElement.value, { clearProps: true })
             streamContentBlockElement.value.style.transform = `translateX(${xMovement.value}px)`
           })
