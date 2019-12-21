@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" id="Group_320" width="50" height="44.743" data-name="Group 320" viewBox="0 0 50 44.743">
+    <defs>
+        <style>
+            .cls-1{fill:#ffc400}.cls-10,.cls-2,.cls-6{fill:#313131}.cls-2,.cls-8{font-size:19px;font-family:PingFangTC-Semibold,PingFang TC;font-weight:600}.cls-3{font-family:Roboto-Bold,Roboto;font-weight:700}.cls-4,.cls-5{fill:#e0e0e0}.cls-7{fill:#fff}.cls-8{fill:#d3d3d3}.cls-10,.cls-9{stroke:none}
+        </style>
+    </defs>
+    <g id="Group_11" data-name="Group 11" transform="translate(2 1.608)">
+        <path id="Path_9" d="M5 0h38a5.15 5.15 0 0 1 5 5.288v32.558a5.15 5.15 0 0 1-5 5.288H5a5.15 5.15 0 0 1-5-5.288V5.288A5.15 5.15 0 0 1 5 0z" class="cls-1" data-name="Path 9"/>
+        <text id="あ_a" class="cls-2" data-name="あ a" transform="translate(4.765 27.853)">
+            <tspan x="0" y="0">あ</tspan><tspan y="0" class="cls-3"> a</tspan>
+        </text>
+    </g>
+    <g id="Path_9-2" class="cls-4" data-name="Path 9">
+        <path d="M43 41.352H5c-2.206 0-4-1.881-4-4.193V5.192C1 2.881 2.794 1 5 1h38c2.206 0 4 1.88 4 4.192V37.16c0 2.312-1.794 4.193-4 4.193z" class="cls-9"/>
+        <path d="M5 2C3.346 2 2 3.432 2 5.192V37.16c0 1.76 1.346 3.193 3 3.193h38c1.654 0 3-1.432 3-3.193V5.192C46 3.432 44.654 2 43 2H5m0-2h38c2.761 0 5 2.325 5 5.192V37.16c0 2.868-2.239 5.193-5 5.193H5c-2.761 0-5-2.325-5-5.193V5.192C0 2.325 2.239 0 5 0z" class="cls-10"/>
+    </g>
+    <path id="Rectangle_670" d="M0 0h2v6H0z" class="cls-1" data-name="Rectangle 670" transform="translate(46.934 11.352)"/>
+    <path id="Rectangle_671" d="M0 0h2v6H0z" class="cls-5" data-name="Rectangle 671" transform="translate(44.934 11.352)"/>
+    <rect id="Rectangle_672" width="2" height="2" class="cls-6" data-name="Rectangle 672" rx="1" transform="translate(45.934 10.352)"/>
+    <rect id="Rectangle_673" width="2" height="2" class="cls-6" data-name="Rectangle 673" rx="1" transform="translate(45.934 16.352)"/>
+    <path id="Rectangle_674" d="M3 0h36a2 2 0 0 1 2 2v28a3 3 0 0 1-3 3H3a3 3 0 0 1-3-3V3a3 3 0 0 1 3-3z" class="cls-7" data-name="Rectangle 674" transform="translate(1.934 2.352)"/>
+    <g id="Group_297" data-name="Group 297" transform="translate(4.765 6.384)">
+        <text id="あ_a-2" class="cls-8" data-name="あ a" transform="translate(1 21)">
+            <tspan x="0" y="0">あ</tspan><tspan y="0" class="cls-3"> a</tspan>
+        </text>
+        <text id="あ_a-3" class="cls-2" data-name="あ a" transform="translate(0 20)">
+            <tspan x="0" y="0">あ</tspan><tspan y="0" class="cls-3"> a</tspan>
+        </text>
+    </g>
+</svg>

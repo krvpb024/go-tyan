@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="50" height="51" viewBox="0 0 50 51">
+    <defs>
+        <style>
+            .cls-1{fill:#ffc400}.cls-2,.cls-3{fill:#fff}.cls-4,.cls-6,.cls-8{fill:#313131}.cls-5{fill:#d3d3d3;font-size:32px;font-family:PingFangTC-Semibold,PingFang TC;font-weight:600}.cls-6{font-size:30px;font-family:PingFangTC-Regular,PingFang TC}.cls-7,.cls-8{stroke:none}
+        </style>
+    </defs>
+    <g id="Group_324" data-name="Group 324" transform="translate(-52 -500)">
+        <rect id="Rectangle_690" width="50" height="50" class="cls-1" data-name="Rectangle 690" rx="23" transform="translate(52 501)"/>
+        <g id="Path_109" class="cls-2" data-name="Path 109">
+            <path d="M24 47a22.925 22.925 0 0 1-16.263-6.737A22.925 22.925 0 0 1 1 24 22.925 22.925 0 0 1 7.737 7.737 22.925 22.925 0 0 1 24 1a22.925 22.925 0 0 1 16.263 6.737A22.925 22.925 0 0 1 47 24a22.925 22.925 0 0 1-6.737 16.263A22.925 22.925 0 0 1 24 47z" class="cls-7" transform="translate(52.066 500)"/>
+            <path d="M24 2A21.93 21.93 0 0 0 8.444 8.444 21.93 21.93 0 0 0 2 24a21.93 21.93 0 0 0 6.444 15.556A21.93 21.93 0 0 0 24 46a21.93 21.93 0 0 0 15.556-6.444A21.93 21.93 0 0 0 46 24a21.93 21.93 0 0 0-6.444-15.556A21.93 21.93 0 0 0 24 2m0-2c13.255 0 24 10.745 24 24S37.255 48 24 48 0 37.255 0 24 10.745 0 24 0z" class="cls-8" transform="translate(52.066 500)"/>
+        </g>
+        <path id="Rectangle_692" d="M0 0h2v5H0z" class="cls-1" data-name="Rectangle 692" transform="translate(99 523)"/>
+        <path id="Rectangle_691" d="M0 0h2v5H0z" class="cls-3" data-name="Rectangle 691" transform="translate(97 523)"/>
+        <rect id="Rectangle_693" width="2" height="2" class="cls-4" data-name="Rectangle 693" rx="1" transform="translate(98 522)"/>
+        <rect id="Rectangle_694" width="2" height="2" class="cls-4" data-name="Rectangle 694" rx="1" transform="translate(97.66 527)"/>
+        <g id="Group_299" data-name="Group 299" transform="translate(60.066 503)">
+            <text id="_" class="cls-5" data-name="？" transform="translate(-.066 34)">
+                <tspan x="0" y="0">？</tspan>
+            </text>
+            <text id="_2" class="cls-6" data-name="？" transform="translate(-.066 32)">
+                <tspan x="0" y="0">？</tspan>
+            </text>
+        </g>
+    </g>
+</svg>

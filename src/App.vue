@@ -62,6 +62,10 @@ p {
   margin: 0;
 }
 
+ul {
+  margin: 0;
+}
+
 .app-visual-hidden {
   clip-path: inset(100%);
   clip: rect(1px 1px 1px 1px); /* IE 6/7 */

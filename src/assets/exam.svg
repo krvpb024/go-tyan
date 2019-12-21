@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="46" height="49" viewBox="0 0 46 49">
+    <defs>
+        <style>
+            .cls-1{fill:#ffc400}.cls-2,.cls-5{fill:#fff}.cls-2,.cls-4,.cls-9{stroke:#313131}.cls-2,.cls-3,.cls-4,.cls-9{stroke-width:2px}.cls-11,.cls-3,.cls-4,.cls-9{fill:none}.cls-3{stroke:#d3d3d3}.cls-3,.cls-4,.cls-9{stroke-linecap:round}.cls-3,.cls-4{stroke-linejoin:round}.cls-6{fill:#313131}.cls-7{fill:#ffe65a}.cls-8{fill:#d3d3d3}.cls-10{stroke:none}
+        </style>
+    </defs>
+    <g id="Group_321" data-name="Group 321" transform="translate(.504)">
+        <rect id="Rectangle_23" width="44" height="49" class="cls-1" data-name="Rectangle 23" rx="5" transform="translate(1.496)"/>
+        <g id="Rectangle_675" class="cls-2" data-name="Rectangle 675" transform="translate(.496)">
+            <rect width="42" height="46" class="cls-10" rx="5"/>
+            <rect width="40" height="44" x="1" y="1" class="cls-11" rx="4"/>
+        </g>
+        <path id="Path_7" d="M4509.366-1358.473l4.4 4.6 7.685-9.67" class="cls-3" data-name="Path 7" transform="translate(-4485.918 1371.337)"/>
+        <path id="Path_108" d="M4509.366-1358.787l4.127 4.315 7.209-9.071" class="cls-4" data-name="Path 108" transform="translate(-4486.182 1370.337)"/>
+        <path id="Rectangle_677" d="M0 0h2v6H0z" class="cls-1" data-name="Rectangle 677" transform="translate(41.496 26)"/>
+        <path id="Rectangle_678" d="M0 0h2v6H0z" class="cls-5" data-name="Rectangle 678" transform="translate(39.496 26)"/>
+        <rect id="Rectangle_676" width="2" height="2" class="cls-6" data-name="Rectangle 676" rx="1" transform="translate(40.496 25)"/>
+        <rect id="Rectangle_679" width="2" height="2" class="cls-6" data-name="Rectangle 679" rx="1" transform="translate(40.496 31)"/>
+        <g id="Group_298" data-name="Group 298" transform="translate(-.066 5)">
+            <path id="Rectangle_683" d="M0 0h2v6H0z" class="cls-5" data-name="Rectangle 683" transform="translate(1.563 1)"/>
+            <path id="Rectangle_681" d="M0 0h2v6H0z" class="cls-7" data-name="Rectangle 681" transform="translate(-.438 1)"/>
+            <rect id="Rectangle_680" width="2" height="2" class="cls-6" data-name="Rectangle 680" rx="1" transform="translate(.563)"/>
+            <rect id="Rectangle_682" width="2" height="2" class="cls-6" data-name="Rectangle 682" rx="1" transform="translate(.563 6)"/>
+        </g>
+        <rect id="Rectangle_684" width="24" height="3" class="cls-8" data-name="Rectangle 684" rx="1.5" transform="translate(14.377 36.5)"/>
+        <rect id="Rectangle_689" width="3" height="3" class="cls-8" data-name="Rectangle 689" rx="1.5" transform="translate(7.095 36.5)"/>
+        <rect id="Rectangle_685" width="24" height="3" class="cls-8" data-name="Rectangle 685" rx="1.5" transform="translate(14.377 29.5)"/>
+        <rect id="Rectangle_688" width="3" height="3" class="cls-8" data-name="Rectangle 688" rx="1.5" transform="translate(7.095 29.5)"/>
+        <rect id="Rectangle_686" width="24" height="3" class="cls-8" data-name="Rectangle 686" rx="1.5" transform="translate(14.377 22.5)"/>
+        <rect id="Rectangle_687" width="3" height="3" class="cls-8" data-name="Rectangle 687" rx="1.5" transform="translate(7.095 22.5)"/>
+        <g id="Group_6" data-name="Group 6" transform="translate(7.211 35.042)">
+            <path id="Line_1" d="M0 0h21" class="cls-9" data-name="Line 1" transform="translate(7.5 1.5)"/>
+            <g id="Ellipse_5" class="cls-2" data-name="Ellipse 5">
+                <circle cx="1.5" cy="1.5" r="1.5" class="cls-10"/>
+                <circle cx="1.5" cy="1.5" r=".5" class="cls-11"/>
+            </g>
+        </g>
+        <g id="Group_7" data-name="Group 7" transform="translate(7.211 27.875)">
+            <path id="Line_1-2" d="M0 0h21" class="cls-9" data-name="Line 1" transform="translate(7.5 1.5)"/>
+            <g id="Ellipse_5-2" class="cls-2" data-name="Ellipse 5">
+                <circle cx="1.5" cy="1.5" r="1.5" class="cls-10"/>
+                <circle cx="1.5" cy="1.5" r=".5" class="cls-11"/>
+            </g>
+        </g>
+        <g id="Group_8" data-name="Group 8" transform="translate(7.211 20.708)">
+            <path id="Line_1-3" d="M0 0h21" class="cls-9" data-name="Line 1" transform="translate(7.5 1.5)"/>
+            <g id="Ellipse_5-3" class="cls-2" data-name="Ellipse 5">
+                <circle cx="1.5" cy="1.5" r="1.5" class="cls-10"/>
+                <circle cx="1.5" cy="1.5" r=".5" class="cls-11"/>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -234,10 +234,15 @@ export default {
 
 <style scoped>
 .exam-container__nav {
+  --column-gap: 25px;
+  --row-gap: 25px;
+
   display: grid;
   grid-auto-flow: row;
-  grid-column-gap: 25px;
-  grid-row-gap: 25px;
+  grid-column-gap: var(--column-gap);
+  column-gap: var(--column-gap);
+  grid-row-gap: var(--row-gap);
+  row-gap: var(--row-gap);
   grid-template-columns: repeat(auto-fill, 150px);
   justify-content: center;
   margin: 31px auto;

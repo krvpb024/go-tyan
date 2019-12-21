@@ -233,7 +233,7 @@ export default {
   position: relative;
   width: 100%;
   overflow: hidden;
-  padding-top: 15vh;
+  padding-top: 10vh;
   margin-bottom: 100vh;
 }
 
