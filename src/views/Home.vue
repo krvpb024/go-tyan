@@ -22,19 +22,14 @@
         ref="streamElement"
         tabindex="0"
         @keydown="streamMoveByKey"
+        @wheel="wheelStreamScroll"
+        @mousedown="streamMoveStart"
+        @mousemove.passive="streamMoving"
+        @mouseup="streamMoveEnd"
+        @touchstart="streamMoveStart"
+        @touchmove.passive="streamMoving"
+        @touchend="streamMoveEnd"
       >
-        <!-- chrome sometimes won't fire touchmove when listen on home-header__stream -->
-        <div
-          class="fix-touch"
-          @mousedown="streamMoveStart"
-          @mousemove="streamMoving"
-          @mouseup="streamMoveEnd"
-          @touchstart="streamMoveStart"
-          @touchmove.prevent="streamMoving"
-          @touchend="streamMoveEnd"
-          @wheel="wheelStreamScroll"
-        ></div>
-
         <div
           class="home-stream__content-block"
           ref="streamContentBlockElement"
