@@ -410,6 +410,7 @@ export default {
           .play()
           .then(function animationEnd () {
             drawingBoardTitleElement.value.classList.remove('app-visual-hidden')
+            drawingBoardTitleElement.value.focus()
           })
       }
     }
@@ -532,6 +533,11 @@ export default {
   height: 100%;
   top: 0;
   left: 0;
+}
+
+.drawing-board-content-block__title-button:focus {
+  outline: 4px solid var(--main-color);
+  outline-offset: 6px;
 }
 
 .drawing-board-title-button__title {

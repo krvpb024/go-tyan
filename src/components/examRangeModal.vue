@@ -92,6 +92,7 @@
       </top-bar>
 
       <div
+        tabindex="0"
         class="exam-range-modal-form__scroll-content"
         ref="examRangeModalScrollContentElement"
       >
@@ -118,6 +119,7 @@
               :id="`${groupName}-row-${rowIndex}-select-all`"
               :checked="current.context.selectedGojuon.includes(`${groupName}-${rowIndex}`)"
               @input="updateSelectedGojuon({ groupName, rowIndex }, $event)"
+              @focus="fo"
             >
             <checkbox-label :forId="`${groupName}-row-${rowIndex}-select-all`">
               <span
@@ -256,6 +258,7 @@ export default {
       // methods
       getRowString,
       updateSelectedGojuon,
+      fo,
     }
 
     function getRowString (row) {
@@ -275,6 +278,10 @@ export default {
           target: `${groupName}-${rowIndex}`,
         },
       })
+    }
+
+    function fo (e) {
+      console.log(e)
     }
   },
 }
@@ -339,6 +346,11 @@ export default {
   padding: 0 5px;
   display: none;
   opacity: 0;
+}
+
+.exam-range-modal-form__scroll-content:focus {
+  border: 4px solid var(--main-color);
+  outline: none;
 }
 
 .exam-range-modal-scroll-content__subtitle {

@@ -49,6 +49,7 @@
       >
         <button
           class="exam-mode-info-modal__modal-trigger-button"
+          ref="modalTriggerButtonElement"
           @click="current.matches('idle.infoModal.hide')
             ? service.send('SHOW_INFO_MODAL')
             : service.send('HIDE_INFO_MODAL')"
@@ -121,6 +122,7 @@ export default {
     const normalExamElement = ref(null)
     const enhancementExamElement = ref(null)
     const examModeInfoModalButtonElement = ref(null)
+    const modalTriggerButtonElement = ref(null)
 
     // data
     const localExamRange = JSON.parse(window.localStorage.getItem('examRange'))
@@ -172,6 +174,14 @@ export default {
       { lazy: true }
     )
 
+    watch(
+      () => current.value.matches('idle.infoModal.hideInfoModalAnimation'),
+      function hideInfoModalAnimationWatcher (value) {
+        if (value) modalTriggerButtonElement.value.focus()
+      },
+      { lazy: true }
+    )
+
     onMounted(function examModeOnMounted () {
       service.value.send('PAGE_MOUNTED')
       document.body.classList.add('app-prevent-scroll')
@@ -188,6 +198,7 @@ export default {
       normalExamElement,
       enhancementExamElement,
       examModeInfoModalButtonElement,
+      modalTriggerButtonElement,
       // data
       service,
       current,
@@ -237,8 +248,8 @@ export default {
 }
 
 .exam-mode-info-modal__modal-trigger-button:focus {
-  border: var(--focus-border);
-  outline: none;
+  outline: 4px solid var(--main-color);
+  outline-offset: 4px;
 }
 
 .exam-mode-content__main-block {

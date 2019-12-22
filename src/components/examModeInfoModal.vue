@@ -12,6 +12,7 @@
     >
       <button
         class="exam-mode-info-modal-content-block__close-button"
+        ref="closeButtonElement"
         @click="service.send('HIDE_INFO_MODAL')"
       >
         <svg
@@ -110,8 +111,9 @@
 </template>
 
 <script>
-import { ref, watch } from '@vue/composition-api'
+import { ref, watch, onMounted } from '@vue/composition-api'
 import { gsap } from 'gsap'
+import { useModalNavigation } from '@/utils/useModalNavigation'
 
 export default {
   name: 'examModeInfoModal',
@@ -133,9 +135,14 @@ export default {
     const examModeInfoModalContainerElement = ref(null)
     const examModeInfoModalBackgroundElement = ref(null)
     const examModeInfoModalElement = ref(null)
+    const closeButtonElement = ref(null)
 
     // data
     const examModeInfoModalAnimationTimeline = ref(null)
+    const modalFocusables = ref(null)
+
+    // composition
+    useModalNavigation(modalFocusables)
 
     // effect
     watch(
@@ -158,6 +165,7 @@ export default {
         showInfoModalAnimation()
           .then(function showAnimationEnd () {
             props.service.send('SHOW_INFO_MODAL_ANIMATION_END')
+            closeButtonElement.value.focus()
           })
 
         function showInfoModalAnimation () {
@@ -206,11 +214,17 @@ export default {
       }
     )
 
+    onMounted(function examModeInfoModalOnMounted () {
+      modalFocusables.value = examModeInfoModalContainerElement.value.querySelectorAll('button')
+    })
+
     return {
       // element
       examModeInfoModalContainerElement,
       examModeInfoModalElement,
       examModeInfoModalBackgroundElement,
+      closeButtonElement,
+      modalFocusables,
     }
   },
 }
@@ -260,8 +274,7 @@ export default {
 }
 
 .exam-mode-info-modal-content-block__close-button:focus {
-  border: var(--focus-border);
-  border-radius: 4px;
+  border: 4px solid var(--main-color);
   outline: none;
 }
 
