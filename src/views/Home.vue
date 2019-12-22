@@ -27,6 +27,7 @@
           @touchstart="streamMoveStart"
           @touchmove.prevent="streamMoving"
           @touchend="streamMoveEnd"
+          @wheel="wheelStreamScroll"
         ></div>
 
         <div
@@ -212,6 +213,7 @@ export default {
       streamMoveStart,
       streamMoving,
       streamMoveEnd,
+      wheelStreamScroll,
     }
 
     function streamMoveStart (e) {
@@ -268,7 +270,7 @@ export default {
             gsap.set(streamContentBlockElement.value, { clearProps: true })
             streamContentBlockElement.value.style.transform = `translateX(${xMovement.value}px)`
           })
-      // if drag time too long, then ignore
+        // if drag time too long, then ignore
       } else if (touchDuration.value <= 500) {
         velocity.value = (touchEndPoint.value - touchStartPoint.value) / 8
         inertiaFrame()
@@ -289,6 +291,26 @@ export default {
         velocity.value *= friction.value
         streamContentBlockElement.value.style.transform = `translateX(${xMovement.value}px)`
       }
+    }
+
+    function wheelStreamScroll (e) {
+      if ((e.deltaY > 0 && rightBoundary.value < xMovement.value) ||
+        (e.deltaY < 0 && xMovement.value < leftBoundary.value)
+      ) {
+        e.preventDefault()
+      }
+
+      const movement = (e.deltaY * -1) * 10
+
+      let resultValue = xMovement.value + movement
+      if (resultValue > leftBoundary.value) {
+        resultValue = 0
+      } else if (resultValue < rightBoundary.value) {
+        resultValue = rightBoundary.value
+      }
+      xMovement.value = resultValue
+
+      streamContentBlockElement.value.style.transform = `translateX(${xMovement.value}px)`
     }
   },
 }
