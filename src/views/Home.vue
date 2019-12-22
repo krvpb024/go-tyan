@@ -20,6 +20,8 @@
       <div
         class="home-header__stream"
         ref="streamElement"
+        tabindex="0"
+        @keydown="streamMoveByKey"
       >
         <!-- chrome sometimes won't fire touchmove when listen on home-header__stream -->
         <div
@@ -217,6 +219,7 @@ export default {
       streamMoving,
       streamMoveEnd,
       wheelStreamScroll,
+      streamMoveByKey,
     }
 
     function streamMoveStart (e) {
@@ -280,7 +283,10 @@ export default {
       }
 
       function inertiaFrame () {
-        if (rightBoundary.value < xMovement.value && xMovement.value < leftBoundary.value) {
+        if (
+          rightBoundary.value < xMovement.value &&
+          xMovement.value < leftBoundary.value
+        ) {
           requestAnimationFrame(inertiaFrame)
         }
 
@@ -292,8 +298,8 @@ export default {
         }
         const friction = 0.96
         xMovement.value = resultValue
-        velocity.value *= friction
         streamContentBlockElement.value.style.transform = `translateX(${xMovement.value}px)`
+        velocity.value *= friction
       }
     }
 
@@ -305,16 +311,43 @@ export default {
       }
 
       const movement = (e.deltaY * -1) * 10
+      const resultValue = getResultMovementBetweenBoundary(movement)
+      xMovement.value = resultValue
+      streamContentBlockElement.value.style.transform = `translateX(${xMovement.value}px)`
+    }
 
-      let resultValue = xMovement.value + movement
+    function streamMoveByKey (e) {
+      if (!['ArrowRight', 'ArrowLeft'].includes(e.key)) return
+
+      let resultValue
+      const moveStep = 15
+
+      switch (e.key) {
+        case 'ArrowRight':
+          e.preventDefault()
+          resultValue = getResultMovementBetweenBoundary(moveStep)
+          break
+        case 'ArrowLeft':
+          e.preventDefault()
+          resultValue = getResultMovementBetweenBoundary(moveStep * -1)
+          break
+        default:
+          break
+      }
+      xMovement.value = resultValue
+      streamContentBlockElement.value.style.transform = `translateX(${xMovement.value}px)`
+    }
+
+    function getResultMovementBetweenBoundary (addValue) {
+      let resultValue = xMovement.value + addValue
+
       if (resultValue > leftBoundary.value) {
         resultValue = 0
       } else if (resultValue < rightBoundary.value) {
         resultValue = rightBoundary.value
       }
-      xMovement.value = resultValue
 
-      streamContentBlockElement.value.style.transform = `translateX(${xMovement.value}px)`
+      return resultValue
     }
   },
 }
@@ -412,6 +445,11 @@ export default {
   grid-area: stream;
   overflow: hidden;
   padding: 10px 0;
+}
+
+.home-header__stream:focus {
+  outline: 4px solid var(--main-color);
+  outline-offset: 6px;
 }
 
 .fix-touch {
