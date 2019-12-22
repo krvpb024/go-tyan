@@ -169,7 +169,7 @@ export default {
   components: { homeCard, homeStreamItem },
   setup () {
     // composition
-    const { xMovement, dragStart, getDraggingMovement, dragEnd } = useDragToMove()
+    const { xMovement, canDrag, dragStart, getDraggingMovement, dragEnd } = useDragToMove()
 
     // element
     const streamElement = ref(null)
@@ -221,8 +221,8 @@ export default {
     }
 
     function streamMoving (e) {
+      if (!canDrag.value) return
       const movement = getDraggingMovement(e)
-      if (movement == 0) return
       touchEndPoint.value = e.touches[0].pageX
 
       if (movement > 0 && xMovement.value > leftBoundary.value) {

@@ -80,7 +80,7 @@ export default {
   },
   setup (props, context) {
     // composition
-    const { xMovement, dragStart, getDraggingMovement, dragEnd } = useDragToMove()
+    const { xMovement, canDrag, dragStart, getDraggingMovement, dragEnd } = useDragToMove()
     // element
     const cardElement = ref(null)
     const cardQuestionElement = ref(null)
@@ -172,6 +172,7 @@ export default {
         props.current.matches('idle.exam.enhancementExam.answerShowed.cardSwipeRightAnimation'),
       function cardSwipeRightAnimationWatcher (value) {
         if (!value) return
+        dragEnd()
         animationTimelineSwipe('right')
           .restart()
           .then(clearAnimationPropsAndSendEvent)
@@ -184,6 +185,7 @@ export default {
         props.current.matches('idle.exam.enhancementExam.answerShowed.cardSwipeLeftAnimation'),
       function cardSwipeLeftAnimationWatcher (value) {
         if (!value) return
+        dragEnd()
         animationTimelineSwipe('left')
           .restart()
           .then(clearAnimationPropsAndSendEvent)
@@ -251,6 +253,7 @@ export default {
         props.current.matches('idle.exam.enhancementExam.answerShowed.cardBackToPositionAnimation'),
       function cardBackToPositionAnimationWatcher (value) {
         if (!value) return
+        dragEnd()
         gsap
           .to(cardElement.value, {
             x: 0,
@@ -299,9 +302,16 @@ export default {
     }
 
     function cardMoving (e) {
-      props.service.send('CARD_MOVE')
+      if (!canDrag.value) return
+      if (
+        (props.current.matches('idle.exam.normalExam') && !props.current.matches('idle.exam.normalExam.answerShowed.moved')) ||
+        (props.current.matches('idle.exam.enhancementExam') && !props.current.matches('idle.exam.enhancementExam.answerShowed.moved'))
+      ) {
+        console.log('sending')
+        props.service.send('CARD_MOVE')
+      }
+
       const movement = getDraggingMovement(e)
-      if (movement == 0) return
 
       if (
         props.current.matches('idle.exam.enhancementExam') &&
