@@ -1,5 +1,10 @@
 <template>
-  <div class="exam-mode-info-modal" ref="examModeInfoModalContainerElement">
+  <div
+    class="exam-mode-info-modal"
+    ref="examModeInfoModalContainerElement"
+    tabindex="-1"
+    @keydown.esc="service.send('HIDE_INFO_MODAL')"
+  >
     <div
       class="exam-mode-info-modal__background"
       ref="examModeInfoModalBackgroundElement"
@@ -9,10 +14,14 @@
     <section
       class="exam-mode-info-modal__content-block"
       ref="examModeInfoModalElement"
+      role="dialog"
+      aria-labelledby="exam-mode-info-modal-title-block__title"
+      aria-modal="true"
     >
       <button
         class="exam-mode-info-modal-content-block__close-button"
         ref="closeButtonElement"
+        aria-labelledby="info-modal-close-icon-title"
         @click="service.send('HIDE_INFO_MODAL')"
       >
         <svg
@@ -20,7 +29,10 @@
           width="14.729"
           height="14.727"
           viewBox="0 0 14.729 14.727"
+          aria-labelledby="info-modal-close-icon-title"
+          role="img"
         >
+          <title id="info-modal-close-icon-title">關閉</title>
           <g
             id="Group_101"
             data-name="Group 101"
@@ -38,7 +50,10 @@
       </button>
 
       <div class="exam-mode-info-modal-content-block__title-block">
-        <h2 class="exam-mode-info-modal-title-block__title">操作方式</h2>
+        <h2
+          id="exam-mode-info-modal-title-block__title"
+          class="exam-mode-info-modal-title-block__title"
+        >操作方式</h2>
       </div>
 
       <div class="exam-mode-info-modal-content-block__description-block">

@@ -1,7 +1,7 @@
 <template>
   <section class="exam-card-root">
     <div class="exam-card-root__container">
-      <p class="exam-card-container__description">
+      <p class="exam-card-container__description" aria-hidden="true">
         <slot name="transformFrom"></slot>
 
         <svg

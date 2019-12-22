@@ -6,6 +6,12 @@
     @mouseup="cardMoveEnd"
     @touchend="cardMoveEnd"
   >
+    <h2 class="app-visual-hidden">
+      {{ examType == 'normalExam'
+          ? '測驗'
+          : '補強測驗' }}
+    </h2>
+
     <div
       class="exam-mode-block-card__card
         exam-mode-block-card__card--first"
@@ -18,12 +24,20 @@
       <span
         class="exam-mode-block-card__question"
         ref="cardQuestionElement"
+        :aria-hidden="
+          ['romanizationToHiragana', 'romanizationToKatakana'].includes(examMode)
+            ? false
+            : 'true'
+        "
+        lang="ja-JP"
       >
         {{ question }}
       </span>
       <span
+        id="exam-mode-block-card__answer"
         class="exam-mode-block-card__answer"
         ref="cardAnswerElement"
+        lang="ja-JP"
       >
         {{ answer }}
       </span>
@@ -75,6 +89,14 @@ export default {
     },
     current: {
       type: Object,
+      required: true,
+    },
+    examType: {
+      type: String,
+      required: true,
+    },
+    isCurrentExamMode: {
+      type: Boolean,
       required: true,
     },
   },

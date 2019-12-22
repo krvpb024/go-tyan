@@ -1,5 +1,11 @@
 <template>
-  <div v-if="current.matches(showState)" class="tooltips" ref="tooltipsElement">
+  <div
+    v-if="current.matches(showState)"
+    class="tooltips"
+    aria-live="assertive"
+    role="alert"
+    ref="tooltipsElement"
+  >
     <span class="tooltips__text">
       <slot></slot>
     </span>
@@ -10,7 +16,7 @@
         ...anglePosition,
         transform: `translate(${angleTransformX}, ${angleTransformY}) rotate(45deg)`
       }"
-     ></div>
+    ></div>
   </div>
 </template>
 

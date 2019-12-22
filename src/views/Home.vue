@@ -11,13 +11,13 @@
         <span class="home-title__span">阿五</span>
       </h1>
 
-      <button class="home-header__install-button">
+      <button class="home-header__install-button" aria-label="安裝至手機桌面">
         <span class="home-install-button__content">
           + 桌面
         </span>
       </button>
 
-      <div
+      <section
         class="home-header__stream"
         ref="streamElement"
         tabindex="0"
@@ -30,12 +30,14 @@
         @touchmove.passive="streamMoving"
         @touchend="streamMoveEnd"
       >
+        <h2 class="app-visual-hidden">最新消息</h2>
+
         <div
           class="home-stream__content-block"
           ref="streamContentBlockElement"
         >
           <home-stream-item class="home-content-block__item--first">
-            <p>嗨！54 阿五！</p>
+            <p>嗨！我是阿五！</p>
           </home-stream-item>
 
           <home-stream-item class="home-content-block__item--second">
@@ -46,7 +48,7 @@
             <p>2020 年 1 月 11 日，一定要回家投票喔！</p>
           </home-stream-item>
         </div>
-      </div>
+      </section>
     </header>
 
     <nav class="home__nav">
@@ -63,7 +65,10 @@
               width="50"
               height="44.743"
               viewBox="0 0 50 44.743"
+              aria-labelledby="table-icon-title"
+              aria-hidden="true"
             >
+              <title id="table-icon-title">五十音表格</title>
               <g
                 id="Group_11"
                 data-name="Group 11"
@@ -224,7 +229,10 @@
               width="45"
               height="49"
               viewBox="0 0 45 49"
+              aria-labelledby="exam-icon-title"
+              aria-hidden="true"
             >
+              <title id="exam-icon-title">五十音測驗</title>
               <g
                 id="Group_321"
                 data-name="Group 321"
@@ -548,7 +556,10 @@
               width="50"
               height="51"
               viewBox="0 0 50 51"
+              aria-labelledby="about-icon-title"
+              aria-hidden="true"
             >
+              <title id="about-icon-title">關於</title>
               <g
                 id="Group_324"
                 data-name="Group 324"
@@ -673,7 +684,10 @@
               width="53"
               height="39"
               viewBox="0 0 53 39"
+              aria-labelledby="coffee-icon-title"
+              aria-hidden="true"
             >
+              <title id="coffee-icon-title">Buy me a coffee</title>
               <g
                 id="Group_323"
                 data-name="Group 323"

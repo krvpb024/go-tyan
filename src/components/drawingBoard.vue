@@ -1,10 +1,8 @@
 <template>
-  <div
-    role="dialog"
-    aria-labelledby="drawing-board-title"
-    aria-modal="true"
+  <section
     class="drawing-board"
     ref="drawingBoardElement"
+    aria-labelledby="drawing-board-title"
   >
     <div
       ref="contentBlockElement"
@@ -15,6 +13,11 @@
       <button
         class="drawing-board-content-block__title-button fake-drawing-board-button"
         ref="drawingBoardTitleElement"
+        :aria-expanded="
+          current.matches(openState)
+            ? 'true'
+            : 'false'
+        "
         @click="service.send(
           service.id == 'examMode'
             ? 'OPEN_DRAWING_BOARD'
@@ -49,7 +52,6 @@
         class="drawing-board-content-block__tool-block"
         ref="activeShowElement"
       >
-
         <div
           class="drawing-board-second-column__canvas-container"
           ref="canvasContainerElement"
@@ -59,8 +61,6 @@
             class="drawing-board-canvas-container__canvas-element"
             id="canvas"
             ref="canvasElement"
-            :width="width"
-            :height="height"
             @mousedown="startDrawing"
             @touchstart.prevent="startDrawing"
             @mouseup="stopDrawing"
@@ -231,7 +231,7 @@
         </button>
       </div>
     </div>
-  </div>
+  </section>
 </template>
 
 <script>
@@ -252,14 +252,6 @@ export default {
       type: Object,
       required: true,
     },
-    width: {
-      type: Number,
-      default: 200,
-    },
-    height: {
-      type: Number,
-      default: 100,
-    },
     activeGroupName: {
       type: String,
       default: null,
@@ -275,6 +267,26 @@ export default {
     opacity: {
       type: String,
       default: '1',
+    },
+    openState: {
+      type: String,
+      required: true,
+    },
+    clearCanvasState: {
+      type: String,
+      required: true,
+    },
+    clearCanvasBeforeCloseState: {
+      type: String,
+      required: true,
+    },
+    openAnimationState: {
+      type: String,
+      required: true,
+    },
+    closeAnimationState: {
+      type: String,
+      required: true,
     },
   },
   setup (props, context) {
@@ -302,118 +314,98 @@ export default {
 
     // effect
     watch(
-      () => props.current.matches('drawingBoard.show.clearCanvas') ||
-        props.current.matches('drawingBoard.clearCanvasBeforeAnimation'),
-      clearCanvas,
+      () => props.current.matches(props.clearCanvasState) ||
+        props.current.matches(props.clearCanvasBeforeCloseState),
+      function clearCanvas (value) {
+        if (value) {
+          ctx.value.clearRect(0, 0, canvasElement.value.width, canvasElement.value.height)
+          props.service.send('CANVAS_CLREAR_FINISHED')
+        }
+      },
       { lazy: true }
     )
-    watch(
-      () => props.current.matches('idle.drawingBoard.show.clearCanvas') ||
-        props.current.matches('idle.drawingBoard.clearCanvasBeforeAnimation'),
-      clearCanvas,
-      { lazy: true }
-    )
-    function clearCanvas (value) {
-      if (value) {
-        ctx.value.clearRect(0, 0, canvasElement.value.width, canvasElement.value.height)
-        props.service.send('CANVAS_CLREAR_FINISHED')
-      }
-    }
 
     watch(
-      () => props.current.matches('drawingBoard.openDrawingBoardAnimation'),
-      startOpenDrawingBoardAnimation,
-      { lazy: true }
-    )
-    watch(
-      () => props.current.matches('idle.drawingBoard.openDrawingBoardAnimation'),
-      startOpenDrawingBoardAnimation,
-      { lazy: true }
-    )
-    function startOpenDrawingBoardAnimation (value) {
-      if (!value) return
-      openModalAnimation().then(function animationEnd () {
-        canvasInitialSettings()
-        autoFoucusButtonElement.value && autoFoucusButtonElement.value.focus()
-        props.service.send('OPEN_DRAWING_BOARD_ANIMATION_END')
-      })
+      () => props.current.matches(props.openAnimationState),
+      function startOpenDrawingBoardAnimation (value) {
+        if (!value) return
+        openModalAnimation().then(function animationEnd () {
+          canvasInitialSettings()
+          autoFoucusButtonElement.value && autoFoucusButtonElement.value.focus()
+          props.service.send('OPEN_DRAWING_BOARD_ANIMATION_END')
+        })
 
-      function openModalAnimation () {
-        drawingBoardTitleElement.value.classList.add('app-visual-hidden')
+        function openModalAnimation () {
+          drawingBoardTitleElement.value.classList.add('app-visual-hidden')
 
-        containerElementAnimationTimeline.value = gsap.timeline({ paused: true })
-        return containerElementAnimationTimeline.value
-          .to(drawingBoardElement.value, {
-            height: '40vh',
-            width: '100%',
-            duration: 0.3,
-            ease: 'circ.inOut',
-          })
-          .to(activeShowElement.value, {
-            display: 'grid',
-            position: 'relative',
-          }, '-=0.3')
-          .to(activeShowElement.value, {
-            opacity: 1,
-            duration: 0.1,
-          }, '-=0.3')
-          .play()
-      }
+          containerElementAnimationTimeline.value = gsap.timeline({ paused: true })
+          return containerElementAnimationTimeline.value
+            .to(drawingBoardElement.value, {
+              height: '40vh',
+              width: '100%',
+              duration: 0.3,
+              ease: 'circ.inOut',
+            })
+            .to(activeShowElement.value, {
+              display: 'grid',
+              position: 'relative',
+            }, '-=0.3')
+            .to(activeShowElement.value, {
+              opacity: 1,
+              duration: 0.1,
+            }, '-=0.3')
+            .play()
+        }
 
-      function canvasInitialSettings () {
+        function canvasInitialSettings () {
         // this api will round floating points, it will cause canvas keep growing
-        canvasElement.value.width = canvasContainerElement.value.clientWidth - 10
-        canvasElement.value.height = canvasContainerElement.value.clientHeight - 10
-        ctx.value = canvasElement.value.getContext('2d')
-        ctx.value.lineWidth = 10
-        ctx.value.strokeStyle = '#313131'
-        ctx.value.lineJoin = 'round'
-        ctx.value.lineCap = 'round'
-      }
-    }
-
-    watch(
-      () => props.current.matches('drawingBoard.closeDrawingBoardAnimation'),
-      startCloseDrawingBoardAnimation,
-      { lazy: true }
-    )
-    watch(
-      () => props.current.matches('idle.drawingBoard.closeDrawingBoardAnimation'),
-      startCloseDrawingBoardAnimation,
+          canvasElement.value.width = canvasContainerElement.value.clientWidth - 10
+          canvasElement.value.height = canvasContainerElement.value.clientHeight - 10
+          ctx.value = canvasElement.value.getContext('2d')
+          ctx.value.lineWidth = 10
+          ctx.value.strokeStyle = '#313131'
+          ctx.value.lineJoin = 'round'
+          ctx.value.lineCap = 'round'
+        }
+      },
       { lazy: true }
     )
 
-    function startCloseDrawingBoardAnimation (value) {
-      if (!value) return
-      closeModalAnimation().then(function animationEnd () {
-        props.service.send('CLOSE_DRAWING_BOARD_ANIMATION_END')
-      })
+    watch(
+      () => props.current.matches(props.closeAnimationState),
+      function startCloseDrawingBoardAnimation (value) {
+        if (!value) return
+        closeModalAnimation().then(function animationEnd () {
+          props.service.send('CLOSE_DRAWING_BOARD_ANIMATION_END')
+        })
 
-      function closeModalAnimation () {
-        containerElementAnimationTimeline.value = gsap.timeline({ paused: true })
+        function closeModalAnimation () {
+          containerElementAnimationTimeline.value = gsap.timeline({ paused: true })
 
-        return containerElementAnimationTimeline.value
-          .to(drawingBoardElement.value, {
-            height: '50px',
-            width: '100px',
-            duration: 0.3,
-            ease: 'circ.inOut',
-          })
-          .to(activeShowElement.value, {
-            opacity: 0,
-            duration: 0.1,
-          }, '-=0.3')
-          .to(activeShowElement.value, {
-            display: 'none',
-            duration: 0,
-          }, '-=0.3')
-          .play()
-          .then(function animationEnd () {
-            drawingBoardTitleElement.value.classList.remove('app-visual-hidden')
-            drawingBoardTitleElement.value.focus()
-          })
-      }
-    }
+          return containerElementAnimationTimeline.value
+            .to(drawingBoardElement.value, {
+              height: '50px',
+              width: '100px',
+              duration: 0.3,
+              ease: 'circ.inOut',
+            })
+            .to(activeShowElement.value, {
+              opacity: 0,
+              duration: 0.1,
+            }, '-=0.3')
+            .to(activeShowElement.value, {
+              display: 'none',
+              duration: 0,
+            }, '-=0.3')
+            .play()
+            .then(function animationEnd () {
+              drawingBoardTitleElement.value.classList.remove('app-visual-hidden')
+              drawingBoardTitleElement.value.focus()
+            })
+        }
+      },
+      { lazy: true }
+    )
 
     onMounted(function tableDrawingBoardOnMounted () {
       modalButtonsElement.value = contentBlockElement.value.querySelectorAll(

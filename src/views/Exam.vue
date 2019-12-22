@@ -47,6 +47,7 @@
           <button
             @click="service.send('SHOW_EXAM_RANGE_MODAL')"
             ref="settingButtonElement"
+            aria-haspopup="true"
           >設定</button>
 
           <exam-range-modal

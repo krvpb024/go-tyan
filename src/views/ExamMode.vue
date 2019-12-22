@@ -53,6 +53,8 @@
           @click="current.matches('idle.infoModal.hide')
             ? service.send('SHOW_INFO_MODAL')
             : service.send('HIDE_INFO_MODAL')"
+          aria-labelledby="exam-mode-info-modal-title-block__title"
+          aria-haspopup="true"
         >
           ！
         </button>
@@ -99,6 +101,11 @@
         opacity="0.8"
         :service="service"
         :current="current"
+        openState="idle.drawingBoard.show"
+        clearCanvasState="idle.drawingBoard.show.clearCanvas"
+        clearCanvasBeforeCloseState="idle.drawingBoard.clearCanvasBeforeAnimation"
+        openAnimationState="idle.drawingBoard.openDrawingBoardAnimation"
+        closeAnimationState="idle.drawingBoard.closeDrawingBoardAnimation"
       ></drawing-board>
     </div>
   </section>
@@ -265,7 +272,8 @@ export default {
   width: 100%;
 }
 
-.exam-mode-main-block__normal-exam:focus, .exam-mode-main-block__enhancement-exam:focus {
+.exam-mode-main-block__normal-exam:focus,
+.exam-mode-main-block__enhancement-exam:focus {
   outline: 4px solid var(--main-color);
   outline-offset: 8px;
 }

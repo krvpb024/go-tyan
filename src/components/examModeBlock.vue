@@ -6,6 +6,7 @@
         :current="current"
         :cards="cards"
         :examType="examType"
+        :isCurrentExamMode="Boolean(current.matches(`idle.exam.${examType}`))"
       ></exam-mode-block-card>
     </div>
 
@@ -15,8 +16,6 @@
         :max="progressMax"
       ></exam-mode-block-progress>
     </div>
-
-    <p class="exam-mode-block__status">{{ progressValue }} / {{ progressMax }}</p>
   </section>
 </template>
 
@@ -112,11 +111,5 @@ export default {
   width: calc(var(--card-width) + var(--card-second-transform));
   min-width: calc(var(--card-min-size) + var(--card-second-transform));
   max-width: calc(var(--card-max-size) + var(--card-second-transform));
-}
-
-.exam-mode-block__status {
-  font-size: 1.25rem;
-  font-weight: bold;
-  margin: 5px;
 }
 </style>

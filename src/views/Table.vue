@@ -51,6 +51,8 @@
     </div>
 
     <main>
+      <h1 class="app-visual-hidden">表格</h1>
+
       <section
         v-for="([groupName, rows]) in Object.entries(current.context.gojuon)"
         :key="groupName"
@@ -184,16 +186,20 @@
           </tr>
         </table>
       </section>
-
+    </main>
       <drawing-board
         :service="service"
         :current="current"
         :activeGroupName="current.context.activeGroupName"
         :activeRow="current.context.activeRow"
         :activeColumn="current.context.activeColumn"
+        openState="drawingBoard.show"
+        clearCanvasState="drawingBoard.show.clearCanvas"
+        clearCanvasBeforeCloseState="drawingBoard.clearCanvasBeforeAnimation"
+        openAnimationState="drawingBoard.openDrawingBoardAnimation"
+        closeAnimationState="drawingBoard.closeDrawingBoardAnimation"
       ></drawing-board>
 
-    </main>
   </section>
 </template>
 

@@ -5,6 +5,8 @@
     role="dialog"
     aria-modal="true"
     ref="examRangeModalContainerElement"
+    tabindex="-1"
+    @keydown.esc="service.send('HIDE_EXAM_RANGE_MODAL')"
   >
     <div
       class="exam-range-modal__background"
@@ -22,6 +24,7 @@
         <template #leftContainer>
           <button
             type="button"
+            aria-labelledby="exam-range-modal-title"
             @click="service.send('HIDE_EXAM_RANGE_MODAL')"
           >
             <svg
@@ -29,7 +32,10 @@
               width="14.729"
               height="14.727"
               viewBox="0 0 16 16"
+              aria-labelledby="exam-range-modal-title"
+              role="img"
             >
+              <title id="exam-range-modal-title">關閉</title>
 
               <filter id="shadow">
                 <feDropShadow
@@ -95,9 +101,15 @@
         tabindex="0"
         class="exam-range-modal-form__scroll-content"
         ref="examRangeModalScrollContentElement"
+        aria-labelledby="exam-range-modal-scroll-content__subtitle"
       >
 
-        <h2 class="exam-range-modal-scroll-content__subtitle">設定測驗範圍</h2>
+        <h2
+          id="exam-range-modal-scroll-content__subtitle"
+          class="exam-range-modal-scroll-content__subtitle"
+        >
+          設定測驗範圍
+        </h2>
 
         <section
           class="exam-range-modal-scroll-content__group"
@@ -119,7 +131,6 @@
               :id="`${groupName}-row-${rowIndex}-select-all`"
               :checked="current.context.selectedGojuon.includes(`${groupName}-${rowIndex}`)"
               @input="updateSelectedGojuon({ groupName, rowIndex }, $event)"
-              @focus="fo"
             >
             <checkbox-label :forId="`${groupName}-row-${rowIndex}-select-all`">
               <span
@@ -258,7 +269,6 @@ export default {
       // methods
       getRowString,
       updateSelectedGojuon,
-      fo,
     }
 
     function getRowString (row) {
@@ -278,10 +288,6 @@ export default {
           target: `${groupName}-${rowIndex}`,
         },
       })
-    }
-
-    function fo (e) {
-      console.log(e)
     }
   },
 }

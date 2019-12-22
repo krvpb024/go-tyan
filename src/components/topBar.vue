@@ -1,5 +1,5 @@
 <template>
-  <div class="top-bar" :class="{ 'top-bar-border': withBorder }">
+  <header class="top-bar" :class="{ 'top-bar-border': withBorder }">
     <div class="left-container">
       <slot name="leftContainer"></slot>
     </div>
@@ -11,7 +11,7 @@
     <div class="right-container">
       <slot name="rightContainer"></slot>
     </div>
-  </div>
+  </header>
 </template>
 
 <script>
