@@ -185,6 +185,8 @@ export default {
     const toucheStartTime = ref(0)
     const touchEndPoint = ref(0)
     const toucheEndTime = ref(0)
+    const friction = ref(0.96)
+    const velocity = ref(0)
     const touchDuration = computed(function getTouchDuration () {
       return toucheEndTime.value - toucheStartTime.value
     })
@@ -268,27 +270,24 @@ export default {
           })
       // if drag time too long, then ignore
       } else if (touchDuration.value <= 500) {
-        const velocity = (touchEndPoint.value - touchStartPoint.value) / (touchDuration.value / 100)
+        velocity.value = (touchEndPoint.value - touchStartPoint.value) / 8
+        inertiaFrame()
+      }
 
-        let addValue = xMovement.value + velocity
-        // prevent inertia cross boundary
-        if (addValue > leftBoundary.value) {
-          addValue = 0
-        } else if (addValue < rightBoundary.value) {
-          addValue = rightBoundary.value
+      function inertiaFrame () {
+        if (rightBoundary.value < xMovement.value && xMovement.value < leftBoundary.value) {
+          requestAnimationFrame(inertiaFrame)
         }
 
-        gsap
-          .to(streamContentBlockElement.value, {
-            x: addValue,
-            duration: 0.3,
-          })
-          .then(function inertiaAnimationEnd () {
-            xMovement.value = addValue
-            // don't know why if don't clear props, duration will be ignored
-            gsap.set(streamContentBlockElement.value, { clearProps: true })
-            streamContentBlockElement.value.style.transform = `translateX(${xMovement.value}px)`
-          })
+        let resultValue = xMovement.value + velocity.value
+        if (resultValue > leftBoundary.value) {
+          resultValue = 0
+        } else if (resultValue < rightBoundary.value) {
+          resultValue = rightBoundary.value
+        }
+        xMovement.value = resultValue
+        velocity.value *= friction.value
+        streamContentBlockElement.value.style.transform = `translateX(${xMovement.value}px)`
       }
     }
   },
