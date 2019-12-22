@@ -48,15 +48,7 @@
           </home-stream-item>
 
           <home-stream-item class="home-content-block__item--third">
-            <p>詐騙集團走開！</p>
-          </home-stream-item>
-
-          <home-stream-item class="home-content-block__item--forth">
-            <p>小胖也走開！</p>
-          </home-stream-item>
-
-          <home-stream-item class="home-content-block__item--fifth">
-            <p>加入到桌面更方便使用喔！fifth</p>
+            <p>2020 年 1 月 11 日，一定要回家投票喔！</p>
           </home-stream-item>
         </div>
       </div>
