@@ -307,7 +307,6 @@ export default {
         (props.current.matches('idle.exam.normalExam') && !props.current.matches('idle.exam.normalExam.answerShowed.moved')) ||
         (props.current.matches('idle.exam.enhancementExam') && !props.current.matches('idle.exam.enhancementExam.answerShowed.moved'))
       ) {
-        console.log('sending')
         props.service.send('CARD_MOVE')
       }
 

@@ -18,6 +18,7 @@ export function useDragToMove () {
 
   function dragStart (e) {
     canDrag.value = true
+    // mousemove has movement property so only save lastTouch for touch event
     if (e.touches) lastTouchX.value = e.touches[0].pageX
   }
 

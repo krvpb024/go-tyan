@@ -24,6 +24,9 @@
         <!-- chrome sometimes won't fire touchmove when listen on home-header__stream -->
         <div
           class="fix-touch"
+          @mousedown="streamMoveStart"
+          @mousemove="streamMoving"
+          @mouseup="streamMoveEnd"
           @touchstart="streamMoveStart"
           @touchmove.prevent="streamMoving"
           @touchend="streamMoveEnd"
@@ -186,7 +189,7 @@ export default {
     const toucheStartTime = ref(0)
     const touchEndPoint = ref(0)
     const toucheEndTime = ref(0)
-    const friction = ref(0.96)
+
     const velocity = ref(0)
     const touchDuration = computed(function getTouchDuration () {
       return toucheEndTime.value - toucheStartTime.value
@@ -218,14 +221,14 @@ export default {
 
     function streamMoveStart (e) {
       dragStart(e)
-      touchStartPoint.value = e.touches[0].pageX
+      touchStartPoint.value = e.touches ? e.touches[0].pageX : e.x
       toucheStartTime.value = e.timeStamp
     }
 
     function streamMoving (e) {
       if (!canDrag.value) return
       const movement = getDraggingMovement(e)
-      touchEndPoint.value = e.touches[0].pageX
+      touchEndPoint.value = e.touches ? e.touches[0].pageX : e.x
 
       if (movement > 0 && xMovement.value > leftBoundary.value) {
         xMovement.value = xMovement.value + movement * accelerator.value
@@ -287,8 +290,9 @@ export default {
         } else if (resultValue < rightBoundary.value) {
           resultValue = rightBoundary.value
         }
+        const friction = 0.96
         xMovement.value = resultValue
-        velocity.value *= friction.value
+        velocity.value *= friction
         streamContentBlockElement.value.style.transform = `translateX(${xMovement.value}px)`
       }
     }
