@@ -66,7 +66,7 @@
         <div
           class="exam-mode-main-block__normal-exam"
           ref="normalExamElement"
-          tabindex="0"
+          :tabindex="current.matches('idle.exam.normalExam') ? 0 : -1"
           @keydown.down="service.send('SHOW_ANSWER')"
           @keydown.left="service.send('NEXT_CARD', { addToEnhancement: true })"
           @keydown.right="service.send('NEXT_CARD')"
@@ -81,7 +81,7 @@
         <div
           class="exam-mode-main-block__enhancement-exam"
           ref="enhancementExamElement"
-          tabindex="0"
+          :tabindex="current.matches('idle.exam.enhancementExam') ? 0 : -1"
           @keydown.down="service.send('SHOW_ANSWER')"
           @keydown.left="service.send('NEXT_CARD', { addToEnhancement: true })"
           @keydown.right="service.send('NEXT_CARD')"
