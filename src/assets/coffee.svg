@@ -1,40 +1,31 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="53" height="39" viewBox="0 0 53 39">
-    <defs>
-        <style>
-            .cls-1{fill:#ffc400}.cls-2{fill:#e0e0e0}.cls-2,.cls-3{stroke:#313131;stroke-width:2px}.cls-3,.cls-4{fill:#fff}.cls-5{fill:#ffe65a}.cls-10,.cls-6{fill:#313131}.cls-7{fill:#f5f5f5}.cls-8,.cls-9{fill:#d3d3d3}.cls-10,.cls-9{font-size:26px;font-family:Roboto-Medium,Roboto Medium;font-weight:500}.cls-11{stroke:none}.cls-12{fill:none}
-        </style>
-    </defs>
-    <g id="Group_323" data-name="Group 323" transform="translate(-61 -639)">
-        <g id="Group_303" data-name="Group 303" transform="translate(-13 43)">
-            <g id="Group_300" data-name="Group 300" transform="translate(77.366 597.244)">
-                <path id="Rectangle_697" d="M6 0h21a6 6 0 0 1 6 6v4a12 12 0 0 1-12 12H6a6 6 0 0 1-6-6V6a6 6 0 0 1 6-6z" class="cls-1" data-name="Rectangle 697" transform="translate(16.634 2.756)"/>
-                <path id="Rectangle_696" d="M6 0h30a6 6 0 0 1 6 6v10a21 21 0 0 1-21 21h-1A20 20 0 0 1 0 17V6a6 6 0 0 1 6-6z" class="cls-1" data-name="Rectangle 696" transform="translate(-1.366 .756)"/>
-            </g>
-            <g id="Group_301" data-name="Group 301" transform="translate(74.838 596)">
-                <g id="Rectangle_697-2" class="cls-2" data-name="Rectangle 697">
-                    <path d="M8 0h21a4 4 0 0 1 4 4v9a8 8 0 0 1-8 8H8a8 8 0 0 1-8-8V8a8 8 0 0 1 8-8z" class="cls-11" transform="translate(16.162 3)"/>
-                    <path d="M8 1h21a3 3 0 0 1 3 3v9a7 7 0 0 1-7 7H8a7 7 0 0 1-7-7V8a7 7 0 0 1 7-7z" class="cls-12" transform="translate(16.162 3)"/>
-                </g>
-                <g id="Rectangle_696-2" class="cls-3" data-name="Rectangle 696">
-                    <path d="M5.727 0h30.546A5.727 5.727 0 0 1 42 5.727V16a21 21 0 0 1-21 21A21 21 0 0 1 0 16V5.727A5.727 5.727 0 0 1 5.727 0z" class="cls-11" transform="translate(.162)"/>
-                    <path d="M5.762 1h30.476A4.762 4.762 0 0 1 41 5.762V16a20 20 0 0 1-20 20A20 20 0 0 1 1 16V5.762A4.762 4.762 0 0 1 5.762 1z" class="cls-12" transform="translate(.162)"/>
-                </g>
-            </g>
-            <path id="Rectangle_698" d="M0 0h2v6H0z" class="cls-4" data-name="Rectangle 698" transform="translate(76 607)"/>
-            <path id="Rectangle_699" d="M0 0h2v6H0z" class="cls-5" data-name="Rectangle 699" transform="translate(74 607)"/>
-            <rect id="Rectangle_700" width="2" height="2" class="cls-6" data-name="Rectangle 700" rx="1" transform="translate(75 606)"/>
-            <rect id="Rectangle_701" width="2" height="2" class="cls-6" data-name="Rectangle 701" rx="1" transform="translate(75 612)"/>
-            <path id="Subtraction_49" d="M-17430-15877.294V-15907h5a4 4 0 0 1 4 4v9a19.975 19.975 0 0 1-9 16.706z" class="cls-7" data-name="Subtraction 49" transform="translate(17536 16505)"/>
-            <path id="Rectangle_718" d="M0 0h2v18H0z" class="cls-8" data-name="Rectangle 718" transform="translate(97 605)"/>
-            <g id="Group_302" data-name="Group 302" transform="translate(92.831 600.488)">
-                <text id="s" class="cls-9" transform="translate(-1.831 20.512)">
-                    <tspan x="0" y="0">s</tspan>
-                </text>
-                <text id="s-2" class="cls-10" data-name="s" transform="translate(-3.831 19.512)">
-                    <tspan x="0" y="0">s</tspan>
-                </text>
-            </g>
-            <path id="Rectangle_713" d="M0 0h2v18H0z" class="cls-6" data-name="Rectangle 713" transform="translate(95 604)"/>
+  <g id="Group_323" data-name="Group 323" transform="translate(-61 -639)">
+    <g id="Group_303" data-name="Group 303" transform="translate(-13 43)">
+      <g id="Group_300" data-name="Group 300" transform="translate(77.366 597.244)">
+        <path id="Rectangle_697" data-name="Rectangle 697" d="M6,0H27a6,6,0,0,1,6,6v4A12,12,0,0,1,21,22H6a6,6,0,0,1-6-6V6A6,6,0,0,1,6,0Z" transform="translate(16.634 2.756)" fill="#ffc400"/>
+        <path id="Rectangle_696" data-name="Rectangle 696" d="M6,0H36a6,6,0,0,1,6,6V16A21,21,0,0,1,21,37H20A20,20,0,0,1,0,17V6A6,6,0,0,1,6,0Z" transform="translate(-1.366 0.756)" fill="#ffc400"/>
+      </g>
+      <g id="Group_301" data-name="Group 301" transform="translate(74.838 596)">
+        <g id="Rectangle_697-2" data-name="Rectangle 697" transform="translate(16.162 3)" fill="#e0e0e0" stroke="#313131" stroke-width="2">
+          <path d="M8,0H29a4,4,0,0,1,4,4v9a8,8,0,0,1-8,8H8a8,8,0,0,1-8-8V8A8,8,0,0,1,8,0Z" stroke="none"/>
+          <path d="M8,1H29a3,3,0,0,1,3,3v9a7,7,0,0,1-7,7H8a7,7,0,0,1-7-7V8A7,7,0,0,1,8,1Z" fill="none"/>
         </g>
+        <g id="Rectangle_696-2" data-name="Rectangle 696" transform="translate(0.162)" fill="#fff" stroke="#313131" stroke-width="2">
+          <path d="M5.727,0H36.273A5.727,5.727,0,0,1,42,5.727V16A21,21,0,0,1,21,37h0A21,21,0,0,1,0,16V5.727A5.727,5.727,0,0,1,5.727,0Z" stroke="none"/>
+          <path d="M5.762,1H36.238A4.762,4.762,0,0,1,41,5.762V16A20,20,0,0,1,21,36h0A20,20,0,0,1,1,16V5.762A4.762,4.762,0,0,1,5.762,1Z" fill="none"/>
+        </g>
+      </g>
+      <rect id="Rectangle_698" data-name="Rectangle 698" width="2" height="6" transform="translate(76 607)" fill="#fff"/>
+      <rect id="Rectangle_699" data-name="Rectangle 699" width="2" height="6" transform="translate(74 607)" fill="#ffe65a"/>
+      <rect id="Rectangle_700" data-name="Rectangle 700" width="2" height="2" rx="1" transform="translate(75 606)" fill="#313131"/>
+      <rect id="Rectangle_701" data-name="Rectangle 701" width="2" height="2" rx="1" transform="translate(75 612)" fill="#313131"/>
+      <path id="Subtraction_49" data-name="Subtraction 49" d="M-17430-15877.294V-15907h5a4,4,0,0,1,4,4v9a19.975,19.975,0,0,1-9,16.706Z" transform="translate(17536 16505)" fill="#f5f5f5"/>
+      <rect id="Rectangle_718" data-name="Rectangle 718" width="2" height="18" transform="translate(97 605)" fill="#d3d3d3"/>
+      <g id="Group_302" data-name="Group 302" transform="translate(92.831 600.488)">
+        <text id="s" transform="translate(-1.831 20.512)" fill="#d3d3d3" font-size="26" font-family="Roboto-Medium, Roboto Medium" font-weight="500"><tspan x="0" y="0">s</tspan></text>
+        <text id="s-2" data-name="s" transform="translate(-3.831 19.512)" fill="#313131" font-size="26" font-family="Roboto-Medium, Roboto Medium" font-weight="500"><tspan x="0" y="0">s</tspan></text>
+      </g>
+      <rect id="Rectangle_713" data-name="Rectangle 713" width="2" height="18" transform="translate(95 604)" fill="#313131"/>
     </g>
+  </g>
 </svg>
