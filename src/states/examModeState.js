@@ -54,6 +54,17 @@ const machine = Machine({
                     idle: {
                       on: {
                         CARD_MOVE: 'moved',
+                        NEXT_CARD: [
+                          {
+                            cond: 'addToEnhancement',
+                            actions: ['addCardsToEnhancement', 'nextCard', send('CLEAR_CANVAS')],
+                            target: 'cardSwipeLeftAnimation',
+                          },
+                          {
+                            actions: ['nextCard', send('CLEAR_CANVAS')],
+                            target: 'cardSwipeRightAnimation',
+                          },
+                        ],
                       },
                     },
                     moved: {
@@ -132,6 +143,17 @@ const machine = Machine({
                     idle: {
                       on: {
                         CARD_MOVE: 'moved',
+                        NEXT_CARD: [
+                          {
+                            cond: 'addToEnhancement',
+                            actions: ['nextEnhancementCard', send('CLEAR_CANVAS')],
+                            target: 'cardSwipeRightAnimation',
+                          },
+                          {
+                            actions: ['nextEnhancementCard', send('CLEAR_CANVAS')],
+                            target: 'cardSwipeRightAnimation',
+                          },
+                        ],
                       },
                     },
                     moved: {
@@ -141,7 +163,7 @@ const machine = Machine({
                           {
                             cond: 'addToEnhancement',
                             actions: ['nextEnhancementCard', send('CLEAR_CANVAS')],
-                            target: 'cardSwipeLeftAnimation',
+                            target: 'cardSwipeRightAnimation',
                           },
                           {
                             actions: ['nextEnhancementCard', send('CLEAR_CANVAS')],

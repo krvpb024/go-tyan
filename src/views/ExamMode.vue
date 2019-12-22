@@ -43,7 +43,10 @@
     </div>
 
     <div class="exam-mode-container__content">
-      <div class="exam-mode-content__info-modal" ref="examModeInfoModalButtonElement">
+      <div
+        class="exam-mode-content__info-modal"
+        ref="examModeInfoModalButtonElement"
+      >
         <button
           class="exam-mode-info-modal__modal-trigger-button"
           @click="current.matches('idle.infoModal.hide')
@@ -63,6 +66,10 @@
         <div
           class="exam-mode-main-block__normal-exam"
           ref="normalExamElement"
+          tabindex="0"
+          @keydown.down="service.send('SHOW_ANSWER')"
+          @keydown.left="service.send('NEXT_CARD', { addToEnhancement: true })"
+          @keydown.right="service.send('NEXT_CARD')"
         >
           <exam-mode-block
             examType="normalExam"
@@ -74,6 +81,10 @@
         <div
           class="exam-mode-main-block__enhancement-exam"
           ref="enhancementExamElement"
+          tabindex="0"
+          @keydown.down="service.send('SHOW_ANSWER')"
+          @keydown.left="service.send('NEXT_CARD', { addToEnhancement: true })"
+          @keydown.right="service.send('NEXT_CARD')"
         >
           <exam-mode-block
             examType="enhancementExam"
@@ -155,6 +166,7 @@ export default {
           }, '-=0.5')
           .then(function changeExamAnimationEnd () {
             service.value.send('CHANGE_EXAM_MODE_ANIMATION_END')
+            enhancementExamElement.value.focus()
           })
       },
       { lazy: true }
@@ -233,12 +245,18 @@ export default {
   position: relative;
   width: 100%;
   overflow: hidden;
+  padding: 20px;
   padding-top: 10vh;
   margin-bottom: 100vh;
 }
 
 .exam-mode-main-block__normal-exam {
   width: 100%;
+}
+
+.exam-mode-main-block__normal-exam:focus, .exam-mode-main-block__enhancement-exam:focus {
+  outline: 4px solid var(--main-color);
+  outline-offset: 8px;
 }
 
 .exam-mode-main-block__enhancement-exam {
