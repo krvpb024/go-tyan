@@ -292,8 +292,36 @@ export default {
       { layz: true }
     )
 
+    watch(
+      () => props.current.matches('idle.exam.enhancementExam.answerShowed.cardShakeAnimation'),
+      function cardShakeAnimationWatcher (value) {
+        if (!value) return
+        const shakeTimeline = gsap
+          .timeline({ paused: true })
+          .to(cardElement.value, {
+            x: 10,
+            duration: 0.05,
+          })
+          .to(cardElement.value, {
+            x: 0,
+            duration: 0.05,
+          })
+
+        shakeTimeline
+          .repeat(2).play()
+          .then(function cardShakeAnimationEnd () {
+            props.service.send('CARD_SHAKE_ANIMATION_END')
+          })
+      },
+      { layz: true }
+    )
+
     onMounted(function examModeBlockCard () {
       swipeCheckPoint.value = document.getElementById('app').offsetWidth / 4
+
+      if (!props.cards[0]) gsap.set(cardElement.value, { opacity: 0 })
+      if (!props.cards[1]) gsap.set(cardSecondElement.value, { opacity: 0 })
+      if (!props.cards[2]) gsap.set(cardThirdElement.value, { opacity: 0 })
     })
 
     return {
@@ -371,7 +399,7 @@ export default {
   --card-third-transform: 30px;
   --card-width: 30vw;
   --card-min-size: 200px;
-  --card-max-size: 300px;
+  --card-max-size: 230px;
 }
 </style>
 

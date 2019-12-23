@@ -67,6 +67,7 @@
 
       <main class="exam-mode-content__main-block">
         <div
+          v-if="current.matches('idle.exam')"
           class="exam-mode-main-block__normal-exam"
           ref="normalExamElement"
           :tabindex="current.matches('idle.exam.normalExam') ? 0 : -1"
@@ -82,6 +83,7 @@
         </div>
 
         <div
+          v-if="current.matches('idle.exam')"
           class="exam-mode-main-block__enhancement-exam"
           ref="enhancementExamElement"
           :tabindex="current.matches('idle.exam.enhancementExam') ? 0 : -1"
@@ -133,7 +135,6 @@ export default {
 
     // data
     const localExamRange = JSON.parse(window.localStorage.getItem('examRange'))
-
     const { service, current } = useMachine(machine.withContext({
       ...machine.context,
       examRange: localExamRange || machine.context.examRange,
@@ -191,6 +192,8 @@ export default {
 
     onMounted(function examModeOnMounted () {
       service.value.send('PAGE_MOUNTED')
+      // expand page height over 100vh to make sitcky drawing board always at bottom
+      // then prevent page scroll for user experience
       document.body.classList.add('app-prevent-scroll')
       document.querySelector('html').classList.add('app-prevent-scroll')
     })

@@ -211,7 +211,7 @@
           </template>
 
           <template #description>
-            <ul>
+            <ul class="home-nav-item__list-group">
               <li>提供默背及手寫練習</li>
             </ul>
           </template>
@@ -537,7 +537,7 @@
           </template>
 
           <template #description>
-            <ul>
+            <ul class="home-nav-item__list-group">
               <li>平假名、片假名、拼音轉換</li>
               <li>手寫測驗</li>
             </ul>
@@ -666,7 +666,7 @@
           </template>
 
           <template #description>
-            <ul>
+            <ul class="home-nav-item__list-group">
               <li>關於這個 App 及我們</li>
             </ul>
           </template>
@@ -858,7 +858,7 @@
           </template>
 
           <template #description>
-            <ul>
+            <ul class="home-nav-item__list-group">
               <li>小額贊助鼓勵我們</li>
             </ul>
           </template>
@@ -1214,7 +1214,7 @@ export default {
 
   padding: 20px;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min-content, auto));
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   grid-column-gap: var(--column-gap);
   column-gap: var(--column-gap);
   grid-row-gap: var(--row-gap);
@@ -1228,5 +1228,9 @@ export default {
 .home-nav__nav-item:focus {
   outline: 4px solid var(--main-color);
   outline-offset: 6px;
+}
+
+.home-nav-item__list-group {
+  padding-bottom: 10px;
 }
 </style>

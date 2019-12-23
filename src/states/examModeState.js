@@ -24,13 +24,21 @@ const machine = Machine({
             target: 'navigateToExamView',
           },
           {
-            target: 'idle',
+            target: 'generateExam',
           },
         ],
       },
     },
     navigateToExamView: {
       type: 'final',
+    },
+    generateExam: {
+      on: {
+        '': {
+          actions: 'generateExam',
+          target: 'idle',
+        },
+      },
     },
     idle: {
       type: 'parallel',
@@ -41,7 +49,6 @@ const machine = Machine({
           states: {
             normalExam: {
               initial: 'idle',
-              entry: ['generateExam'],
               states: {
                 idle: {
                   on: {
@@ -146,8 +153,7 @@ const machine = Machine({
                         NEXT_CARD: [
                           {
                             cond: 'addToEnhancement',
-                            actions: ['nextEnhancementCard', send('CLEAR_CANVAS')],
-                            target: 'cardSwipeRightAnimation',
+                            target: 'cardShakeAnimation',
                           },
                           {
                             actions: ['nextEnhancementCard', send('CLEAR_CANVAS')],
@@ -159,11 +165,11 @@ const machine = Machine({
                     moved: {
                       on: {
                         CARD_BACK_TO_POSITION: 'cardBackToPositionAnimation',
+                        CARD_SHAKE: 'cardShakeAnimation',
                         NEXT_CARD: [
                           {
                             cond: 'addToEnhancement',
-                            actions: ['nextEnhancementCard', send('CLEAR_CANVAS')],
-                            target: 'cardSwipeRightAnimation',
+                            target: 'cardShakeAnimation',
                           },
                           {
                             actions: ['nextEnhancementCard', send('CLEAR_CANVAS')],
@@ -175,6 +181,11 @@ const machine = Machine({
                     cardBackToPositionAnimation: {
                       on: {
                         CARD_BACK_TO_POSITION_ANIMATION_END: 'idle',
+                      },
+                    },
+                    cardShakeAnimation: {
+                      on: {
+                        CARD_SHAKE_ANIMATION_END: 'idle',
                       },
                     },
                     cardSwipeRightAnimation: {
