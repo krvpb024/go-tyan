@@ -352,6 +352,7 @@ export default {
   padding: 0 5px;
   display: none;
   opacity: 0;
+  border: 4px solid transparent;
 }
 
 .exam-range-modal-form__scroll-content:focus {
