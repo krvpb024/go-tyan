@@ -5,6 +5,8 @@
     @touchmove.prevent="cardMoving"
     @mouseup="cardMoveEnd"
     @touchend="cardMoveEnd"
+    @mouseleave="cardMoveEnd"
+    @touchleave="cardMoveEnd"
   >
     <h2 class="app-visual-hidden">
       {{ examType == 'normalExam'
