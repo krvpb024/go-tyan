@@ -608,7 +608,7 @@ export default {
   grid-template-rows: 1fr 1fr 1fr 1fr;
   grid-row-gap: 30px;
   row-gap: 40px;
-  margin: 25px 0 45px 0;
+  margin: 25px 20px 45px;
 }
 
 .exam-mode-info-modal-description-block__description {
@@ -620,5 +620,6 @@ export default {
 .exam-mode-info-modal-description__text {
   font-size: 1rem;
   font-weight: bold;
+  white-space: nowrap;
 }
 </style>

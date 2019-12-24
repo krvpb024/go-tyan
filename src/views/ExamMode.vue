@@ -342,7 +342,6 @@ export default {
   position: relative;
   width: 100%;
   overflow: hidden;
-  padding: 20px;
   padding-top: 10vh;
   height: 150vh;
 }

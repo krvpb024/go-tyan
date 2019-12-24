@@ -6,9 +6,9 @@
     role="alert"
     ref="tooltipsElement"
   >
-    <span class="tooltips__text">
+    <p class="tooltips__text">
       <slot></slot>
-    </span>
+    </p>
 
     <div
       class="tooltips__angle"
@@ -153,6 +153,9 @@ export default {
 }
 
 .tooltips__text {
+  display: flex;
   text-align: center;
+  align-items: center;
+  justify-content: center;
 }
 </style>

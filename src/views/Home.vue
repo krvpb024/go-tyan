@@ -241,42 +241,15 @@
         <span class="home-title__span">阿五</span>
       </h1>
 
-      <two-layer-button aria-label="安裝至手機桌面">
+      <two-layer-button
+        v-if="showAddToHomeButton"
+        aria-label="安裝至手機桌面"
+        @buttonClick="addToHomeScreen"
+      >
         + 桌面
       </two-layer-button>
 
-      <section
-        class="home-header__stream"
-        ref="streamElement"
-        tabindex="0"
-        @keydown="streamMoveByKey"
-        @wheel="wheelStreamScroll"
-        @mousedown="streamMoveStart"
-        @mousemove.passive="streamMoving"
-        @mouseup="streamMoveEnd"
-        @touchstart="streamMoveStart"
-        @touchmove.passive="streamMoving"
-        @touchend="streamMoveEnd"
-      >
-        <h2 class="app-visual-hidden">最新消息</h2>
-
-        <div
-          class="home-stream__content-block"
-          ref="streamContentBlockElement"
-        >
-          <home-stream-item class="home-content-block__item--first">
-            <p>嗨！我是阿五！</p>
-          </home-stream-item>
-
-          <home-stream-item class="home-content-block__item--second">
-            <p>加入到桌面更方便使用喔！</p>
-          </home-stream-item>
-
-          <home-stream-item class="home-content-block__item--third">
-            <p>2020 年 1 月 11 日，一定要回家投票喔！</p>
-          </home-stream-item>
-        </div>
-      </section>
+      <home-stream></home-stream>
     </header>
 
     <nav class="home__nav">
@@ -1093,201 +1066,140 @@
         </home-card>
       </router-link>
     </nav>
+
+    <div
+      class="home__tooltips-container"
+      :class="{ 'home__tooltips-container--ios-safari': isIosSafari }"
+    >
+      <tooltips
+        class="home__tooltips"
+        :service="service"
+        :current="current"
+        showState="tooltips"
+        showAnimationState="tooltips.showTooltipsAnimation"
+        idleState="tooltips.showTooltips"
+        hideAnimationState="tooltips.hideTooltipsAnimation"
+        :anglePosition="{ left: '50%', bottom: '0' }"
+        angleTransformX="-50%"
+        angleTransformY="50%"
+      >
+        點擊
+        <svg class="home-tooltips__icon" xmlns="http://www.w3.org/2000/svg" width="15.998" height="23.872" viewBox="0 0 15.998 23.872">
+          <g id="Group_392" data-name="Group 392" transform="translate(-127 -37.131)">
+            <path id="Subtraction_67" data-name="Subtraction 67" d="M-22203-15081h-16v-17h5v.942h-4.061v15.111h14.119v-15.111H-22208v-.942h5v17Z" transform="translate(22346 15142)" fill="#313131"/>
+            <path id="Union_11" data-name="Union 11" d="M4.6,8.554.56,4.9a.46.46,0,0,1,0-.7L4.6.544a.588.588,0,0,1,.77,0,.46.46,0,0,1,0,.7L2.309,4.011H14.943a.493.493,0,0,1,0,.985H2.21l3.162,2.86a.46.46,0,0,1,0,.7.585.585,0,0,1-.77,0Z" transform="translate(139.566 36.73) rotate(90)" fill="#313131"/>
+          </g>
+        </svg>
+        選擇加入主畫面
+      </tooltips>
+    </div>
+
+    <div
+      class="home__tooltips-container"
+      :class="{ 'home__tooltips-container--android-firefox': isAndroidFirefox }"
+    >
+      <tooltips
+        class="home__tooltips"
+        :service="service"
+        :current="current"
+        showState="tooltips"
+        showAnimationState="tooltips.showTooltipsAnimation"
+        idleState="tooltips.showTooltips"
+        hideAnimationState="tooltips.hideTooltipsAnimation"
+        :anglePosition="{ right: '70px', top: '0' }"
+        angleTransformY="-50%"
+      >
+        點擊
+        <svg class="home-tooltips__icon" xmlns="http://www.w3.org/2000/svg" width="22.636" height="22.301" viewBox="0 0 22.636 22.301">
+          <g id="Group_393" data-name="Group 393" transform="translate(-165.743 -33.698)">
+            <g id="Group_391" data-name="Group 391" transform="translate(-119 7)">
+              <path id="Path_166" data-name="Path 166" d="M.967-.033A.89.89,0,0,1,1.9.9L1.434,14.434a1.051,1.051,0,0,1-1,1A.89.89,0,0,1-.5,14.5L-.033.967A1.051,1.051,0,0,1,.967-.033Z" transform="translate(296.01 27.075) rotate(45)" fill="#313131"/>
+              <path id="Path_165" data-name="Path 165" d="M.967.033a1.051,1.051,0,0,1,1,1l.466,13.534A.89.89,0,0,1,1.5,15.5a1.051,1.051,0,0,1-1-1L.033.967A.89.89,0,0,1,.967.033Z" transform="translate(307.425 37.637) rotate(135)" fill="#313131"/>
+              <rect id="Rectangle_895" data-name="Rectangle 895" width="2" height="8" rx="1" transform="translate(300.001 39) rotate(90)" fill="#313131"/>
+              <rect id="Rectangle_896" data-name="Rectangle 896" width="2" height="8" rx="1" transform="translate(297 44) rotate(180)" fill="#313131"/>
+              <path id="Subtraction_68" data-name="Subtraction 68" d="M-22205-15085h-12a2,2,0,0,1-2-2v-11a2,2,0,0,1,2-2v12.128a1,1,0,0,0,1,1h10a1,1,0,0,0,1-1v-12.082s0-.01,0-.016v-.03a2,2,0,0,1,2,2v11A2,2,0,0,1-22205-15085Z" transform="translate(22507 15134)" fill="#313131"/>
+            </g>
+          </g>
+        </svg>
+        加入主畫面
+      </tooltips>
+    </div>
   </section>
 </template>
 
 <script>
-import { ref, onMounted, computed } from '@vue/composition-api'
-import { gsap } from 'gsap'
-import { useDragToMove } from '@/utils/useDragToMove.js'
+import { ref, computed, onMounted } from '@vue/composition-api'
+import { useMachine } from '@/utils/useMachine.js'
+import { machine } from '@/states/homeState.js'
+import is from 'is_js'
+import homeStream from '@/components/homeStream.vue'
 import homeCard from '@/components/homeCard.vue'
-import homeStreamItem from '@/components/homeStreamItem.vue'
 import twoLayerButton from '@/components/twoLayerButton.vue'
+import tooltips from '@/components/tooltips.vue'
 
 export default {
   name: 'Home',
-  components: { homeCard, homeStreamItem, twoLayerButton },
+  components: { homeStream, homeCard, twoLayerButton, tooltips },
   setup () {
     // composition
-    const { xMovement, canDrag, dragStart, getDraggingMovement, dragEnd } = useDragToMove()
-
-    // element
-    const streamElement = ref(null)
-    const streamContentBlockElement = ref(null)
-
+    const { service, current } = useMachine(machine)
     // data
-    const crossLimit = ref(0)
-    const leftBoundary = ref(0)
-    const rightBoundary = ref(null)
-    const accelerator = ref(1)
-
-    const touchStartPoint = ref(0)
-    const toucheStartTime = ref(0)
-    const touchEndPoint = ref(0)
-    const toucheEndTime = ref(0)
-
-    const velocity = ref(0)
-    const touchDuration = computed(function getTouchDuration () {
-      return toucheEndTime.value - toucheStartTime.value
+    const isAndroidChrome = ref(is.android() && is.chrome())
+    const isAndroidFirefox = ref(is.android() && is.firefox())
+    const isIosSafari = ref(is.ios() && is.safari())
+    const showAddToHomeButton = computed(function getShowAddToHomeButton () {
+      return (isAndroidChrome.value && deferredPrompt.value) ||
+        isAndroidFirefox.value ||
+        isIosSafari.value
     })
+
+    const deferredPrompt = ref(null)
 
     // effect
     onMounted(function homeOnMounted () {
-      crossLimit.value = streamElement.value.offsetWidth / 4
-      rightBoundary.value = streamElement.value.offsetWidth - streamContentBlockElement.value.scrollWidth
+      window.addEventListener('beforeinstallprompt', (e) => {
+        // Prevent Chrome 67 and earlier from automatically showing the prompt
+        e.preventDefault()
+        deferredPrompt.value = e
+      })
     })
 
     return {
-      // element
-      streamElement,
-      streamContentBlockElement,
       // data
-      xMovement,
-      crossLimit,
-      rightBoundary,
-      touchStartPoint,
-      touchEndPoint,
-      touchDuration,
+      service,
+      current,
+      isIosSafari,
+      isAndroidFirefox,
+      showAddToHomeButton,
       // methods
-      streamMoveStart,
-      streamMoving,
-      streamMoveEnd,
-      wheelStreamScroll,
-      streamMoveByKey,
+      addToHomeScreen,
     }
 
-    function streamMoveStart (e) {
-      dragStart(e)
-      touchStartPoint.value = e.touches ? e.touches[0].pageX : e.x
-      toucheStartTime.value = e.timeStamp
-    }
-
-    function streamMoving (e) {
-      if (!canDrag.value) return
-      const movement = getDraggingMovement(e)
-      touchEndPoint.value = e.touches ? e.touches[0].pageX : e.x
-
-      if (movement > 0 && xMovement.value > leftBoundary.value) {
-        xMovement.value = xMovement.value + movement * accelerator.value
-        // check current position to crossLimit percentage
-        accelerator.value = 0.5 - Math.abs(xMovement.value / crossLimit.value)
-      } else if (movement < 0 && xMovement.value < rightBoundary.value) {
-        xMovement.value = xMovement.value + movement * accelerator.value
-        const extra = rightBoundary.value - xMovement.value
-        // check current position to crossLimit percentage
-        accelerator.value = 0.5 - Math.abs(extra / crossLimit.value)
+    function addToHomeScreen () {
+      if (deferredPrompt.value) {
+        console.log(deferredPrompt.value)
+        deferredPrompt.value.prompt()
+        deferredPrompt.value.userChoice.then(function responseUserChoice (choiceResult) {
+          if (choiceResult.outcome == 'accepted') {
+            console.log('User accepted the A2HS prompt')
+          } else {
+            console.log('User dismissed the A2HS prompt')
+          }
+          deferredPrompt.value = null
+        })
       } else {
-        xMovement.value += movement
+        service.value.send('SHOW_TOOLTIPS')
       }
-
-      streamContentBlockElement.value.style.transform = `translateX(${xMovement.value}px)`
-    }
-
-    function streamMoveEnd (e) {
-      dragEnd()
-      toucheEndTime.value = e.timeStamp
-
-      if (xMovement.value > leftBoundary.value) {
-        gsap
-          .to(streamContentBlockElement.value, {
-            x: 0,
-            duration: 0.3,
-          })
-          .then(function backToPositionAnimationEnd () {
-            xMovement.value = 0
-            // don't know why if don't clear props, duration will be ignored
-            gsap.set(streamContentBlockElement.value, { clearProps: true })
-          })
-      } else if (xMovement.value < rightBoundary.value) {
-        gsap
-          .to(streamContentBlockElement.value, {
-            x: rightBoundary.value,
-            duration: 0.3,
-          })
-          .then(function backToPositionAnimationEnd () {
-            xMovement.value = rightBoundary.value
-            // don't know why if don't clear props, duration will be ignored
-            gsap.set(streamContentBlockElement.value, { clearProps: true })
-            streamContentBlockElement.value.style.transform = `translateX(${xMovement.value}px)`
-          })
-        // if drag time too long, then ignore
-      } else if (touchDuration.value <= 500) {
-        velocity.value = (touchEndPoint.value - touchStartPoint.value) / 8
-        inertiaFrame()
-      }
-
-      function inertiaFrame () {
-        if (
-          rightBoundary.value < xMovement.value &&
-          xMovement.value < leftBoundary.value
-        ) {
-          requestAnimationFrame(inertiaFrame)
-        }
-
-        let resultValue = xMovement.value + velocity.value
-        if (resultValue > leftBoundary.value) {
-          resultValue = 0
-        } else if (resultValue < rightBoundary.value) {
-          resultValue = rightBoundary.value
-        }
-        const friction = 0.96
-        xMovement.value = resultValue
-        streamContentBlockElement.value.style.transform = `translateX(${xMovement.value}px)`
-        velocity.value *= friction
-      }
-    }
-
-    function wheelStreamScroll (e) {
-      if ((e.deltaY > 0 && rightBoundary.value < xMovement.value) ||
-        (e.deltaY < 0 && xMovement.value < leftBoundary.value)
-      ) {
-        e.preventDefault()
-      }
-
-      const movement = (e.deltaY * -1) * 10
-      const resultValue = getResultMovementBetweenBoundary(movement)
-      xMovement.value = resultValue
-      streamContentBlockElement.value.style.transform = `translateX(${xMovement.value}px)`
-    }
-
-    function streamMoveByKey (e) {
-      if (!['ArrowRight', 'ArrowLeft'].includes(e.key)) return
-
-      let resultValue
-      const moveStep = 15
-
-      switch (e.key) {
-        case 'ArrowRight':
-          e.preventDefault()
-          resultValue = getResultMovementBetweenBoundary(moveStep)
-          break
-        case 'ArrowLeft':
-          e.preventDefault()
-          resultValue = getResultMovementBetweenBoundary(moveStep * -1)
-          break
-        default:
-          break
-      }
-      xMovement.value = resultValue
-      streamContentBlockElement.value.style.transform = `translateX(${xMovement.value}px)`
-    }
-
-    function getResultMovementBetweenBoundary (addValue) {
-      let resultValue = xMovement.value + addValue
-
-      if (resultValue > leftBoundary.value) {
-        resultValue = 0
-      } else if (resultValue < rightBoundary.value) {
-        resultValue = rightBoundary.value
-      }
-
-      return resultValue
     }
   },
 }
 </script>
 
 <style scoped>
+.home {
+  position: relative;
+}
+
 .home__header {
   margin-top: 27px;
   display: grid;
@@ -1383,18 +1295,6 @@ export default {
   z-index: 10;
 }
 
-.home-header__stream {
-  position: relative;
-  grid-area: stream;
-  overflow: hidden;
-  padding: 10px 0;
-}
-
-.home-header__stream:focus {
-  outline: 4px solid var(--main-color);
-  outline-offset: 6px;
-}
-
 .fix-touch {
   position: absolute;
   top: 0;
@@ -1405,54 +1305,13 @@ export default {
   z-index: 100;
 }
 
-.home-stream__content-block {
-  padding: 0 20px;
-  height: 100%;
-  display: grid;
-  grid-template-columns:
-    40px minmax(min-content, auto) 40px minmax(min-content, auto)
-    40px minmax(min-content, auto) 40px minmax(min-content, auto) 40px minmax(min-content, auto);
-  grid-auto-flow: column dense;
-  justify-content: start;
-  align-content: flex-start;
-  grid-row-gap: 30px;
-  row-gap: 30px;
-  grid-column-gap: 30px;
-  column-gap: 30px;
-  z-index: 9;
-}
-
-.home-content-block__item--first {
-  grid-column: 1 / 4;
-  grid-row: 1;
-}
-
-.home-content-block__item--second {
-  grid-column: 3 / 6;
-  grid-row: 2;
-}
-.home-content-block__item--third {
-  grid-column: 5 / 8;
-  grid-row: 1;
-}
-
-.home-content-block__item--forth {
-  grid-column: 7 / 10;
-  grid-row: 2;
-}
-
-.home-content-block__item--fifth {
-  grid-column: 9 / 11;
-  grid-row: 1;
-}
-
 .home__nav {
   --column-gap: 25px;
   --row-gap: 25px;
 
   padding: 20px;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
   grid-column-gap: var(--column-gap);
   column-gap: var(--column-gap);
   grid-row-gap: var(--row-gap);
@@ -1470,5 +1329,25 @@ export default {
 
 .home-nav-item__list-group {
   padding-bottom: 10px;
+}
+
+.home__tooltips-container {
+  position: fixed;
+  z-index: 100;
+}
+
+.home__tooltips-container--ios-safari {
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.home-tooltips__icon {
+  margin: 0 10px;
+}
+
+.home__tooltips-container--android-firefox {
+  right: 20px;
+  top: 20px;
 }
 </style>

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="22.636" height="22.301" viewBox="0 0 22.636 22.301">
+  <g id="Group_393" data-name="Group 393" transform="translate(-165.743 -33.698)">
+    <g id="Group_391" data-name="Group 391" transform="translate(-119 7)">
+      <path id="Path_166" data-name="Path 166" d="M.967-.033A.89.89,0,0,1,1.9.9L1.434,14.434a1.051,1.051,0,0,1-1,1A.89.89,0,0,1-.5,14.5L-.033.967A1.051,1.051,0,0,1,.967-.033Z" transform="translate(296.01 27.075) rotate(45)" fill="#313131"/>
+      <path id="Path_165" data-name="Path 165" d="M.967.033a1.051,1.051,0,0,1,1,1l.466,13.534A.89.89,0,0,1,1.5,15.5a1.051,1.051,0,0,1-1-1L.033.967A.89.89,0,0,1,.967.033Z" transform="translate(307.425 37.637) rotate(135)" fill="#313131"/>
+      <rect id="Rectangle_895" data-name="Rectangle 895" width="2" height="8" rx="1" transform="translate(300.001 39) rotate(90)" fill="#313131"/>
+      <rect id="Rectangle_896" data-name="Rectangle 896" width="2" height="8" rx="1" transform="translate(297 44) rotate(180)" fill="#313131"/>
+      <path id="Subtraction_68" data-name="Subtraction 68" d="M-22205-15085h-12a2,2,0,0,1-2-2v-11a2,2,0,0,1,2-2v12.128a1,1,0,0,0,1,1h10a1,1,0,0,0,1-1v-12.082s0-.01,0-.016v-.03a2,2,0,0,1,2,2v11A2,2,0,0,1-22205-15085Z" transform="translate(22507 15134)" fill="#313131"/>
+    </g>
+  </g>
+</svg>
