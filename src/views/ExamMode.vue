@@ -185,6 +185,14 @@ export default {
     )
 
     watch(
+      () => current.value.matches('navigateToExamView'),
+      function navigateToExamViewWatcher (value) {
+        if (value) context.root.$router.push('/exam')
+      },
+      { lazy: true }
+    )
+
+    watch(
       () => current.value.matches('idle.infoModal.hideInfoModalAnimation'),
       function hideInfoModalAnimationWatcher (value) {
         if (value) modalTriggerButtonElement.value.focus()
