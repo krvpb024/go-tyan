@@ -24,7 +24,7 @@ const machine = Machine({
             target: 'navigateToExamView',
           },
           {
-            target: 'generateExam',
+            target: 'idle.exam.generateExam',
           },
         ],
       },
@@ -32,20 +32,20 @@ const machine = Machine({
     navigateToExamView: {
       type: 'final',
     },
-    generateExam: {
-      on: {
-        '': {
-          actions: 'generateExam',
-          target: 'idle',
-        },
-      },
-    },
     idle: {
       type: 'parallel',
       states: {
         exam: {
           initial: 'examing',
           states: {
+            generateExam: {
+              on: {
+                '': {
+                  actions: 'generateExam',
+                  target: 'examing',
+                },
+              },
+            },
             examing: {
               id: 'examing',
               initial: 'normalExam',
@@ -210,7 +210,7 @@ const machine = Machine({
                 },
                 restartExamAnimation: {
                   on: {
-                    RESTART_EXAM_ANIMATION_END: '#examMode.generateExam',
+                    RESTART_EXAM_ANIMATION_END: '#examMode.idle.exam.generateExam',
                   },
                 },
               },
