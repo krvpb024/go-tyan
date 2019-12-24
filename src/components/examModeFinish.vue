@@ -238,7 +238,7 @@
 
     <div class="exam-mode-finish__description-block">
       <home-stream-item class="home-content-block__item--first">
-        <p>測驗結束瞜</p>
+        <p>測驗結束囉！</p>
       </home-stream-item>
     </div>
 

@@ -355,13 +355,6 @@ export default {
 
     function cardMoving (e) {
       if (!canDrag.value) return
-      if (
-        (props.current.matches('idle.exam.examing.normalExam') && !props.current.matches('idle.exam.examing.normalExam.answerShowed.moved')) ||
-        (props.current.matches('idle.exam.examing.enhancementExam') && !props.current.matches('idle.exam.examing.enhancementExam.answerShowed.moved'))
-      ) {
-        props.service.send('CARD_MOVE')
-      }
-
       const movement = getDraggingMovement(e)
 
       if (

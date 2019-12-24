@@ -189,7 +189,7 @@ export default {
           .to(normalExamElement.value, {
             position: 'absolute',
             x: '100%',
-            delay: 0.15,
+            delay: 0.1,
             duration,
           })
           .to(enhancementExamElement.value, {
@@ -231,7 +231,7 @@ export default {
         gsap.timeline()
           .to(finishExamElement.value, {
             opacity: 1,
-            delay: 0.15,
+            delay: 0.1,
             duration,
           })
           .to(examBlockElement.value, {
@@ -239,7 +239,6 @@ export default {
             duration,
           }, `-=${duration}`)
           .then(function finishExamAnimationEnd () {
-            gsap.set(examBlockElement.value, { clearProps: true })
             service.value.send('EXAM_FINISH_ANIMATION_END')
           })
       },
@@ -260,7 +259,6 @@ export default {
           .set(finishExamElement.value, { display: 'none' })
           .then(function finishExamAnimationEnd () {
             service.value.send('RESTART_EXAM_ANIMATION_END')
-            gsap.set(examBlockElement.value, { clearProps: true })
           })
       },
       { lazy: true }

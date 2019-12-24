@@ -63,22 +63,6 @@ const machine = Machine({
                       states: {
                         idle: {
                           on: {
-                            CARD_MOVE: 'moved',
-                            NEXT_CARD: [
-                              {
-                                cond: 'addToEnhancement',
-                                actions: ['addCardsToEnhancement', 'nextCard', send('CLEAR_CANVAS')],
-                                target: 'cardSwipeLeftAnimation',
-                              },
-                              {
-                                actions: ['nextCard', send('CLEAR_CANVAS')],
-                                target: 'cardSwipeRightAnimation',
-                              },
-                            ],
-                          },
-                        },
-                        moved: {
-                          on: {
                             CARD_BACK_TO_POSITION: 'cardBackToPositionAnimation',
                             NEXT_CARD: [
                               {
@@ -156,23 +140,7 @@ const machine = Machine({
                       states: {
                         idle: {
                           on: {
-                            CARD_MOVE: 'moved',
-                            NEXT_CARD: [
-                              {
-                                cond: 'addToEnhancement',
-                                target: 'cardShakeAnimation',
-                              },
-                              {
-                                actions: ['nextEnhancementCard', send('CLEAR_CANVAS')],
-                                target: 'cardSwipeRightAnimation',
-                              },
-                            ],
-                          },
-                        },
-                        moved: {
-                          on: {
                             CARD_BACK_TO_POSITION: 'cardBackToPositionAnimation',
-                            CARD_SHAKE: 'cardShakeAnimation',
                             NEXT_CARD: [
                               {
                                 cond: 'addToEnhancement',
