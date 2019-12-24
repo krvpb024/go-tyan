@@ -1,5 +1,5 @@
 <template>
-  <section class="exam-mode-container">
+  <section class="exam-mode">
     <div class="app-sticky-top">
       <top-bar>
         <template #leftContainer>
@@ -42,7 +42,7 @@
       </top-bar>
     </div>
 
-    <div class="exam-mode-container__content">
+    <div class="exam-mode__content">
       <div
         class="exam-mode-content__info-modal"
         ref="examModeInfoModalButtonElement"
@@ -67,37 +67,52 @@
 
       <main class="exam-mode-content__main-block">
         <div
-          v-if="current.matches('idle.exam')"
-          class="exam-mode-main-block__normal-exam"
-          ref="normalExamElement"
-          :tabindex="current.matches('idle.exam.normalExam') ? 0 : -1"
-          :aria-hidden="current.matches('idle.exam.normalExam') ? false : 'true'"
-          @keydown.down="service.send('SHOW_ANSWER')"
-          @keydown.left="service.send('NEXT_CARD', { addToEnhancement: true })"
-          @keydown.right="service.send('NEXT_CARD')"
+          v-if="current.matches('idle.exam.examing') ||
+            current.matches('idle.exam.examFinish.examFinishAnimation')"
+          class="exam-mode-main-block__exam-block"
+          ref="examBlockElement"
         >
-          <exam-mode-block
-            examType="normalExam"
-            :service="service"
-            :current="current"
-          ></exam-mode-block>
+          <div
+            class="exam-mode-exam-block__normal-exam"
+            ref="normalExamElement"
+            :tabindex="current.matches('idle.exam.examing.normalExam') ? 0 : -1"
+            :aria-hidden="current.matches('idle.exam.examing.normalExam') ? false : 'true'"
+            @keydown.down="service.send('SHOW_ANSWER')"
+            @keydown.left="service.send('NEXT_CARD', { addToEnhancement: true })"
+            @keydown.right="service.send('NEXT_CARD')"
+          >
+            <exam-mode-block
+              examType="normalExam"
+              :service="service"
+              :current="current"
+            ></exam-mode-block>
+          </div>
+
+          <div
+            class="exam-mode-exam-block__enhancement-exam"
+            ref="enhancementExamElement"
+            :tabindex="current.matches('idle.exam.examing.enhancementExam') ? 0 : -1"
+            :aria-hidden="current.matches('idle.exam.examing.enhancementExam') ? false : 'true'"
+            @keydown.down="service.send('SHOW_ANSWER')"
+            @keydown.left="service.send('NEXT_CARD', { addToEnhancement: true })"
+            @keydown.right="service.send('NEXT_CARD')"
+          >
+            <exam-mode-block
+              examType="enhancementExam"
+              :service="service"
+              :current="current"
+            ></exam-mode-block>
+          </div>
         </div>
 
         <div
-          v-if="current.matches('idle.exam')"
-          class="exam-mode-main-block__enhancement-exam"
-          ref="enhancementExamElement"
-          :tabindex="current.matches('idle.exam.enhancementExam') ? 0 : -1"
-          :aria-hidden="current.matches('idle.exam.enhancementExam') ? false : 'true'"
-          @keydown.down="service.send('SHOW_ANSWER')"
-          @keydown.left="service.send('NEXT_CARD', { addToEnhancement: true })"
-          @keydown.right="service.send('NEXT_CARD')"
+          class="exam-mode-main-block__finish-block"
+          ref="finishExamElement"
         >
-          <exam-mode-block
-            examType="enhancementExam"
+          <exam-mode-finish
             :service="service"
             :current="current"
-          ></exam-mode-block>
+          ></exam-mode-finish>
         </div>
       </main>
 
@@ -105,6 +120,7 @@
         opacity="0.8"
         :service="service"
         :current="current"
+        :style="{ zIndex: 99 }"
         openState="idle.drawingBoard.show"
         clearCanvasState="idle.drawingBoard.show.clearCanvas"
         clearCanvasBeforeCloseState="idle.drawingBoard.clearCanvasBeforeAnimation"
@@ -124,16 +140,19 @@ import topBar from '@/components/topBar.vue'
 import examModeBlock from '@/components/examModeBlock.vue'
 import examModeInfoModal from '@/components/examModeInfoModal.vue'
 import drawingBoard from '@/components/drawingBoard.vue'
+import examModeFinish from '@/components/examModeFinish.vue'
 
 export default {
   name: 'ExamMode',
-  components: { topBar, examModeBlock, examModeInfoModal, drawingBoard },
+  components: { topBar, examModeBlock, examModeInfoModal, drawingBoard, examModeFinish },
   setup (props, context) {
     // element
     const normalExamElement = ref(null)
     const enhancementExamElement = ref(null)
     const examModeInfoModalButtonElement = ref(null)
     const modalTriggerButtonElement = ref(null)
+    const examBlockElement = ref(null)
+    const finishExamElement = ref(null)
 
     // data
     const localExamRange = JSON.parse(window.localStorage.getItem('examRange'))
@@ -163,18 +182,20 @@ export default {
 
     // effect
     watch(
-      () => current.value.matches('idle.exam.changeExamModeAnimation'),
+      () => current.value.matches('idle.exam.examing.changeExamModeAnimation'),
       function changeExamAnimationWatcher () {
+        const duration = 0.5
         gsap.timeline()
           .to(normalExamElement.value, {
             position: 'absolute',
             x: '100%',
-            duration: 0.5,
+            delay: 0.15,
+            duration,
           })
           .to(enhancementExamElement.value, {
             position: 'relative',
             x: '0%',
-            duration: 0.5,
+            duration,
           }, '-=0.5')
           .then(function changeExamAnimationEnd () {
             service.value.send('CHANGE_EXAM_MODE_ANIMATION_END')
@@ -200,6 +221,51 @@ export default {
       { lazy: true }
     )
 
+    watch(
+      () => current.value.matches('idle.exam.examFinish.examFinishAnimation'),
+      function examFinishAnimationWatcher (value) {
+        if (!value) return
+
+        gsap.set(finishExamElement.value, { display: 'grid', position: 'absolute' })
+        const duration = 0.3
+        gsap.timeline()
+          .to(finishExamElement.value, {
+            opacity: 1,
+            delay: 0.15,
+            duration,
+          })
+          .to(examBlockElement.value, {
+            opacity: 0,
+            duration,
+          }, `-=${duration}`)
+          .then(function finishExamAnimationEnd () {
+            gsap.set(examBlockElement.value, { clearProps: true })
+            service.value.send('EXAM_FINISH_ANIMATION_END')
+          })
+      },
+      { lazy: true }
+    )
+
+    watch(
+      () => current.value.matches('idle.exam.examFinish.restartExamAnimation'),
+      function restartExamAnimationWatcher (value) {
+        if (!value) return
+
+        const duration = 0.3
+        gsap.timeline()
+          .to(finishExamElement.value, {
+            opacity: 0,
+            duration,
+          })
+          .set(finishExamElement.value, { display: 'none' })
+          .then(function finishExamAnimationEnd () {
+            service.value.send('RESTART_EXAM_ANIMATION_END')
+            gsap.set(examBlockElement.value, { clearProps: true })
+          })
+      },
+      { lazy: true }
+    )
+
     onMounted(function examModeOnMounted () {
       service.value.send('PAGE_MOUNTED')
       // expand page height over 100vh to make sitcky drawing board always at bottom
@@ -219,6 +285,8 @@ export default {
       enhancementExamElement,
       examModeInfoModalButtonElement,
       modalTriggerButtonElement,
+      examBlockElement,
+      finishExamElement,
       // data
       service,
       current,
@@ -229,7 +297,7 @@ export default {
 </script>
 
 <style scoped>
-.exam-mode-container__content {
+.exam-mode__content {
   position: relative;
 }
 
@@ -278,24 +346,36 @@ export default {
   overflow: hidden;
   padding: 20px;
   padding-top: 10vh;
-  margin-bottom: 100vh;
+  height: 150vh;
 }
 
-.exam-mode-main-block__normal-exam {
+.exam-mode-exam-block__normal-exam {
   width: 100%;
 }
 
-.exam-mode-main-block__normal-exam:focus,
-.exam-mode-main-block__enhancement-exam:focus {
+.exam-mode-exam-block__normal-exam:focus,
+.exam-mode-exam-block__enhancement-exam:focus {
   outline: 4px solid var(--main-color);
   outline-offset: 8px;
 }
 
-.exam-mode-main-block__enhancement-exam {
+.exam-mode-exam-block__enhancement-exam {
   width: 100%;
   position: absolute;
   top: 0;
   left: 0;
   transform: translateX(-100%);
+}
+
+.exam-mode-main-block__finish-block {
+  background-color: #fff;
+  position: relative;
+  display: none;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  z-index: 200;
 }
 </style>

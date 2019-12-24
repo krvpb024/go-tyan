@@ -44,174 +44,183 @@ const machine = Machine({
       type: 'parallel',
       states: {
         exam: {
-          id: 'exam',
-          initial: 'normalExam',
+          initial: 'examing',
           states: {
-            normalExam: {
-              initial: 'idle',
+            examing: {
+              id: 'examing',
+              initial: 'normalExam',
               states: {
-                idle: {
-                  on: {
-                    SHOW_ANSWER: 'answerShowed',
-                  },
-                },
-                answerShowed: {
+                normalExam: {
                   initial: 'idle',
                   states: {
                     idle: {
                       on: {
-                        CARD_MOVE: 'moved',
-                        NEXT_CARD: [
-                          {
-                            cond: 'addToEnhancement',
-                            actions: ['addCardsToEnhancement', 'nextCard', send('CLEAR_CANVAS')],
-                            target: 'cardSwipeLeftAnimation',
-                          },
-                          {
-                            actions: ['nextCard', send('CLEAR_CANVAS')],
-                            target: 'cardSwipeRightAnimation',
-                          },
-                        ],
+                        SHOW_ANSWER: 'answerShowed',
                       },
                     },
-                    moved: {
-                      on: {
-                        CARD_BACK_TO_POSITION: 'cardBackToPositionAnimation',
-                        NEXT_CARD: [
-                          {
-                            cond: 'addToEnhancement',
-                            actions: ['addCardsToEnhancement', 'nextCard', send('CLEAR_CANVAS')],
-                            target: 'cardSwipeLeftAnimation',
+                    answerShowed: {
+                      initial: 'idle',
+                      states: {
+                        idle: {
+                          on: {
+                            CARD_MOVE: 'moved',
+                            NEXT_CARD: [
+                              {
+                                cond: 'addToEnhancement',
+                                actions: ['addCardsToEnhancement', 'nextCard', send('CLEAR_CANVAS')],
+                                target: 'cardSwipeLeftAnimation',
+                              },
+                              {
+                                actions: ['nextCard', send('CLEAR_CANVAS')],
+                                target: 'cardSwipeRightAnimation',
+                              },
+                            ],
                           },
-                          {
-                            actions: ['nextCard', send('CLEAR_CANVAS')],
-                            target: 'cardSwipeRightAnimation',
+                        },
+                        moved: {
+                          on: {
+                            CARD_BACK_TO_POSITION: 'cardBackToPositionAnimation',
+                            NEXT_CARD: [
+                              {
+                                cond: 'addToEnhancement',
+                                actions: ['addCardsToEnhancement', 'nextCard', send('CLEAR_CANVAS')],
+                                target: 'cardSwipeLeftAnimation',
+                              },
+                              {
+                                actions: ['nextCard', send('CLEAR_CANVAS')],
+                                target: 'cardSwipeRightAnimation',
+                              },
+                            ],
                           },
-                        ],
-                      },
-                    },
-                    cardBackToPositionAnimation: {
-                      on: {
-                        CARD_BACK_TO_POSITION_ANIMATION_END: 'idle',
-                      },
-                    },
-                    cardSwipeRightAnimation: {
-                      on: {
-                        CARD_SWIPE_ANIMATION_END: [
-                          {
-                            cond: 'noMoreCards',
-                            target: '#exam.changeExamModeAnimation',
+                        },
+                        cardBackToPositionAnimation: {
+                          on: {
+                            CARD_BACK_TO_POSITION_ANIMATION_END: 'idle',
                           },
-                          {
-                            target: '#exam.normalExam.idle',
+                        },
+                        cardSwipeRightAnimation: {
+                          on: {
+                            CARD_SWIPE_ANIMATION_END: [
+                              {
+                                cond: 'noMoreCardsWithEnhancementCards',
+                                target: '#examing.changeExamModeAnimation',
+                              },
+                              {
+                                cond: 'noMoreCards',
+                                target: '#examMode.idle.exam.examFinish.examFinishAnimation',
+                              },
+                              {
+                                target: '#examing.normalExam.idle',
+                              },
+                            ],
                           },
-                        ],
-                      },
-                    },
-                    cardSwipeLeftAnimation: {
-                      on: {
-                        CARD_SWIPE_ANIMATION_END: [
-                          {
-                            cond: 'noMoreCards',
-                            target: '#exam.changeExamModeAnimation',
+                        },
+                        cardSwipeLeftAnimation: {
+                          on: {
+                            CARD_SWIPE_ANIMATION_END: [
+                              {
+                                cond: 'noMoreCards',
+                                target: '#examing.changeExamModeAnimation',
+                              },
+                              {
+                                target: '#examing.normalExam.idle',
+                              },
+                            ],
                           },
-                          {
-                            target: '#exam.normalExam.idle',
-                          },
-                        ],
+                        },
                       },
                     },
                   },
                 },
-              },
-            },
-            changeExamModeAnimation: {
-              on: {
-                CHANGE_EXAM_MODE_ANIMATION_END: 'enhancementExam',
-              },
-            },
-            enhancementExam: {
-              initial: 'idle',
-              on: {
-                '': {
-                  cond: 'noEnhancementCards',
-                  target: '#exam.examFinish',
-                },
-              },
-              states: {
-                idle: {
+                changeExamModeAnimation: {
                   on: {
-                    SHOW_ANSWER: 'answerShowed',
+                    CHANGE_EXAM_MODE_ANIMATION_END: 'enhancementExam',
                   },
                 },
-                answerShowed: {
+                enhancementExam: {
                   initial: 'idle',
+                  on: {
+                    '': {
+                      cond: 'noEnhancementCards',
+                      target: '#examMode.idle.exam.examFinish.examFinishAnimation',
+                    },
+                  },
                   states: {
                     idle: {
                       on: {
-                        CARD_MOVE: 'moved',
-                        NEXT_CARD: [
-                          {
-                            cond: 'addToEnhancement',
-                            target: 'cardShakeAnimation',
-                          },
-                          {
-                            actions: ['nextEnhancementCard', send('CLEAR_CANVAS')],
-                            target: 'cardSwipeRightAnimation',
-                          },
-                        ],
+                        SHOW_ANSWER: 'answerShowed',
                       },
                     },
-                    moved: {
-                      on: {
-                        CARD_BACK_TO_POSITION: 'cardBackToPositionAnimation',
-                        CARD_SHAKE: 'cardShakeAnimation',
-                        NEXT_CARD: [
-                          {
-                            cond: 'addToEnhancement',
-                            target: 'cardShakeAnimation',
+                    answerShowed: {
+                      initial: 'idle',
+                      states: {
+                        idle: {
+                          on: {
+                            CARD_MOVE: 'moved',
+                            NEXT_CARD: [
+                              {
+                                cond: 'addToEnhancement',
+                                target: 'cardShakeAnimation',
+                              },
+                              {
+                                actions: ['nextEnhancementCard', send('CLEAR_CANVAS')],
+                                target: 'cardSwipeRightAnimation',
+                              },
+                            ],
                           },
-                          {
-                            actions: ['nextEnhancementCard', send('CLEAR_CANVAS')],
-                            target: 'cardSwipeRightAnimation',
+                        },
+                        moved: {
+                          on: {
+                            CARD_BACK_TO_POSITION: 'cardBackToPositionAnimation',
+                            CARD_SHAKE: 'cardShakeAnimation',
+                            NEXT_CARD: [
+                              {
+                                cond: 'addToEnhancement',
+                                target: 'cardShakeAnimation',
+                              },
+                              {
+                                actions: ['nextEnhancementCard', send('CLEAR_CANVAS')],
+                                target: 'cardSwipeRightAnimation',
+                              },
+                            ],
                           },
-                        ],
-                      },
-                    },
-                    cardBackToPositionAnimation: {
-                      on: {
-                        CARD_BACK_TO_POSITION_ANIMATION_END: 'idle',
-                      },
-                    },
-                    cardShakeAnimation: {
-                      on: {
-                        CARD_SHAKE_ANIMATION_END: 'idle',
-                      },
-                    },
-                    cardSwipeRightAnimation: {
-                      on: {
-                        CARD_SWIPE_ANIMATION_END: [
-                          {
-                            cond: 'noMoreEnhancementCards',
-                            target: '#exam.examFinish',
+                        },
+                        cardBackToPositionAnimation: {
+                          on: {
+                            CARD_BACK_TO_POSITION_ANIMATION_END: 'idle',
                           },
-                          {
-                            target: '#exam.enhancementExam.idle',
+                        },
+                        cardShakeAnimation: {
+                          on: {
+                            CARD_SHAKE_ANIMATION_END: 'idle',
                           },
-                        ],
-                      },
-                    },
-                    cardSwipeLeftAnimation: {
-                      on: {
-                        CARD_SWIPE_ANIMATION_END: [
-                          {
-                            cond: 'noMoreEnhancementCards',
-                            target: '#exam.examFinish',
+                        },
+                        cardSwipeRightAnimation: {
+                          on: {
+                            CARD_SWIPE_ANIMATION_END: [
+                              {
+                                cond: 'noMoreEnhancementCards',
+                                target: '#examMode.idle.exam.examFinish.examFinishAnimation',
+                              },
+                              {
+                                target: '#examing.enhancementExam.idle',
+                              },
+                            ],
                           },
-                          {
-                            target: '#exam.enhancementExam.idle',
+                        },
+                        cardSwipeLeftAnimation: {
+                          on: {
+                            CARD_SWIPE_ANIMATION_END: [
+                              {
+                                cond: 'noMoreEnhancementCards',
+                                target: '#examMode.idle.exam.examFinish.examFinishAnimation',
+                              },
+                              {
+                                target: '#examing.enhancementExam.idle',
+                              },
+                            ],
                           },
-                        ],
+                        },
                       },
                     },
                   },
@@ -219,8 +228,23 @@ const machine = Machine({
               },
             },
             examFinish: {
-              on: {
-                TAKE_EXAM_AGAIN: 'normalExam',
+              initial: 'examFinishAnimation',
+              states: {
+                examFinishAnimation: {
+                  on: {
+                    EXAM_FINISH_ANIMATION_END: 'examFinish',
+                  },
+                },
+                examFinish: {
+                  on: {
+                    TAKE_EXAM_AGAIN: 'restartExamAnimation',
+                  },
+                },
+                restartExamAnimation: {
+                  on: {
+                    RESTART_EXAM_ANIMATION_END: '#examMode.generateExam',
+                  },
+                },
               },
             },
           },
@@ -309,6 +333,10 @@ const machine = Machine({
     noMoreCards ({ cards, cursor }) {
       return cursor == cards.length
     },
+    noMoreCardsWithEnhancementCards ({ cards, cursor, enhancementCards }) {
+      return cursor == cards.length &&
+        enhancementCards.length > 0
+    },
     noEnhancementCards ({ enhancementCards }) {
       return enhancementCards.length == 0
     },
@@ -317,9 +345,12 @@ const machine = Machine({
     },
   },
   actions: {
-    generateExam: assign(function mutateCards ({ examRange }) {
+    generateExam: assign(function mutateCards ({ examRange, cursor, enhancementCursor, enhancementCards }) {
       return {
         cards: shuffle(examRange),
+        cursor: 0,
+        enhancementCursor: 0,
+        enhancementCards: [],
       }
     }),
     addCardsToEnhancement: assign(function addCardsToEnhancement ({ enhancementCards, cards, cursor }) {

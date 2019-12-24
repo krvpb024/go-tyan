@@ -178,8 +178,8 @@ export default {
     })
 
     watch(
-      () => props.current.matches('idle.exam.normalExam.answerShowed.idle') ||
-        props.current.matches('idle.exam.enhancementExam.answerShowed.idle'),
+      () => props.current.matches('idle.exam.examing.normalExam.answerShowed.idle') ||
+        props.current.matches('idle.exam.examing.enhancementExam.answerShowed.idle'),
       function answerShowedAnimationWatcher (value) {
         if (!value) return
         gsap
@@ -192,8 +192,8 @@ export default {
     )
 
     watch(
-      () => props.current.matches('idle.exam.normalExam.answerShowed.cardSwipeRightAnimation') ||
-        props.current.matches('idle.exam.enhancementExam.answerShowed.cardSwipeRightAnimation'),
+      () => props.current.matches('idle.exam.examing.normalExam.answerShowed.cardSwipeRightAnimation') ||
+        props.current.matches('idle.exam.examing.enhancementExam.answerShowed.cardSwipeRightAnimation'),
       function cardSwipeRightAnimationWatcher (value) {
         if (!value) return
         dragEnd()
@@ -205,8 +205,8 @@ export default {
     )
 
     watch(
-      () => props.current.matches('idle.exam.normalExam.answerShowed.cardSwipeLeftAnimation') ||
-        props.current.matches('idle.exam.enhancementExam.answerShowed.cardSwipeLeftAnimation'),
+      () => props.current.matches('idle.exam.examing.normalExam.answerShowed.cardSwipeLeftAnimation') ||
+        props.current.matches('idle.exam.examing.enhancementExam.answerShowed.cardSwipeLeftAnimation'),
       function cardSwipeLeftAnimationWatcher (value) {
         if (!value) return
         dragEnd()
@@ -273,8 +273,8 @@ export default {
     }
 
     watch(
-      () => props.current.matches('idle.exam.normalExam.answerShowed.cardBackToPositionAnimation') ||
-        props.current.matches('idle.exam.enhancementExam.answerShowed.cardBackToPositionAnimation'),
+      () => props.current.matches('idle.exam.examing.normalExam.answerShowed.cardBackToPositionAnimation') ||
+        props.current.matches('idle.exam.examing.enhancementExam.answerShowed.cardBackToPositionAnimation'),
       function cardBackToPositionAnimationWatcher (value) {
         if (!value) return
         dragEnd()
@@ -295,7 +295,7 @@ export default {
     )
 
     watch(
-      () => props.current.matches('idle.exam.enhancementExam.answerShowed.cardShakeAnimation'),
+      () => props.current.matches('idle.exam.examing.enhancementExam.answerShowed.cardShakeAnimation'),
       function cardShakeAnimationWatcher (value) {
         if (!value) return
         const shakeTimeline = gsap
@@ -356,8 +356,8 @@ export default {
     function cardMoving (e) {
       if (!canDrag.value) return
       if (
-        (props.current.matches('idle.exam.normalExam') && !props.current.matches('idle.exam.normalExam.answerShowed.moved')) ||
-        (props.current.matches('idle.exam.enhancementExam') && !props.current.matches('idle.exam.enhancementExam.answerShowed.moved'))
+        (props.current.matches('idle.exam.examing.normalExam') && !props.current.matches('idle.exam.examing.normalExam.answerShowed.moved')) ||
+        (props.current.matches('idle.exam.examing.enhancementExam') && !props.current.matches('idle.exam.examing.enhancementExam.answerShowed.moved'))
       ) {
         props.service.send('CARD_MOVE')
       }
@@ -365,7 +365,7 @@ export default {
       const movement = getDraggingMovement(e)
 
       if (
-        props.current.matches('idle.exam.enhancementExam') &&
+        props.current.matches('idle.exam.examing.enhancementExam') &&
         movement < 0 &&
         xMovement.value <= 0
       ) {
