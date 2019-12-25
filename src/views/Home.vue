@@ -205,8 +205,8 @@ export default {
     // data
     const deferredPrompt = ref(null)
 
-    const isAndroidChrome = ref(is.android() && is.chrome())
-    const isAndroidFirefox = ref(is.android() && is.firefox())
+    const isAndroidChrome = ref(is.android() && is.chrome() && !window.matchMedia('(display-mode: standalone)').matches)
+    const isAndroidFirefox = ref(is.android() && is.firefox() && !window.matchMedia('(display-mode: standalone)').matches)
     const isIosSafari = ref(is.ios() && is.safari() && !window.navigator.standalone == true)
     const showAddToHomeButton = computed(function getShowAddToHomeButton () {
       return (isAndroidChrome.value && deferredPrompt.value) ||
