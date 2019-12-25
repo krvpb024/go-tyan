@@ -510,7 +510,7 @@ export default {
   text-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
   font-size: 1rem;
   user-select: none;
-  padding: 0;
+  padding: 4px;
   display: flex;
   align-items: center;
   justify-content: center;

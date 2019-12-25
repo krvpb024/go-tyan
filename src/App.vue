@@ -50,6 +50,11 @@ export default {
   outline-offset: 5px;
 }
 
+/* fix android firefox preview hover button text will disappear */
+button:hover {
+  color: inherit;
+}
+
 body.using-mouse :focus {
   outline: none !important;
 }

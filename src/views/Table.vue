@@ -340,7 +340,7 @@ export default {
 }
 
 .table-view-table-data__data-button {
-  font-family: system-ui;
+  font-family: inherit;
   width: 100%;
   height: 100%;
   border-radius: 8px;
