@@ -158,36 +158,10 @@
           aria-labelledby="drawing-board-nav-previous"
           :aria-controls="current.context.activeGroupName"
         >
-          <svg
-            aria-labelledby="drawing-board-nav-previous"
-            xmlns="http://www.w3.org/2000/svg"
-            width="17.049"
-            height="19.324"
-            viewBox="0 0 17.049 19.324"
+          <img
+            src="@/assets/left-arrow.svg"
+            alt="往上一個儲存格"
           >
-            <title id="drawing-board-nav-previous">往上一個儲存格</title>
-
-            <g
-              aria-labelledby="drawing-board-nav-previous"
-              id="Path_55"
-              fill="#ffffff"
-              data-name="Path 55"
-            >
-              <path
-                aria-labelledby="drawing-board-nav-previous"
-                d="M18.811 18.2H3.493c-.436 0-.825-.226-1.041-.604a1.187 1.187 0 0 1 .006-1.203l7.66-13.05a1.189 1.189 0 0 1 1.034-.592c.43 0 .817.222 1.035.593l7.66 13.049c.22.375.222.825.006 1.203a1.187 1.187 0 0 1-1.042.604z"
-                stroke="none"
-                transform="rotate(-90 9.432 11.383)"
-              />
-              <path
-                aria-labelledby="drawing-board-nav-previous"
-                d="M11.152 3.551a.382.382 0 0 0-.345.198L3.148 16.798a.382.382 0 0 0-.002.4.382.382 0 0 0 .347.202h15.318c.192 0 .295-.11.347-.201a.382.382 0 0 0-.002-.401l-7.659-13.05a.382.382 0 0 0-.345-.197m0-1.6c.67 0 1.339.33 1.725.988l7.66 13.049C21.318 17.32 20.356 19 18.81 19H3.493c-1.546 0-2.507-1.68-1.725-3.012l7.66-13.05a1.982 1.982 0 0 1 1.724-.987z"
-                stroke="none"
-                fill="#2c2c2c"
-                transform="rotate(-90 9.432 11.383)"
-              />
-            </g>
-          </svg>
         </button>
 
         <button
@@ -198,36 +172,10 @@
           aria-labelledby="drawing-board-nav-next"
           :aria-controls="current.context.activeGroupName"
         >
-          <svg
-            aria-labelledby="drawing-board-nav-next"
-            xmlns="http://www.w3.org/2000/svg"
-            width="17.049"
-            height="19.324"
-            viewBox="0 0 17.049 19.324"
+          <img
+            src="@/assets/right-arrow.svg"
+            alt="往下一個儲存格"
           >
-            <title id="drawing-board-nav-next">往下一個儲存格</title>
-
-            <g
-              aria-labelledby="drawing-board-nav-next"
-              id="Path_57"
-              fill="#ffffff"
-              data-name="Path 57"
-            >
-              <path
-                aria-labelledby="drawing-board-nav-next"
-                d="M18.811 18.2H3.493c-.436 0-.825-.226-1.041-.604a1.187 1.187 0 0 1 .006-1.203l7.66-13.05a1.189 1.189 0 0 1 1.034-.592c.43 0 .817.222 1.035.593l7.66 13.049c.22.375.222.825.006 1.203a1.187 1.187 0 0 1-1.042.604z"
-                stroke="none"
-                transform="rotate(90 10.245 8.755)"
-              />
-              <path
-                aria-labelledby="drawing-board-nav-next"
-                d="M11.152 3.551a.382.382 0 0 0-.345.198L3.148 16.798a.382.382 0 0 0-.002.4.382.382 0 0 0 .347.202h15.318c.192 0 .295-.11.347-.201a.382.382 0 0 0-.002-.401l-7.659-13.05a.382.382 0 0 0-.345-.197m0-1.6c.67 0 1.339.33 1.725.988l7.66 13.049C21.318 17.32 20.356 19 18.81 19H3.493c-1.546 0-2.507-1.68-1.725-3.012l7.66-13.05a1.982 1.982 0 0 1 1.724-.987z"
-                stroke="none"
-                fill="#2c2c2c"
-                transform="rotate(90 10.245 8.755)"
-              />
-            </g>
-          </svg>
         </button>
       </div>
     </div>
@@ -358,7 +306,7 @@ export default {
         }
 
         function canvasInitialSettings () {
-        // this api will round floating points, it will cause canvas keep growing
+          // this api will round floating points, it will cause canvas keep growing
           canvasElement.value.width = canvasContainerElement.value.clientWidth - 10
           canvasElement.value.height = canvasContainerElement.value.clientHeight - 10
           ctx.value = canvasElement.value.getContext('2d')
