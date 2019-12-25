@@ -349,15 +349,13 @@ export default {
   flex: 1;
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
-  padding: 0 5px;
+  padding: 10px;
   display: none;
   opacity: 0;
-  border: 4px solid transparent;
 }
 
 .exam-range-modal-form__scroll-content:focus {
-  border: 4px solid var(--main-color);
-  outline: none;
+  outline-offset: -5px;
 }
 
 .exam-range-modal-scroll-content__subtitle {

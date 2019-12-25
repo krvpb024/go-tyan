@@ -286,14 +286,12 @@ export default {
   position: absolute;
   left: 10px;
   top: 10px;
-  padding: 3px;
+  padding: 0;
   background-color: transparent;
   border: var(--focus-border-width) solid transparent;
-}
-
-.exam-mode-info-modal-content-block__close-button:focus {
-  border: 4px solid var(--main-color);
-  outline: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .exam-mode-info-modal-content-block__title-block {

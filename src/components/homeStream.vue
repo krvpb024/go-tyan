@@ -231,11 +231,6 @@ export default {
   height: 100%;
 }
 
-.home-stream:focus {
-  outline: 4px solid var(--main-color);
-  outline-offset: 6px;
-}
-
 .home-stream__content-block {
   padding: 0 20px;
   height: 100%;

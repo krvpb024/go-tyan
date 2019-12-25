@@ -324,11 +324,6 @@ export default {
   position: relative;
 }
 
-.home-header__install-button:focus {
-  outline: 4px solid var(--main-color);
-  outline-offset: 8px;
-}
-
 .home-header__install-button::after {
   content: "";
   display: block;
@@ -381,11 +376,6 @@ export default {
 
 .home-nav__nav-item {
   display: block;
-}
-
-.home-nav__nav-item:focus {
-  outline: 4px solid var(--main-color);
-  outline-offset: 6px;
 }
 
 .home-nav-item__list-group {

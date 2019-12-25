@@ -475,11 +475,6 @@ export default {
   left: 0;
 }
 
-.drawing-board-content-block__title-button:focus {
-  outline: 4px solid var(--main-color);
-  outline-offset: 6px;
-}
-
 .drawing-board-title-button__title {
   margin: 0;
   font-size: 1rem;
@@ -502,8 +497,10 @@ export default {
   will-change: auto;
   display: none;
   flex-direction: column;
-  grid-template-columns: auto auto auto auto 1fr auto;
+  grid-template-columns: auto auto auto 1fr auto;
   grid-template-rows: auto 1fr auto 1fr;
+  grid-column-gap: 5px;
+  column-gap: 5px;
 }
 
 .drawing-board-first-column__tool-button {
@@ -513,7 +510,7 @@ export default {
   text-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
   font-size: 1rem;
   user-select: none;
-  padding: 5px 8px;
+  padding: 0;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -521,22 +518,22 @@ export default {
 }
 
 .drawing-board-first-column__tool-button--clear-button {
-  grid-column: 1 / 2;
+  grid-column: 1;
   grid-row: 1;
 }
 
 .drawing-board-first-column__tool-button--peak-hiragana-button {
-  grid-column: 3;
+  grid-column: 2;
   grid-row: 1;
 }
 
 .drawing-board-first-column__tool-button--peak-katakana-button {
-  grid-column: 4;
+  grid-column: 3;
   grid-row: 1;
 }
 
 .drawing-board-first-column__tool-button--close-button {
-  grid-column: 6;
+  grid-column: 5;
   grid-row: 1;
 }
 
@@ -548,7 +545,7 @@ export default {
 
 .drawing-board-first-column__tool-button--next-button {
   grid-row: 3;
-  grid-column: 6;
+  grid-column: 5;
   justify-self: end;
 }
 
@@ -566,12 +563,5 @@ export default {
   margin: 0;
   padding: 0;
   border: solid var(--focus-border-width) transparent;
-}
-
-.drawing-board-canvas-container__canvas-element:focus,
-.drawing-board-first-column__tool-button:focus {
-  border: var(--focus-border);
-  border-radius: 4px;
-  outline: none;
 }
 </style>

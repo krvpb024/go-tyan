@@ -333,11 +333,6 @@ export default {
   color: var(--main-color);
 }
 
-.exam-mode-info-modal__modal-trigger-button:focus {
-  outline: 4px solid var(--main-color);
-  outline-offset: 4px;
-}
-
 .exam-mode-content__main-block {
   position: relative;
   width: 100%;
@@ -348,12 +343,6 @@ export default {
 
 .exam-mode-exam-block__normal-exam {
   width: 100%;
-}
-
-.exam-mode-exam-block__normal-exam:focus,
-.exam-mode-exam-block__enhancement-exam:focus {
-  outline: 4px solid var(--main-color);
-  outline-offset: 8px;
 }
 
 .exam-mode-exam-block__enhancement-exam {

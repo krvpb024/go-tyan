@@ -8,7 +8,29 @@
 </template>
 
 <script>
-export default {}
+import { onMounted, onUnmounted } from '@vue/composition-api'
+
+export default {
+  setup () {
+    onMounted(function addOnMounted () {
+      document.body.addEventListener('mousedown', mouseDownHandler)
+      document.body.addEventListener('keydown', keydownHandler)
+    })
+
+    onUnmounted(function addOnUnmounted () {
+      document.body.removeEventListener('mousedown', mouseDownHandler)
+      document.body.removeEventListener('keydown', keydownHandler)
+    })
+
+    function mouseDownHandler () {
+      document.body.classList.add('using-mouse')
+    }
+
+    function keydownHandler () {
+      document.body.classList.remove('using-mouse')
+    }
+  },
+}
 </script>
 
 <style>
@@ -21,6 +43,15 @@ export default {}
   --focus-border: solid var(--focus-border-width) var(--main-color);
   --app-max-width: 768px;
   --root-padding-size: 8px;
+}
+
+:focus {
+  outline: 4px solid var(--text-color);
+  outline-offset: 5px;
+}
+
+body.using-mouse :focus {
+  outline: none !important;
 }
 
 html {

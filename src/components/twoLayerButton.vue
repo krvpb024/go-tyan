@@ -26,11 +26,6 @@ export default {
   background-color: transparent;
 }
 
-.two-layer-button:focus {
-  outline: 4px solid var(--main-color);
-  outline-offset: 8px;
-}
-
 .two-layer-button::after {
   content: "";
   display: block;

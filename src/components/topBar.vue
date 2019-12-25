@@ -54,10 +54,12 @@ export default {
   position: relative;
 }
 
-.left-container *:focus, .right-container *:focus {
-  border: 2.5px solid var(--text-color);
-  outline: none;
-  border-radius: 4px;
+.left-container button:focus,
+.left-container a:focus,
+.right-container button:focus,
+.right-container a:focus {
+  outline-offset: 0;
+  outline-color: var(--text-color);
 }
 
 .left-container button, .right-container button, .left-container a, .right-container a {

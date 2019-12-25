@@ -270,9 +270,4 @@ export default {
   margin: 31px auto;
   padding: 0 20px;
 }
-
-.exam-nav__link:focus {
-  outline: 4px solid var(--main-color);
-  outline-offset: 10px;
-}
 </style>
