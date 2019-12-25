@@ -59,6 +59,11 @@ export default {
   align-items: center;
 }
 
+.two-layer-button__content img {
+  max-width: 100%;
+  max-height: 100%;
+}
+
 .two-layer-button__content--invert {
   background-color: var(--main-color);
 }
