@@ -143,13 +143,18 @@
         angleTransformX="-50%"
         angleTransformY="50%"
       >
-        點擊
+        <span class="home-tooltips__text">
+          點擊
+        </span>
+
         <img
           class="home-tooltips__icon"
           src="@/assets/ios-share.svg"
           alt="加入主畫面按鈕"
         >
-        加入「主畫面」
+        <span class="home-tooltips__text">
+          加入「主畫面」
+        </span>
       </tooltips>
     </div>
 
@@ -168,7 +173,9 @@
         :anglePosition="{ right: '70px', top: '0' }"
         angleTransformY="-50%"
       >
-        點擊
+        <span class="home-tooltips__text">
+          點擊
+        </span>
         <img
           class="home-tooltips__icon"
           src="@/assets/firefox-home.svg"
@@ -232,7 +239,6 @@ export default {
 
     function addToHomeScreen () {
       if (deferredPrompt.value) {
-        console.log(deferredPrompt.value)
         deferredPrompt.value.prompt()
         deferredPrompt.value.userChoice.then(function responseUserChoice (choiceResult) {
           if (choiceResult.outcome == 'accepted') {
@@ -397,8 +403,12 @@ export default {
   transform: translateX(-50%);
 }
 
-.home-tooltips__icon {
-  margin: 0 10px;
+.home-tooltips__text + .home-tooltips__icon {
+  margin-left: 10px;
+}
+
+.home-tooltips__icon + .home-tooltips__text {
+  margin-left: 10px;
 }
 
 .home__tooltips-container--android-firefox {

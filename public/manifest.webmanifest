@@ -1,0 +1,52 @@
+{
+  "name": "五十音阿五",
+  "short_name": "阿五",
+  "description": "「記憶日文五十音網站」免網路即可使用，讓你坐車時輕鬆練習，可隱藏五十音方便默念，還可手寫練習。",
+  "display": "standalone",
+  "scope": "/",
+  "start_url": "./",
+  "background_color": "#ffffff",
+  "theme_color": "#ffe65a",
+  "icons": [
+    {
+      "src": "./img/icons/go-tyan_48x48.png",
+      "sizes": "48x48",
+      "type": "image/png"
+    },
+    {
+      "src": "./img/icons/go-tyan_72x72.png",
+      "sizes": "72x72",
+      "type": "image/png"
+    },
+    {
+      "src": "./img/icons/go-tyan_96x96.png",
+      "sizes": "96x96",
+      "type": "image/png"
+    },
+    {
+      "src": "./img/icons/go-tyan_128x128.png",
+      "sizes": "128x128",
+      "type": "image/png"
+    },
+    {
+      "src": "./img/icons/go-tyan_144x144.png",
+      "sizes": "144x144",
+      "type": "image/png"
+    },
+    {
+      "src": "./img/icons/go-tyan_192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "./img/icons/go-tyan_256x256.png",
+      "sizes": "256x256",
+      "type": "image/png"
+    },
+    {
+      "src": "./img/icons/go-tyan_512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
