@@ -1,6 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="15.998" height="23.872" viewBox="0 0 15.998 23.872">
-  <g id="Group_392" data-name="Group 392" transform="translate(-127 -37.131)">
-    <path id="Subtraction_67" data-name="Subtraction 67" d="M-22203-15081h-16v-17h5v.942h-4.061v15.111h14.119v-15.111H-22208v-.942h5v17Z" transform="translate(22346 15142)" fill="#313131"/>
-    <path id="Union_11" data-name="Union 11" d="M4.6,8.554.56,4.9a.46.46,0,0,1,0-.7L4.6.544a.588.588,0,0,1,.77,0,.46.46,0,0,1,0,.7L2.309,4.011H14.943a.493.493,0,0,1,0,.985H2.21l3.162,2.86a.46.46,0,0,1,0,.7.585.585,0,0,1-.77,0Z" transform="translate(139.566 36.73) rotate(90)" fill="#313131"/>
-  </g>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="15.998" height="23.872" viewBox="0 0 15.998 23.872"><g data-name="Group 392" fill="#313131"><path data-name="Subtraction 67" d="M16 23.869H0v-17h5v.942H.939v15.111h14.119V7.811H11v-.942h5v17z"/><path data-name="Union 11" d="M4.012 4.199L7.666.159a.46.46 0 01.7 0l3.656 4.04a.588.588 0 010 .77.46.46 0 01-.7 0L8.555 1.908v12.634a.493.493 0 01-.985 0V1.809L4.71 4.971a.46.46 0 01-.7 0 .585.585 0 010-.77z"/></g></svg>
