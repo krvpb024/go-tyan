@@ -2,7 +2,11 @@
   <section class="home">
     <header class="home__header">
       <div class="home-header__logo">
-        <img src="@/assets/go-tyan.svg" alt="" aria-hidden="true">
+        <img
+          src="@/assets/go-tyan.svg"
+          alt=""
+          aria-hidden="true"
+        >
       </div>
 
       <h1 class="home-header__title">
@@ -27,7 +31,11 @@
       >
         <home-card>
           <template #image>
-            <img src="@/assets/table.svg" alt="" aria-hidden="true">
+            <img
+              src="@/assets/table.svg"
+              alt=""
+              aria-hidden="true"
+            >
           </template>
 
           <template #title>
@@ -48,7 +56,11 @@
       >
         <home-card>
           <template #image>
-<img src="@/assets/exam.svg" alt="" aria-hidden="true">
+            <img
+              src="@/assets/exam.svg"
+              alt=""
+              aria-hidden="true"
+            >
           </template>
 
           <template #title>
@@ -70,7 +82,11 @@
       >
         <home-card>
           <template #image>
-            <img src="@/assets/about.svg" alt="" aria-hidden="true">
+            <img
+              src="@/assets/about.svg"
+              alt=""
+              aria-hidden="true"
+            >
           </template>
 
           <template #title>
@@ -91,7 +107,11 @@
       >
         <home-card>
           <template #image>
-<img src="@/assets/coffee.svg" alt="" aria-hidden="true">
+            <img
+              src="@/assets/coffee.svg"
+              alt=""
+              aria-hidden="true"
+            >
           </template>
 
           <template #title>
@@ -124,13 +144,12 @@
         angleTransformY="50%"
       >
         點擊
-        <svg class="home-tooltips__icon" xmlns="http://www.w3.org/2000/svg" width="15.998" height="23.872" viewBox="0 0 15.998 23.872">
-          <g id="Group_392" data-name="Group 392" transform="translate(-127 -37.131)">
-            <path id="Subtraction_67" data-name="Subtraction 67" d="M-22203-15081h-16v-17h5v.942h-4.061v15.111h14.119v-15.111H-22208v-.942h5v17Z" transform="translate(22346 15142)" fill="#313131"/>
-            <path id="Union_11" data-name="Union 11" d="M4.6,8.554.56,4.9a.46.46,0,0,1,0-.7L4.6.544a.588.588,0,0,1,.77,0,.46.46,0,0,1,0,.7L2.309,4.011H14.943a.493.493,0,0,1,0,.985H2.21l3.162,2.86a.46.46,0,0,1,0,.7.585.585,0,0,1-.77,0Z" transform="translate(139.566 36.73) rotate(90)" fill="#313131"/>
-          </g>
-        </svg>
-        選擇加入主畫面
+        <img
+          class="home-tooltips__icon"
+          src="@/assets/ios-share.svg"
+          alt="加入主畫面按鈕"
+        >
+        加入「主畫面」
       </tooltips>
     </div>
 
@@ -150,18 +169,11 @@
         angleTransformY="-50%"
       >
         點擊
-        <svg class="home-tooltips__icon" xmlns="http://www.w3.org/2000/svg" width="22.636" height="22.301" viewBox="0 0 22.636 22.301">
-          <g id="Group_393" data-name="Group 393" transform="translate(-165.743 -33.698)">
-            <g id="Group_391" data-name="Group 391" transform="translate(-119 7)">
-              <path id="Path_166" data-name="Path 166" d="M.967-.033A.89.89,0,0,1,1.9.9L1.434,14.434a1.051,1.051,0,0,1-1,1A.89.89,0,0,1-.5,14.5L-.033.967A1.051,1.051,0,0,1,.967-.033Z" transform="translate(296.01 27.075) rotate(45)" fill="#313131"/>
-              <path id="Path_165" data-name="Path 165" d="M.967.033a1.051,1.051,0,0,1,1,1l.466,13.534A.89.89,0,0,1,1.5,15.5a1.051,1.051,0,0,1-1-1L.033.967A.89.89,0,0,1,.967.033Z" transform="translate(307.425 37.637) rotate(135)" fill="#313131"/>
-              <rect id="Rectangle_895" data-name="Rectangle 895" width="2" height="8" rx="1" transform="translate(300.001 39) rotate(90)" fill="#313131"/>
-              <rect id="Rectangle_896" data-name="Rectangle 896" width="2" height="8" rx="1" transform="translate(297 44) rotate(180)" fill="#313131"/>
-              <path id="Subtraction_68" data-name="Subtraction 68" d="M-22205-15085h-12a2,2,0,0,1-2-2v-11a2,2,0,0,1,2-2v12.128a1,1,0,0,0,1,1h10a1,1,0,0,0,1-1v-12.082s0-.01,0-.016v-.03a2,2,0,0,1,2,2v11A2,2,0,0,1-22205-15085Z" transform="translate(22507 15134)" fill="#313131"/>
-            </g>
-          </g>
-        </svg>
-        加入主畫面
+        <img
+          class="home-tooltips__icon"
+          src="@/assets/firefox-home.svg"
+          alt="加入主畫面"
+        >
       </tooltips>
     </div>
   </section>
@@ -184,16 +196,18 @@ export default {
     // composition
     const { service, current } = useMachine(machine)
     // data
+    const deferredPrompt = ref(null)
+
     const isAndroidChrome = ref(is.android() && is.chrome())
     const isAndroidFirefox = ref(is.android() && is.firefox())
-    const isIosSafari = ref(is.ios() && is.safari())
+    const isIosSafari = ref(is.ios() && is.safari() && !window.navigator.standalone == true)
     const showAddToHomeButton = computed(function getShowAddToHomeButton () {
       return (isAndroidChrome.value && deferredPrompt.value) ||
         isAndroidFirefox.value ||
         isIosSafari.value
     })
 
-    const deferredPrompt = ref(null)
+    const standalone = ref(window.navigator.standalone == true)
 
     // effect
     onMounted(function homeOnMounted () {
@@ -206,6 +220,7 @@ export default {
 
     return {
       // data
+      standalone,
       service,
       current,
       isIosSafari,

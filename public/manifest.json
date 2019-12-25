@@ -1,14 +1,12 @@
 {
-  "name": "五十音阿五 - 記憶五十音小工具",
+  "name": "五十音阿五",
   "short_name": "阿五",
   "description": "「記憶日文五十音網站」免網路即可使用，讓你坐車時輕鬆練習，可隱藏五十音方便默念，還可手寫練習。",
-  "start_url": "./",
-  "scope": "/",
   "display": "standalone",
+  "scope": "/",
+  "start_url": "./",
   "background_color": "#ffffff",
   "theme_color": "#ffe65a",
-  "categories": ["education"],
-  ​​"orientation": "portrait-primary",
   "icons": [
     {
       "src": "./img/icons/go-tyan_48x48.png",
