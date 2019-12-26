@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import smoothscroll from 'smoothscroll-polyfill'
 import VueCompositionApi from '@vue/composition-api'
+import { store } from '@/store/index.js'
 import runtime from 'serviceworker-webpack-plugin/lib/runtime'
 import 'normalize.css'
 import App from './App.vue'
@@ -20,5 +21,6 @@ if ('serviceWorker' in navigator) {
 
 new Vue({
   router,
+  store,
   render: h => h(App),
 }).$mount('#app')

@@ -187,7 +187,7 @@
 </template>
 
 <script>
-import { ref, computed, onMounted } from '@vue/composition-api'
+import { ref, computed } from '@vue/composition-api'
 import { useMachine } from '@/utils/useMachine.js'
 import { machine } from '@/states/homeState.js'
 import is from 'is_js'
@@ -199,12 +199,16 @@ import tooltips from '@/components/tooltips.vue'
 export default {
   name: 'Home',
   components: { homeStream, homeCard, twoLayerButton, tooltips },
-  setup () {
+  setup (props, context) {
+    // store
+    context.root.$store.dispatch('updateDefferedPrompt')
     // composition
     const { service, current } = useMachine(machine)
-    // data
-    const deferredPrompt = ref(null)
+    const deferredPrompt = computed(function getDeferredPrompt () {
+      return context.root.$store.state.deferredPrompt
+    })
 
+    // data
     const isAndroidChrome = ref(is.android() && is.chrome() && !window.matchMedia('(display-mode: standalone)').matches)
     const isAndroidFirefox = ref(is.android() && is.firefox() && !window.matchMedia('(display-mode: standalone)').matches)
     const isIosSafari = ref(is.ios() && is.safari() && !window.navigator.standalone == true)
@@ -216,15 +220,6 @@ export default {
 
     const standalone = ref(window.navigator.standalone == true)
 
-    // effect
-    onMounted(function homeOnMounted () {
-      window.addEventListener('beforeinstallprompt', (e) => {
-        // Prevent Chrome 67 and earlier from automatically showing the prompt
-        e.preventDefault()
-        deferredPrompt.value = e
-      })
-    })
-
     return {
       // data
       standalone,
@@ -233,6 +228,7 @@ export default {
       isIosSafari,
       isAndroidFirefox,
       showAddToHomeButton,
+      deferredPrompt,
       // methods
       addToHomeScreen,
     }
@@ -246,7 +242,6 @@ export default {
           } else {
             console.log('User dismissed the A2HS prompt')
           }
-          deferredPrompt.value = null
         })
       } else {
         service.value.send('SHOW_TOOLTIPS')
