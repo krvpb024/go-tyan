@@ -1,0 +1,14 @@
+{
+  "@context": "http://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "item": {
+        "@id": "https://gojuon.now.sh/",
+        "name": "首頁"
+      }
+    }
+  ]
+}

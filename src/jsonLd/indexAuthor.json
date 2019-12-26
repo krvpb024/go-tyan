@@ -1,0 +1,14 @@
+{
+  "@type": "Person",
+  "@id": "#Author",
+  "name": "Chen Yi-Chen",
+  "familyName": "Chen",
+  "givenName": "Yi-Chen",
+  "gender": "Male",
+  "sameAs": [
+    "https://www.facebook.com/miwooro",
+    "https://twitter.com/krvpb024",
+    "https://github.com/krvpb024",
+    "https://g0v.social/web/accounts/80071"
+  ]
+}

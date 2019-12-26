@@ -1,0 +1,17 @@
+{
+  "@context": "http://schema.org",
+  "@type": "WebApplication",
+  "applicationCategory": "EducationalApplication",
+  "name": "五十音阿五",
+  "description": "「記憶日文五十音網站」免網路即可使用，讓你坐車時輕鬆練習，可隱藏五十音方便默念，還可手寫練習。版面乾淨清新，無廣告干擾。",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "TWD"
+  },
+  "mainEntityOfPage": "https://gojuon.now.sh",
+  "operatingSystem": "All platform with modern browser.",
+  "Author": {
+    "@id": "#Author"
+  }
+}
