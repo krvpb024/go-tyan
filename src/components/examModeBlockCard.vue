@@ -31,7 +31,6 @@
             ? false
             : 'true'
         "
-        lang="ja-JP"
       >
         {{ question }}
       </span>
@@ -39,7 +38,6 @@
         id="exam-mode-block-card__answer"
         class="exam-mode-block-card__answer"
         ref="cardAnswerElement"
-        lang="ja-JP"
       >
         {{ answer }}
       </span>
