@@ -76,7 +76,7 @@
         </home-card>
       </router-link>
 
-      <router-link
+      <!-- <router-link
         to="/"
         class="home-nav__nav-item"
       >
@@ -124,7 +124,7 @@
             </ul>
           </template>
         </home-card>
-      </router-link>
+      </router-link> -->
     </nav>
 
     <div
