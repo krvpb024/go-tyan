@@ -129,7 +129,7 @@
 
     <div
       class="home__tooltips-container"
-      :class="{ 'home__tooltips-container--ios-safari': isIosSafari }"
+      :class="{ 'home__tooltips-container--ios-safari': showWhenIosSafari }"
     >
       <tooltips
         class="home__tooltips"
@@ -153,14 +153,14 @@
           alt="加入主畫面按鈕"
         >
         <span class="home-tooltips__text">
-          加入「主畫面」
+          加入主畫面
         </span>
       </tooltips>
     </div>
 
     <div
       class="home__tooltips-container"
-      :class="{ 'home__tooltips-container--android-firefox': isAndroidFirefox }"
+      :class="{ 'home__tooltips-container--android-firefox': showWhenAndroidFirefox }"
     >
       <tooltips
         class="home__tooltips"
@@ -200,8 +200,6 @@ export default {
   name: 'Home',
   components: { homeStream, homeCard, twoLayerButton, tooltips },
   setup (props, context) {
-    // store
-    context.root.$store.dispatch('updateDefferedPrompt')
     // composition
     const { service, current } = useMachine(machine)
     const deferredPrompt = computed(function getDeferredPrompt () {
@@ -209,26 +207,44 @@ export default {
     })
 
     // data
-    const isAndroidChrome = ref(is.android() && is.chrome() && !window.matchMedia('(display-mode: standalone)').matches)
-    const isAndroidFirefox = ref(is.android() && is.firefox() && !window.matchMedia('(display-mode: standalone)').matches)
-    const isIosSafari = ref(is.ios() && is.safari() && !window.navigator.standalone == true)
+    const standalone = ref(
+      window.navigator.standalone == true ||
+      window.matchMedia('(display-mode: standalone)').matches
+    )
+    const showWhenAndroidChrome = computed(function getShowWhenAndroidChrome () {
+      return is.android() &&
+        is.chrome() &&
+        !standalone.value &&
+        deferredPrompt.value
+    })
+    const showWhenAndroidFirefox = computed(function getShowWhenAndroidFirefox () {
+      return is.android() &&
+        is.firefox() &&
+        !standalone.value
+    })
+    const showWhenIosSafari = computed(function getShowWhenIosSafari () {
+      return is.ios() &&
+        is.safari() &&
+        !standalone.value
+    })
     const showAddToHomeButton = computed(function getShowAddToHomeButton () {
-      return (isAndroidChrome.value && deferredPrompt.value) ||
-        isAndroidFirefox.value ||
-        isIosSafari.value
+      return showWhenAndroidChrome.value ||
+        showWhenAndroidFirefox.value ||
+        showWhenIosSafari.value
     })
 
-    const standalone = ref(window.navigator.standalone == true)
+    // effect
+    context.root.$store.dispatch('updateDefferedPrompt')
 
     return {
       // data
-      standalone,
       service,
       current,
-      isIosSafari,
-      isAndroidFirefox,
+      standalone,
+      showWhenAndroidChrome,
+      showWhenIosSafari,
+      showWhenAndroidFirefox,
       showAddToHomeButton,
-      deferredPrompt,
       // methods
       addToHomeScreen,
     }
@@ -397,7 +413,7 @@ export default {
 }
 
 .home__tooltips-container--android-firefox {
-  right: 20px;
+  right: 30px;
   top: 20px;
 }
 </style>
