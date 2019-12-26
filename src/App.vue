@@ -43,20 +43,17 @@ export default {
   --focus-border: solid var(--focus-border-width) var(--main-color);
   --app-max-width: 768px;
   --root-padding-size: 8px;
+
+  --focus-default-outline: 4px solid var(--text-color);
 }
 
 :focus {
-  outline: 4px solid var(--text-color);
+  outline: var(--focus-default-outline);
   outline-offset: 5px;
 }
 
-/* fix android firefox preview hover button text will disappear */
-button:hover {
-  color: inherit;
-}
-
 body.using-mouse :focus {
-  outline: none !important;
+  outline: none;
 }
 
 html {
@@ -68,6 +65,11 @@ html {
 a {
   color: inherit;
   text-decoration: none;
+}
+
+/* fix android firefox preview hover button text will disappear */
+button:hover {
+  color: inherit;
 }
 
 *,

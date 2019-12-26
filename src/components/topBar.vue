@@ -54,12 +54,16 @@ export default {
   position: relative;
 }
 
-.left-container button:focus,
-.left-container a:focus,
-.right-container button:focus,
-.right-container a:focus {
-  outline-offset: 0;
-  outline-color: var(--text-color);
+/* firefox can't apply default outline style */
+.left-container *:focus,
+.right-container *:focus {
+  outline-offset: 0px;
+  outline: var(--focus-default-outline);
+}
+
+body.using-mouse .left-container *:focus,
+body.using-mouse .right-container *:focus {
+  outline: none;
 }
 
 .left-container button, .right-container button, .left-container a, .right-container a {
