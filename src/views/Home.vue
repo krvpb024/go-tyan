@@ -142,6 +142,7 @@
         :anglePosition="{ left: '50%', bottom: '0' }"
         angleTransformX="-50%"
         angleTransformY="50%"
+        :showDuration="5000"
       >
         <span class="home-tooltips__text">
           點擊
@@ -172,6 +173,7 @@
         hideAnimationState="tooltips.hideTooltipsAnimation"
         :anglePosition="{ right: '70px', top: '0' }"
         angleTransformY="-50%"
+        :showDuration="5000"
       >
         <span class="home-tooltips__text">
           點擊

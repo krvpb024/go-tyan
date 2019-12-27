@@ -5,6 +5,7 @@
     aria-live="assertive"
     role="alert"
     ref="tooltipsElement"
+    @click="clickToHide"
   >
     <p class="tooltips__text">
       <slot></slot>
@@ -62,6 +63,10 @@ export default {
       type: String,
       default: '0',
     },
+    showDuration: {
+      type: Number,
+      default: 1500,
+    },
   },
   setup (props) {
     // element
@@ -102,9 +107,11 @@ export default {
     watch(
       () => props.current.matches(props.idleState),
       function startHideTooltipsAnimation (value) {
+        if (!value) return
+        if (tooltipsTimeout.value) return
         tooltipsTimeout.value = setTimeout(function closeTooltipsTimeout () {
           props.service.send('HIDE_TOOLTIPS')
-        }, 1500)
+        }, props.showDuration)
       },
       { lazy: true }
     )
@@ -124,6 +131,14 @@ export default {
 
     return {
       tooltipsElement,
+      // methods
+      clickToHide,
+    }
+
+    function clickToHide () {
+      clearTimeout(tooltipsTimeout.value)
+      tooltipsTimeout.value = null
+      props.service.send('HIDE_TOOLTIPS')
     }
   },
 }
