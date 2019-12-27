@@ -3,22 +3,22 @@ import { gojuon } from '@/states/gojuon.js'
 
 const machine = Machine({
   id: 'examRangeView',
-  initial: 'pageUnounted',
+  initial: 'idle',
   context: {
     gojuon,
     selectedGojuon: [],
     submittedGojuon: [],
     examRange: [],
-  },
-  on: {
-    SHOW_EXAM_RANGE_MODAL: {
-      target: 'examRangeModal.showAnimation',
-    },
+    navTarget: '',
   },
   states: {
-    pageUnounted: {
+    idle: {
       on: {
-        PAGE_MOUNTED: 'checkIfExamRangeExist',
+        NAV_TO_EXAM_MODE: {
+          target: 'checkIfExamRangeExist',
+          actions: 'updateNavTarget',
+        },
+        SHOW_EXAM_RANGE_MODAL: 'examRangeModal.showAnimation',
       },
     },
     checkIfExamRangeExist: {
@@ -29,12 +29,11 @@ const machine = Machine({
             target: 'examRangeModal.showAnimation',
           },
           {
-            target: 'idle',
+            target: 'navToExamMode',
           },
         ],
       },
     },
-    idle: {},
     examRangeModal: {
       id: 'examRangeModal',
       initial: 'hide',
@@ -47,16 +46,10 @@ const machine = Machine({
         show: {
           initial: 'idle',
           on: {
-            HIDE_EXAM_RANGE_MODAL: [
-              {
-                cond: 'examRangeIsEmpty',
-                target: '.error',
-              },
-              {
-                actions: 'undoMutateSelectedGojuon',
-                target: 'hideAnimation',
-              },
-            ],
+            HIDE_EXAM_RANGE_MODAL: {
+              actions: ['clearNavTarget', 'undoMutateSelectedGojuon'],
+              target: 'hideAnimation',
+            },
             UPDATE_SELECTED_GOJUON: {
               actions: 'updateSelectedGojuon',
             },
@@ -103,8 +96,23 @@ const machine = Machine({
             HIDE_EXAM_RANGE_MODAL_ANIMATION_END: 'hide',
           },
         },
-        hide: {},
+        hide: {
+          on: {
+            '': [
+              {
+                cond: 'hasNavTarget',
+                target: '#examRangeView.navToExamMode',
+              },
+              {
+                target: '#examRangeView.idle',
+              },
+            ],
+          },
+        },
       },
+    },
+    navToExamMode: {
+      type: 'final',
     },
   },
 }, {
@@ -118,8 +126,17 @@ const machine = Machine({
     noExamRange ({ examRange }) {
       return examRange.length == 0
     },
+    hasNavTarget ({ navTarget }) {
+      return Boolean(navTarget)
+    },
   },
   actions: {
+    updateNavTarget: assign(function mutateNavTarget (context, { data: navTarget }) {
+      return {
+        navTarget,
+      }
+    }),
+    clearNavTarget: assign({ navTarget: '' }),
     undoMutateSelectedGojuon: assign(function undoMutateSelectedGojuon ({ submittedGojuon }) {
       return {
         selectedGojuon: submittedGojuon,
@@ -143,8 +160,6 @@ const machine = Machine({
       }
     }),
     updateSubmittedGojuon: assign(function mutateSubmittedGojuon ({ selectedGojuon }) {
-      window.localStorage.setItem('submittedGojuon', JSON.stringify(selectedGojuon))
-
       return {
         submittedGojuon: selectedGojuon,
       }

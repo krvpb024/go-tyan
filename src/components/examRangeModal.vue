@@ -70,7 +70,7 @@
         <template #rightContainer>
           <button
             class="exam-range-modal__save-button"
-            @click="service.send('SET_EXAM_RANGE')"
+            @click="setExamRange"
             type="submit"
           >
             儲存
@@ -149,7 +149,7 @@
 </template>
 
 <script>
-import { ref, watch, onMounted } from '@vue/composition-api'
+import { ref, watch } from '@vue/composition-api'
 import { gsap } from 'gsap'
 import { generateTitle } from '@/states/gojuon.js'
 import { useModalNavigation } from '@/utils/useModalNavigation.js'
@@ -254,10 +254,6 @@ export default {
       { lazy: true }
     )
 
-    onMounted(function examRangeModalOnMounted () {
-      props.service.send('PAGE_MOUNTED')
-    })
-
     return {
       // elements
       examRangeModalBackground,
@@ -269,6 +265,7 @@ export default {
       // methods
       getRowString,
       updateSelectedGojuon,
+      setExamRange,
     }
 
     function getRowString (row) {
@@ -288,6 +285,15 @@ export default {
           target: `${groupName}-${rowIndex}`,
         },
       })
+    }
+
+    function setExamRange () {
+      window.localStorage.setItem(
+        'submittedGojuon',
+        JSON.stringify(props.current.context.selectedGojuon)
+      )
+
+      props.service.send('SET_EXAM_RANGE')
     }
   },
 }

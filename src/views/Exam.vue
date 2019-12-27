@@ -61,9 +61,10 @@
     </div>
 
     <nav class="exam-container__nav">
-      <router-link
+      <a
         class="exam-nav__link"
-        to="/exam/hiragana_to_romanization"
+        href="/exam/hiragana_to_romanization"
+        @click.prevent="navToExamMode"
       >
         <exam-card>
           <template #transformFrom>
@@ -82,11 +83,12 @@
             </h2>
           </template>
         </exam-card>
-      </router-link>
+      </a>
 
-      <router-link
+      <a
         class="exam-nav__link"
-        to="/exam/romanization_to_hiragana"
+        href="/exam/romanization_to_hiragana"
+        @click.prevent="navToExamMode"
       >
         <exam-card>
           <template #transformFrom>
@@ -105,11 +107,12 @@
             </h2>
           </template>
         </exam-card>
-      </router-link>
+      </a>
 
-      <router-link
+      <a
         class="exam-nav__link"
-        to="/exam/katakana_to_romanization"
+        href="/exam/katakana_to_romanization"
+        @click.prevent="navToExamMode"
       >
         <exam-card>
           <template #transformFrom>
@@ -128,11 +131,12 @@
             </h2>
           </template>
         </exam-card>
-      </router-link>
+      </a>
 
-      <router-link
+      <a
         class="exam-nav__link"
-        to="/exam/romanization_to_katakana"
+        href="/exam/romanization_to_katakana"
+        @click.prevent="navToExamMode"
       >
         <exam-card>
           <template #transformFrom>
@@ -151,11 +155,12 @@
             </h2>
           </template>
         </exam-card>
-      </router-link>
+      </a>
 
-      <router-link
+      <a
         class="exam-nav__link"
-        to="/exam/hiragana_to_katakana"
+        href="/exam/hiragana_to_katakana"
+        @click.prevent="navToExamMode"
       >
         <exam-card>
           <template #transformFrom>
@@ -174,11 +179,12 @@
             </h2>
           </template>
         </exam-card>
-      </router-link>
+      </a>
 
-      <router-link
+      <a
         class="exam-nav__link"
-        to="/exam/katakana_to_hiragana"
+        href="/exam/katakana_to_hiragana"
+        @click.prevent="navToExamMode"
       >
         <exam-card>
           <template #transformFrom>
@@ -197,13 +203,13 @@
             </h2>
           </template>
         </exam-card>
-      </router-link>
+      </a>
     </nav>
   </section>
 </template>
 
 <script>
-import { ref, onMounted } from '@vue/composition-api'
+import { ref, watch, onMounted } from '@vue/composition-api'
 import { machine } from '@/states/examState.js'
 import { useMachine } from '@/utils/useMachine.js'
 import topBar from '@/components/topBar.vue'
@@ -231,6 +237,15 @@ export default {
     const settingButtonBoundingClientRect = ref(null)
 
     // effect
+    watch(
+      () => current.value.matches('navToExamMode'),
+      function navToExamModeWatcher (value) {
+        if (!value) return
+
+        context.root.$router.push(current.value.context.navTarget)
+      }
+    )
+
     onMounted(function examOnMounted () {
       const { top, left, width, height } = settingButtonElement.value.getBoundingClientRect()
       settingButtonBoundingClientRect.value = { top, left, width, height }
@@ -245,10 +260,20 @@ export default {
       settingButtonBoundingClientRect,
       // methods
       modalHide,
+      navToExamMode,
     }
 
     function modalHide () {
       settingButtonElement.value.focus()
+    }
+
+    function navToExamMode (e) {
+      const navTarget = e.currentTarget.getAttribute('href')
+
+      service.value.send(
+        'NAV_TO_EXAM_MODE',
+        { data: '/exam/hiragana_to_romanization' }
+      )
     }
   },
 }
