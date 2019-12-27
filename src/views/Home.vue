@@ -129,6 +129,7 @@
 
     <div
       class="home__tooltips-container"
+      v-if="showWhenIosSafari"
       :class="{ 'home__tooltips-container--ios-safari': showWhenIosSafari }"
     >
       <tooltips
@@ -161,6 +162,7 @@
 
     <div
       class="home__tooltips-container"
+      v-if="showWhenAndroidFirefox"
       :class="{ 'home__tooltips-container--android-firefox': showWhenAndroidFirefox }"
     >
       <tooltips
