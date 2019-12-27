@@ -272,7 +272,7 @@ export default {
 
       service.value.send(
         'NAV_TO_EXAM_MODE',
-        { data: '/exam/hiragana_to_romanization' }
+        { data: navTarget }
       )
     }
   },
