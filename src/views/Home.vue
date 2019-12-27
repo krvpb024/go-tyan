@@ -187,6 +187,29 @@
         >
       </tooltips>
     </div>
+
+    <div
+      class="home__tooltips-container"
+      :class="{ 'home__tooltips-container--is-inapp': showWhenIsInapp }"
+    >
+      <tooltips
+        class="home__tooltips"
+        :service="service"
+        :current="current"
+        showState="tooltips"
+        showAnimationState="tooltips.showTooltipsAnimation"
+        idleState="tooltips.showTooltips"
+        hideAnimationState="tooltips.hideTooltipsAnimation"
+        :anglePosition="{ left: '0', top: '0' }"
+        angleTransformX="100%"
+        angleTransformY="50%"
+        :showDuration="5000"
+      >
+        <span class="home-tooltips__text">
+          「加入主畫面」功能目前不支援於您目前使用的瀏覽器，建議您切換至 {{ recommendedBrowser }} 瀏覽器。
+        </span>
+      </tooltips>
+    </div>
   </section>
 </template>
 
@@ -195,10 +218,13 @@ import { ref, computed } from '@vue/composition-api'
 import { useMachine } from '@/utils/useMachine.js'
 import { machine } from '@/states/homeState.js'
 import is from 'is_js'
+import InApp from 'detect-inapp'
 import homeStream from '@/components/homeStream.vue'
 import homeCard from '@/components/homeCard.vue'
 import twoLayerButton from '@/components/twoLayerButton.vue'
 import tooltips from '@/components/tooltips.vue'
+
+const inapp = new InApp(navigator.userAgent || navigator.vendor || window.opera)
 
 export default {
   name: 'Home',
@@ -229,12 +255,25 @@ export default {
     const showWhenIosSafari = computed(function getShowWhenIosSafari () {
       return is.ios() &&
         is.safari() &&
+        !inapp.isInApp &&
         !standalone.value
+    })
+    const showWhenIsInapp = computed(function getShowWhenIsInapp () {
+      return (is.ios() || is.android()) &&
+        inapp.isInApp &&
+        ['messenger', 'facebook', 'line', 'twitter', 'instagram'].includes(inapp.browser)
     })
     const showAddToHomeButton = computed(function getShowAddToHomeButton () {
       return showWhenAndroidChrome.value ||
         showWhenAndroidFirefox.value ||
-        showWhenIosSafari.value
+        showWhenIosSafari.value ||
+        showWhenIsInapp.value
+    })
+
+    const recommendedBrowser = computed(function getRecommendedBrowser () {
+      if (is.ios()) return 'Safari'
+      else if (is.android()) return 'FireFox、Chrome'
+      return ''
     })
 
     // effect
@@ -249,6 +288,8 @@ export default {
       showWhenIosSafari,
       showWhenAndroidFirefox,
       showAddToHomeButton,
+      showWhenIsInapp,
+      recommendedBrowser,
       // methods
       addToHomeScreen,
     }
@@ -402,10 +443,19 @@ export default {
   z-index: 100;
 }
 
-.home__tooltips-container--ios-safari {
+.home__tooltips-container--ios-safari, .home__tooltips-container--is-inapp {
   bottom: 20px;
   left: 50%;
   transform: translateX(-50%);
+}
+
+.home__tooltips-container--is-inapp {
+  width: 80%;
+}
+
+.home-tooltips__text {
+  text-align: center;
+  white-space: normal;
 }
 
 .home-tooltips__text + .home-tooltips__icon {
