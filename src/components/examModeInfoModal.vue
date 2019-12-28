@@ -35,22 +35,6 @@
         </button>
 
         <div class="exam-mode-info-modal-main-block__title-block">
-          <h2 class="exam-mode-info-modal-title-block__title">測驗說明</h2>
-        </div>
-
-        <div class="exam-mode-info-modal-main-block__description-block">
-          <ul class="exam-mode-info-modal-description__list-group">
-            <li class="exam-mode-info-modal-list-group__list-item">
-              答錯的題目會在測驗結束後再進行一次補強測驗
-            </li>
-
-            <li class="exam-mode-info-modal-list-group__list-item">
-              如果需要練習手寫幫助記憶，可以開啓手寫板
-            </li>
-          </ul>
-        </div>
-
-        <div class="exam-mode-info-modal-main-block__title-block">
           <h2 class="exam-mode-info-modal-title-block__title">操作方式</h2>
         </div>
 
@@ -308,7 +292,6 @@ export default {
   display: none;
   overflow: hidden;
   will-change: auto;
-  padding: 20px 0;
 }
 
 .exam-mode-info-modal-content-block__close-button {
@@ -336,8 +319,8 @@ body.using-mouse .exam-mode-info-modal-content-block__close-button:focus {
   border-bottom: 3px solid var(--text-color);
   width: 80%;
   margin: 0 auto;
-  padding-top: 20px;
-  padding-bottom: 15px;
+  padding-top: 31px;
+  padding-bottom: 22px;
 }
 
 .exam-mode-info-modal-title-block__title {
@@ -347,15 +330,16 @@ body.using-mouse .exam-mode-info-modal-content-block__close-button:focus {
 
 .exam-mode-info-modal-main-block__description-block {
   position: relative;
-  margin: 10px 10% 10px;
+  margin: 10px 10% 30px;
 }
 
 .exam-mode-info-modal-main-block__description-block--gesture {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   grid-template-rows: 1fr 1fr 1fr 1fr;
-  grid-row-gap: 20px;
-  row-gap: 20px;
+  grid-row-gap: 40px;
+  row-gap: 40px;
+  margin: 25px 20px 45px;
 }
 
 .exam-mode-info-modal-description-block__description {

@@ -56,15 +56,7 @@ const machine = Machine({
                   states: {
                     idle: {
                       on: {
-                        SHOW_ANSWER: [
-                          {
-                            cond: 'isNotFirstTime',
-                            target: 'answerShowed',
-                          },
-                          {
-                            target: '#examMode.idle.infoModal.showInfoModalAnimation',
-                          },
-                        ],
+                        SHOW_ANSWER: 'answerShowed',
                       },
                     },
                     answerShowed: {
@@ -206,6 +198,7 @@ const machine = Machine({
             },
             examFinish: {
               initial: 'examFinishAnimation',
+              entry: ['updateIsNotFirstTime'],
               states: {
                 examFinishAnimation: {
                   on: {
@@ -235,7 +228,6 @@ const machine = Machine({
               },
             },
             show: {
-              entry: ['updateIsNotFirstTime'],
               on: {
                 HIDE_INFO_MODAL: 'hideInfoModalAnimation',
               },

@@ -39,7 +39,7 @@
           </a>
         </template>
 
-        <h1>{{ title }}</h1>
+        <h1>{{ title.join('轉') }}</h1>
       </top-bar>
     </div>
 
@@ -87,6 +87,40 @@
               :service="service"
               :current="current"
             ></exam-mode-block>
+
+            <div
+              v-if="!current.context.isNotFirstTime && current.context.cursor == 0"
+              class="exam-mode-normal-exam__intro-block"
+            >
+              <img
+                class="exam-mode-intro-block__go-tyan"
+                src="@/assets/go-tyan.svg"
+                alt=""
+                aria-hidden="true"
+              >
+
+              <home-stream-item
+                v-if="!current.context.isNotFirstTime && current.matches('idle.exam.examing.normalExam.idle')"
+                class="exam-mode-intro-block__intro-description"
+                anglePosition="left"
+              >
+                <p class="exam-mode-intro-description__text">
+                  這個{{ title[0] }}的{{ title[1] }}是什麼？點擊卡片可以看解答喔！<br>
+                  打開手寫板可以練習手寫，但目前還沒有辨識功能。
+                </p>
+              </home-stream-item>
+
+              <home-stream-item
+                v-if="!current.context.isNotFirstTime && current.matches('idle.exam.examing.normalExam.answerShowed')"
+                class="exam-mode-intro-block__intro-description"
+                anglePosition="left"
+              >
+                <p class="exam-mode-intro-description__text">
+                  你答對了嗎？如果答對了就把卡片往右滑消除。<br>
+                  答錯了也沒關係，把卡片往左滑。測驗結束之後我會再幫你進行一次錯誤補強喔！
+                </p>
+              </home-stream-item>
+            </div>
           </div>
 
           <div
@@ -103,6 +137,28 @@
               :service="service"
               :current="current"
             ></exam-mode-block>
+
+            <div
+              v-if="!current.context.isNotFirstTime && current.context.enhancementCursor == 0"
+              class="exam-mode-normal-exam__intro-block"
+            >
+              <img
+                class="exam-mode-intro-block__go-tyan"
+                src="@/assets/go-tyan.svg"
+                alt=""
+                aria-hidden="true"
+              >
+
+              <home-stream-item
+                v-if="!current.context.isNotFirstTime && current.matches('idle.exam.examing.enhancementExam')"
+                class="exam-mode-intro-block__intro-description"
+                anglePosition="left"
+              >
+                <p class="exam-mode-intro-description__text">
+                  補強測驗只能參加一次喔！所以即使又答錯了，還是請你往右滑。
+                </p>
+              </home-stream-item>
+            </div>
           </div>
         </div>
 
@@ -142,10 +198,18 @@ import examModeBlock from '@/components/examModeBlock.vue'
 import examModeInfoModal from '@/components/examModeInfoModal.vue'
 import drawingBoard from '@/components/drawingBoard.vue'
 import examModeFinish from '@/components/examModeFinish.vue'
+import homeStreamItem from '@/components/homeStreamItem.vue'
 
 export default {
   name: 'ExamMode',
-  components: { topBar, examModeBlock, examModeInfoModal, drawingBoard, examModeFinish },
+  components: {
+    topBar,
+    examModeBlock,
+    examModeInfoModal,
+    drawingBoard,
+    examModeFinish,
+    homeStreamItem,
+  },
   setup (props, context) {
     // element
     const normalExamElement = ref(null)
@@ -170,17 +234,17 @@ export default {
     const title = computed(function getTitle () {
       switch (context.root.$route.name) {
         case 'hiraganaToRomanization':
-          return '平假名轉拼音'
+          return ['平假名', '拼音']
         case 'hiraganaToKatakana':
-          return '平假名轉片假名'
+          return ['平假名', '片假名']
         case 'katakanaToRomanization':
-          return '片假名轉拼音'
+          return ['片假名', '拼音']
         case 'katakanaToHiragana':
-          return '片假名轉平假名'
+          return ['片假名', '平假名']
         case 'romanizationToHiragana':
-          return '拼音轉平假名'
+          return ['拼音', '平假名']
         case 'romanizationToKatakana':
-          return '拼音轉片假名'
+          return ['拼音', '片假名']
         default:
           return ''
       }
@@ -331,7 +395,7 @@ export default {
 }
 
 .exam-mode-info-modal__modal-trigger-button:focus {
-  outline: var(--focus-default-outline)
+  outline: var(--focus-default-outline);
 }
 
 body.using-mouse .exam-mode-info-modal__modal-trigger-button:focus {
@@ -351,12 +415,42 @@ body.using-mouse .exam-mode-info-modal__modal-trigger-button:focus {
   position: relative;
   width: 100%;
   overflow: hidden;
-  padding-top: 10vh;
+  padding-top: 5vh;
   height: 150vh;
 }
 
 .exam-mode-exam-block__normal-exam {
   width: 100%;
+}
+
+.exam-mode-normal-exam__intro-block {
+  --logo-size: 60px;
+  --column-gap: 15px;
+
+  width: 80%;
+  max-width: 420px;
+  margin: 0 auto;
+  margin-top: 5%;
+  display: grid;
+  grid-template:
+    "go-tyan intro-text" var(--logo-size)
+    ".       intro-text" auto / var(--logo-size) 1fr;
+  grid-column-gap: var(--column-gap);
+  column-gap: var(--column-gap);
+}
+
+.exam-mode-intro-block__go-tyan {
+  grid-area: go-tyan;
+}
+
+.exam-mode-intro-block__intro-description {
+  grid-area: intro-text;
+}
+
+.exam-mode-intro-description__text {
+  white-space: normal;
+  font-size: 0.8rem;
+  line-height: 1rem;
 }
 
 .exam-mode-exam-block__enhancement-exam {

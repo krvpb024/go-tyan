@@ -1,6 +1,9 @@
 <template>
   <div class="home-stream-item">
-    <div class="home-stream-item__content">
+    <div
+      class="home-stream-item__content"
+      :class="[`home-stream-item__content--${anglePosition}`]"
+    >
       <slot></slot>
     </div>
   </div>
@@ -8,7 +11,12 @@
 
 <script>
 export default {
-
+  props: {
+    anglePosition: {
+      type: String,
+      default: 'top',
+    },
+  },
 }
 </script>
 
@@ -51,8 +59,17 @@ export default {
   height: 10px;
   border-left: 2.5px solid var(--text-color);
   border-top: 2.5px solid var(--text-color);
+}
+
+.home-stream-item__content--top::after {
   top: 0;
   left: 0;
   transform: translate(10px, calc(-50% - 2px)) rotate(45deg);
+}
+
+.home-stream-item__content--left::after {
+  top: 0;
+  left: 0;
+  transform: translate(calc(-50% - 2px), 10px) rotate(-45deg);
 }
 </style>
