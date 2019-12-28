@@ -324,6 +324,14 @@ export default {
   z-index: 110;
 }
 
+.exam-mode-info-modal__modal-trigger-button:focus {
+  outline: var(--focus-default-outline)
+}
+
+body.using-mouse .exam-mode-info-modal__modal-trigger-button:focus {
+  outline: none;
+}
+
 .exam-mode-info-modal__modal-trigger-button:hover,
 .exam-mode-info-modal__modal-trigger-button:active {
   color: var(--text-color);

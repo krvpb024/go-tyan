@@ -17,7 +17,6 @@
       role="dialog"
       aria-labelledby="exam-mode-info-modal-title-block__title"
       aria-modal="true"
-      aria-describedat=""
     >
       <button
         class="exam-mode-info-modal-content-block__close-button"
@@ -42,29 +41,29 @@
         class="app-visual-hidden"
         id="exam-mode-info-modal-describe"
       >
-        使用點擊卡片或是鍵盤方向鍵「下」，來顯示解答；如果回答錯誤，可以左滑卡片或是使用鍵盤方向鍵「左」，稍後補強測驗會再一次出現；如果回答正確，可以右滑卡片或使用鍵盤方向鍵「右」，消除卡片。
+        使用點擊卡片或是鍵盤方向鍵「下」，來顯示解答；如果回答錯誤，可以左滑卡片或是使用鍵盤方向鍵「左」；如果回答正確，可以右滑卡片或使用鍵盤方向鍵「右」。
       </p>
 
       <div
-        class="exam-mode-info-modal-content-block__description-block"
+        class="exam-mode-info-modal-content-block__description-block exam-mode-info-modal-content-block__description-block--gesture"
         aria-hidden="true"
       >
         <div class="exam-mode-info-modal-description-block__description"></div>
 
-        <div class="exam-mode-info-modal-description-block__description">
+        <div class="exam-mode-info-modal-description-block__description exam-mode-info-modal-description-block__description--head">
           <p class="exam-mode-info-modal-description__text">
             觸控/滑鼠
           </p>
         </div>
 
-        <div class="exam-mode-info-modal-description-block__description">
+        <div class="exam-mode-info-modal-description-block__description exam-mode-info-modal-description-block__description--head">
           <p class="exam-mode-info-modal-description__text">
             鍵盤
           </p>
         </div>
 
         <div class="exam-mode-info-modal-description-block__description">
-          <p class="exam-mode-info-modal-description__text">點擊解答</p>
+          <p class="exam-mode-info-modal-description__text">顯示解答</p>
         </div>
 
         <div class="exam-mode-info-modal-description-block__description">
@@ -84,7 +83,7 @@
         </div>
 
         <div class="exam-mode-info-modal-description-block__description">
-          <p class="exam-mode-info-modal-description__text">答錯左滑</p>
+          <p class="exam-mode-info-modal-description__text">答錯</p>
         </div>
 
         <div class="exam-mode-info-modal-description-block__description">
@@ -104,7 +103,7 @@
         </div>
 
         <div class="exam-mode-info-modal-description-block__description">
-          <span class="exam-mode-info-modal-description__text">答對右滑</span>
+          <span class="exam-mode-info-modal-description__text">答對</span>
         </div>
 
         <div class="exam-mode-info-modal-description-block__description">
@@ -123,6 +122,27 @@
           >
         </div>
 
+      </div>
+
+      <div class="exam-mode-info-modal-content-block__title-block">
+        <h2
+          id="exam-mode-info-modal-title-block__title"
+          class="exam-mode-info-modal-title-block__title"
+        >測驗說明</h2>
+      </div>
+
+      <div
+        class="exam-mode-info-modal-content-block__description-block"
+      >
+      <ul class="exam-mode-info-modal-description__list-group">
+        <li class="exam-mode-info-modal-list-group__list-item">
+          答錯的題目會在測驗結束後再進行一次補強測驗
+        </li>
+
+        <li class="exam-mode-info-modal-list-group__list-item">
+          如果需要練習手寫幫助記憶，可以開啓手寫板
+        </li>
+      </ul>
       </div>
     </section>
   </div>
@@ -294,13 +314,21 @@ export default {
   justify-content: center;
 }
 
+.exam-mode-info-modal-content-block__close-button:focus {
+  outline: var(--focus-default-outline);
+}
+
+body.using-mouse .exam-mode-info-modal-content-block__close-button:focus {
+  outline: none;
+}
+
 .exam-mode-info-modal-content-block__title-block {
   text-align: center;
   border-bottom: 3px solid var(--text-color);
   width: 80%;
   margin: 0 auto;
-  padding-top: 31px;
-  padding-bottom: 22px;
+  padding-top: 20px;
+  padding-bottom: 15px;
 }
 
 .exam-mode-info-modal-title-block__title {
@@ -310,15 +338,15 @@ export default {
 
 .exam-mode-info-modal-content-block__description-block {
   position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  margin: 10px 10% 10px;
+}
+
+.exam-mode-info-modal-content-block__description-block--gesture {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   grid-template-rows: 1fr 1fr 1fr 1fr;
-  grid-row-gap: 30px;
-  row-gap: 40px;
-  margin: 25px 20px 45px;
+  grid-row-gap: 20px;
+  row-gap: 20px;
 }
 
 .exam-mode-info-modal-description-block__description {
@@ -327,9 +355,29 @@ export default {
   justify-content: center;
 }
 
+.exam-mode-info-modal-description-block__description--head {
+  align-self: end;
+}
+
 .exam-mode-info-modal-description__text {
   font-size: 1rem;
   font-weight: bold;
   white-space: nowrap;
 }
+
+.exam-mode-info-modal-description__list-group {
+  padding-top: 5px;
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.exam-mode-info-modal-list-group__list-item {
+  white-space: normal;
+  line-height: 1.5rem;
+}
+
+.exam-mode-info-modal-list-group__list-item + .exam-mode-info-modal-list-group__list-item {
+  margin-top: 10px;
+}
+
 </style>

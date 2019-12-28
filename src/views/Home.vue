@@ -435,6 +435,7 @@ export default {
 }
 
 .home-nav-item__list-group {
+  padding-left: 20px;
   padding-bottom: 10px;
 }
 

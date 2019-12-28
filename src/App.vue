@@ -102,6 +102,7 @@ p {
 
 ul {
   margin: 0;
+  padding: 0;
 }
 
 .app-visual-hidden {

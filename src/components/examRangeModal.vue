@@ -342,6 +342,7 @@ export default {
   border: solid 2px var(--text-color);
   border-radius: 4px;
   will-change: auto;
+  overflow: hidden;
 }
 
 .exam-range-modal-form-block__form {

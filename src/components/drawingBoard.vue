@@ -475,6 +475,14 @@ export default {
   left: 0;
 }
 
+.drawing-board-content-block__title-button:focus {
+  outline: var(--focus-default-outline)
+}
+
+body.using-mouse .drawing-board-content-block__title-button:focus {
+  outline: none;
+}
+
 .drawing-board-title-button__title {
   margin: 0;
   font-size: 1rem;
@@ -517,6 +525,14 @@ export default {
   position: relative;
 }
 
+.drawing-board-first-column__tool-button:focus {
+  outline: var(--focus-default-outline);
+  outline-offset: 0;
+}
+
+body.using-mouse .drawing-board-first-column__tool-button:focus {
+  outline: none;
+}
 .drawing-board-first-column__tool-button--clear-button {
   grid-column: 1;
   grid-row: 1;

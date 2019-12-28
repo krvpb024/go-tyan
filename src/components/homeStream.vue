@@ -27,7 +27,7 @@
       </home-stream-item>
 
       <home-stream-item class="home-stream-content-block__item--third">
-        <p>2020 年 1 月 11 日，一定要回家投票喔！</p>
+        <p>這個網站是可以離線使用的，不用擔心流量不夠。</p>
       </home-stream-item>
     </div>
   </section>
