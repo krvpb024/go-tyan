@@ -4,7 +4,7 @@
       <top-bar>
         <template #leftContainer>
           <a
-            @click,prevent="$router.go(-1)"
+            @click.prevent="$router.go(-1)"
             href="/exam"
             class="app-top-bar-link-icon"
             aria-labelledby="nav-return-label"
