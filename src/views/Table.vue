@@ -6,8 +6,8 @@
     >
       <top-bar>
         <template #leftContainer>
-          <router-link
-            to="/"
+          <a
+            @click="$router.go(-1)"
             class="left-icon"
             aria-labelledby="nav-return-label"
           >
@@ -38,7 +38,7 @@
                 stroke-width="0.6"
               />
             </svg>
-          </router-link>
+          </a>
         </template>
 
         <h1>五十音表格</h1>

@@ -3,8 +3,8 @@
     <div class="app-sticky-top">
       <top-bar>
         <template #leftContainer>
-          <router-link
-            to="/exam"
+          <a
+            @click="$router.go(-1)"
             class="app-top-bar-link-icon"
             aria-labelledby="nav-return-label"
           >
@@ -35,7 +35,7 @@
                 stroke-width="0.6"
               />
             </svg>
-          </router-link>
+          </a>
         </template>
 
         <h1>{{ title }}</h1>
