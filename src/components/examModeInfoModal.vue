@@ -15,11 +15,13 @@
       class="exam-mode-info-modal__content-block"
       ref="examModeInfoModalElement"
       role="dialog"
-      aria-labelledby="exam-mode-info-modal-title-block__title"
       aria-modal="true"
     >
 
-      <div class="exam-mode-info-modal-content-block__main-block" ref="examModeInfoModalMainBlockElement">
+      <div
+        class="exam-mode-info-modal-content-block__main-block"
+        ref="examModeInfoModalMainBlockElement"
+      >
         <button
           class="exam-mode-info-modal-content-block__close-button"
           ref="closeButtonElement"
@@ -33,10 +35,7 @@
         </button>
 
         <div class="exam-mode-info-modal-main-block__title-block">
-          <h2
-            id="exam-mode-info-modal-title-block__title"
-            class="exam-mode-info-modal-title-block__title"
-          >操作方式</h2>
+          <h2 class="exam-mode-info-modal-title-block__title">操作方式</h2>
         </div>
 
         <p
@@ -127,15 +126,10 @@
         </div>
 
         <div class="exam-mode-info-modal-main-block__title-block">
-          <h2
-            id="exam-mode-info-modal-title-block__title"
-            class="exam-mode-info-modal-title-block__title"
-          >測驗說明</h2>
+          <h2 class="exam-mode-info-modal-title-block__title">測驗說明</h2>
         </div>
 
-        <div
-          class="exam-mode-info-modal-main-block__description-block"
-        >
+        <div class="exam-mode-info-modal-main-block__description-block">
           <ul class="exam-mode-info-modal-description__list-group">
             <li class="exam-mode-info-modal-list-group__list-item">
               答錯的題目會在測驗結束後再進行一次補強測驗
@@ -390,8 +384,8 @@ body.using-mouse .exam-mode-info-modal-content-block__close-button:focus {
   line-height: 1.5rem;
 }
 
-.exam-mode-info-modal-list-group__list-item + .exam-mode-info-modal-list-group__list-item {
+.exam-mode-info-modal-list-group__list-item
+  + .exam-mode-info-modal-list-group__list-item {
   margin-top: 10px;
 }
-
 </style>

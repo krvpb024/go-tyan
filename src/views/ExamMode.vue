@@ -54,7 +54,7 @@
           @click="current.matches('idle.infoModal.hide')
             ? service.send('SHOW_INFO_MODAL')
             : service.send('HIDE_INFO_MODAL')"
-          aria-labelledby="exam-mode-info-modal-title-block__title"
+          aria-label="測驗說明"
           aria-haspopup="true"
         >
           ！
