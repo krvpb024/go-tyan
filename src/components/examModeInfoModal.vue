@@ -35,6 +35,22 @@
         </button>
 
         <div class="exam-mode-info-modal-main-block__title-block">
+          <h2 class="exam-mode-info-modal-title-block__title">測驗說明</h2>
+        </div>
+
+        <div class="exam-mode-info-modal-main-block__description-block">
+          <ul class="exam-mode-info-modal-description__list-group">
+            <li class="exam-mode-info-modal-list-group__list-item">
+              答錯的題目會在測驗結束後再進行一次補強測驗
+            </li>
+
+            <li class="exam-mode-info-modal-list-group__list-item">
+              如果需要練習手寫幫助記憶，可以開啓手寫板
+            </li>
+          </ul>
+        </div>
+
+        <div class="exam-mode-info-modal-main-block__title-block">
           <h2 class="exam-mode-info-modal-title-block__title">操作方式</h2>
         </div>
 
@@ -122,25 +138,9 @@
               aria-hidden="true"
             >
           </div>
-
-        </div>
-
-        <div class="exam-mode-info-modal-main-block__title-block">
-          <h2 class="exam-mode-info-modal-title-block__title">測驗說明</h2>
-        </div>
-
-        <div class="exam-mode-info-modal-main-block__description-block">
-          <ul class="exam-mode-info-modal-description__list-group">
-            <li class="exam-mode-info-modal-list-group__list-item">
-              答錯的題目會在測驗結束後再進行一次補強測驗
-            </li>
-
-            <li class="exam-mode-info-modal-list-group__list-item">
-              如果需要練習手寫幫助記憶，可以開啓手寫板
-            </li>
-          </ul>
         </div>
       </div>
+
     </section>
   </div>
 </template>
@@ -308,6 +308,7 @@ export default {
   display: none;
   overflow: hidden;
   will-change: auto;
+  padding: 20px 0;
 }
 
 .exam-mode-info-modal-content-block__close-button {
