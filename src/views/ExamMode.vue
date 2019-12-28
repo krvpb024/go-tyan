@@ -156,9 +156,14 @@ export default {
 
     // data
     const localExamRange = JSON.parse(window.localStorage.getItem('examRange'))
+    const isNotFirstTime = JSON.parse(window.localStorage.getItem('isNotFirstTime'))
+
+    if (!isNotFirstTime) window.localStorage.setItem('isNotFirstTime', true)
+
     const { service, current } = useMachine(machine.withContext({
       ...machine.context,
       examRange: localExamRange || machine.context.examRange,
+      isNotFirstTime,
     }))
 
     const title = computed(function getTitle () {

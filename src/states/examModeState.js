@@ -9,6 +9,7 @@ const machine = Machine({
     cursor: 0,
     enhancementCards: [],
     enhancementCursor: 0,
+    isNotFirstTime: false,
   },
   states: {
     pageUnounted: {
@@ -55,7 +56,15 @@ const machine = Machine({
                   states: {
                     idle: {
                       on: {
-                        SHOW_ANSWER: 'answerShowed',
+                        SHOW_ANSWER: [
+                          {
+                            cond: 'isNotFirstTime',
+                            target: 'answerShowed',
+                          },
+                          {
+                            target: '#examMode.idle.infoModal.showInfoModalAnimation',
+                          },
+                        ],
                       },
                     },
                     answerShowed: {
@@ -226,6 +235,7 @@ const machine = Machine({
               },
             },
             show: {
+              entry: ['updateIsNotFirstTime'],
               on: {
                 HIDE_INFO_MODAL: 'hideInfoModalAnimation',
               },
@@ -292,6 +302,9 @@ const machine = Machine({
   },
 }, {
   guards: {
+    isNotFirstTime ({ isNotFirstTime }) {
+      return Boolean(isNotFirstTime)
+    },
     addToEnhancement (context, { addToEnhancement }) {
       return Boolean(addToEnhancement)
     },
@@ -313,6 +326,12 @@ const machine = Machine({
     },
   },
   actions: {
+    updateIsNotFirstTime: assign(function mutateIsNotFirstTime ({ isNotFirstTime }) {
+      if (isNotFirstTime) return
+      return {
+        isNotFirstTime: true,
+      }
+    }),
     generateExam: assign(function mutateCards ({ examRange, cursor, enhancementCursor, enhancementCards }) {
       return {
         cards: shuffle(examRange),
