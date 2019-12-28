@@ -26,6 +26,15 @@ export default {
   background-color: transparent;
 }
 
+.two-layer-button:focus {
+  outline: var(--focus-default-outline);
+  outline-offset: 5px;
+}
+
+body.using-mouse .two-layer-button:focus {
+  outline: none;
+}
+
 .two-layer-button::after {
   content: "";
   display: block;
