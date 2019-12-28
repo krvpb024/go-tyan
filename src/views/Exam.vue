@@ -41,7 +41,7 @@
           </router-link>
         </template>
 
-        <h1>測驗</h1>
+        <h1>五十音測驗</h1>
 
         <template #rightContainer>
           <button
