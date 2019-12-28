@@ -302,7 +302,7 @@ export default {
     }
 
     function checkboxFocus (e) {
-      console.log(e.target.offsetTop)
+      if (document.body.classList.contains('using-mouse')) return
       // add header height
       examRangeModalScrollContentElement.value.scrollTop = e.target.offsetTop - 50
     }
