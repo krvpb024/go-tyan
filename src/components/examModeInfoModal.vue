@@ -18,131 +18,134 @@
       aria-labelledby="exam-mode-info-modal-title-block__title"
       aria-modal="true"
     >
-      <button
-        class="exam-mode-info-modal-content-block__close-button"
-        ref="closeButtonElement"
-        aria-labelledby="info-modal-close-icon-title"
-        @click="service.send('HIDE_INFO_MODAL')"
-      >
-        <img
-          src="@/assets/close.svg"
-          alt="關閉"
+
+      <div class="exam-mode-info-modal-content-block__main-block" ref="examModeInfoModalMainBlockElement">
+        <button
+          class="exam-mode-info-modal-content-block__close-button"
+          ref="closeButtonElement"
+          aria-labelledby="info-modal-close-icon-title"
+          @click="service.send('HIDE_INFO_MODAL')"
         >
-      </button>
-
-      <div class="exam-mode-info-modal-content-block__title-block">
-        <h2
-          id="exam-mode-info-modal-title-block__title"
-          class="exam-mode-info-modal-title-block__title"
-        >操作方式</h2>
-      </div>
-
-      <p
-        class="app-visual-hidden"
-        id="exam-mode-info-modal-describe"
-      >
-        使用點擊卡片或是鍵盤方向鍵「下」，來顯示解答；如果回答錯誤，可以左滑卡片或是使用鍵盤方向鍵「左」；如果回答正確，可以右滑卡片或使用鍵盤方向鍵「右」。
-      </p>
-
-      <div
-        class="exam-mode-info-modal-content-block__description-block exam-mode-info-modal-content-block__description-block--gesture"
-        aria-hidden="true"
-      >
-        <div class="exam-mode-info-modal-description-block__description"></div>
-
-        <div class="exam-mode-info-modal-description-block__description exam-mode-info-modal-description-block__description--head">
-          <p class="exam-mode-info-modal-description__text">
-            觸控/滑鼠
-          </p>
-        </div>
-
-        <div class="exam-mode-info-modal-description-block__description exam-mode-info-modal-description-block__description--head">
-          <p class="exam-mode-info-modal-description__text">
-            鍵盤
-          </p>
-        </div>
-
-        <div class="exam-mode-info-modal-description-block__description">
-          <p class="exam-mode-info-modal-description__text">顯示解答</p>
-        </div>
-
-        <div class="exam-mode-info-modal-description-block__description">
           <img
-            src="@/assets/show-answer.svg"
-            alt=""
-            aria-hidden="true"
+            src="@/assets/close.svg"
+            alt="關閉"
           >
+        </button>
+
+        <div class="exam-mode-info-modal-main-block__title-block">
+          <h2
+            id="exam-mode-info-modal-title-block__title"
+            class="exam-mode-info-modal-title-block__title"
+          >操作方式</h2>
         </div>
 
-        <div class="exam-mode-info-modal-description-block__description">
-          <img
-            src="@/assets/keyboard-down.svg"
-            alt=""
-            aria-hidden="true"
-          >
+        <p
+          class="app-visual-hidden"
+          id="exam-mode-info-modal-describe"
+        >
+          使用點擊卡片或是鍵盤方向鍵「下」，來顯示解答；如果回答錯誤，可以左滑卡片或是使用鍵盤方向鍵「左」；如果回答正確，可以右滑卡片或使用鍵盤方向鍵「右」。
+        </p>
+
+        <div
+          class="exam-mode-info-modal-main-block__description-block exam-mode-info-modal-main-block__description-block--gesture"
+          aria-hidden="true"
+        >
+          <div class="exam-mode-info-modal-description-block__description"></div>
+
+          <div class="exam-mode-info-modal-description-block__description exam-mode-info-modal-description-block__description--head">
+            <p class="exam-mode-info-modal-description__text">
+              觸控/滑鼠
+            </p>
+          </div>
+
+          <div class="exam-mode-info-modal-description-block__description exam-mode-info-modal-description-block__description--head">
+            <p class="exam-mode-info-modal-description__text">
+              鍵盤
+            </p>
+          </div>
+
+          <div class="exam-mode-info-modal-description-block__description">
+            <p class="exam-mode-info-modal-description__text">顯示解答</p>
+          </div>
+
+          <div class="exam-mode-info-modal-description-block__description">
+            <img
+              src="@/assets/show-answer.svg"
+              alt=""
+              aria-hidden="true"
+            >
+          </div>
+
+          <div class="exam-mode-info-modal-description-block__description">
+            <img
+              src="@/assets/keyboard-down.svg"
+              alt=""
+              aria-hidden="true"
+            >
+          </div>
+
+          <div class="exam-mode-info-modal-description-block__description">
+            <p class="exam-mode-info-modal-description__text">答錯</p>
+          </div>
+
+          <div class="exam-mode-info-modal-description-block__description">
+            <img
+              src="@/assets/left-swipe.svg"
+              alt=""
+              aria-hidden="true"
+            >
+          </div>
+
+          <div class="exam-mode-info-modal-description-block__description">
+            <img
+              src="@/assets/keyboard-left.svg"
+              alt=""
+              aria-hidden="true"
+            >
+          </div>
+
+          <div class="exam-mode-info-modal-description-block__description">
+            <span class="exam-mode-info-modal-description__text">答對</span>
+          </div>
+
+          <div class="exam-mode-info-modal-description-block__description">
+            <img
+              src="@/assets/right-swipe.svg"
+              alt=""
+              aria-hidden="true"
+            >
+          </div>
+
+          <div class="exam-mode-info-modal-description-block__description">
+            <img
+              src="@/assets/keyboard-right.svg"
+              alt=""
+              aria-hidden="true"
+            >
+          </div>
+
         </div>
 
-        <div class="exam-mode-info-modal-description-block__description">
-          <p class="exam-mode-info-modal-description__text">答錯</p>
+        <div class="exam-mode-info-modal-main-block__title-block">
+          <h2
+            id="exam-mode-info-modal-title-block__title"
+            class="exam-mode-info-modal-title-block__title"
+          >測驗說明</h2>
         </div>
 
-        <div class="exam-mode-info-modal-description-block__description">
-          <img
-            src="@/assets/left-swipe.svg"
-            alt=""
-            aria-hidden="true"
-          >
+        <div
+          class="exam-mode-info-modal-main-block__description-block"
+        >
+          <ul class="exam-mode-info-modal-description__list-group">
+            <li class="exam-mode-info-modal-list-group__list-item">
+              答錯的題目會在測驗結束後再進行一次補強測驗
+            </li>
+
+            <li class="exam-mode-info-modal-list-group__list-item">
+              如果需要練習手寫幫助記憶，可以開啓手寫板
+            </li>
+          </ul>
         </div>
-
-        <div class="exam-mode-info-modal-description-block__description">
-          <img
-            src="@/assets/keyboard-left.svg"
-            alt=""
-            aria-hidden="true"
-          >
-        </div>
-
-        <div class="exam-mode-info-modal-description-block__description">
-          <span class="exam-mode-info-modal-description__text">答對</span>
-        </div>
-
-        <div class="exam-mode-info-modal-description-block__description">
-          <img
-            src="@/assets/right-swipe.svg"
-            alt=""
-            aria-hidden="true"
-          >
-        </div>
-
-        <div class="exam-mode-info-modal-description-block__description">
-          <img
-            src="@/assets/keyboard-right.svg"
-            alt=""
-            aria-hidden="true"
-          >
-        </div>
-
-      </div>
-
-      <div class="exam-mode-info-modal-content-block__title-block">
-        <h2
-          id="exam-mode-info-modal-title-block__title"
-          class="exam-mode-info-modal-title-block__title"
-        >測驗說明</h2>
-      </div>
-
-      <div
-        class="exam-mode-info-modal-content-block__description-block"
-      >
-      <ul class="exam-mode-info-modal-description__list-group">
-        <li class="exam-mode-info-modal-list-group__list-item">
-          答錯的題目會在測驗結束後再進行一次補強測驗
-        </li>
-
-        <li class="exam-mode-info-modal-list-group__list-item">
-          如果需要練習手寫幫助記憶，可以開啓手寫板
-        </li>
-      </ul>
       </div>
     </section>
   </div>
@@ -173,6 +176,7 @@ export default {
     const examModeInfoModalContainerElement = ref(null)
     const examModeInfoModalBackgroundElement = ref(null)
     const examModeInfoModalElement = ref(null)
+    const examModeInfoModalMainBlockElement = ref(null)
     const closeButtonElement = ref(null)
 
     // data
@@ -189,6 +193,12 @@ export default {
         if (!value) return
         const { top, left, width, height } = getOffset(examModeInfoModalContainerElement.value)
 
+        showInfoModalAnimation()
+          .then(function showAnimationEnd () {
+            props.service.send('SHOW_INFO_MODAL_ANIMATION_END')
+            closeButtonElement.value.focus()
+          })
+
         function getOffset (el) {
           const { top, left, width, height } = el.getBoundingClientRect()
 
@@ -200,13 +210,8 @@ export default {
           }
         }
 
-        showInfoModalAnimation()
-          .then(function showAnimationEnd () {
-            props.service.send('SHOW_INFO_MODAL_ANIMATION_END')
-            closeButtonElement.value.focus()
-          })
-
         function showInfoModalAnimation () {
+          gsap.set(examModeInfoModalMainBlockElement.value, { clearProps: 'all' })
           gsap.set(examModeInfoModalElement.value, { clearProps: 'all' })
           gsap.set(examModeInfoModalElement.value, { display: 'block' })
           gsap.set(examModeInfoModalBackgroundElement.value, { display: 'block' })
@@ -228,6 +233,14 @@ export default {
               y: '+=50%',
               duration: duration - 0.1,
             }, `-=${duration}`)
+            .fromTo(examModeInfoModalMainBlockElement.value, {
+              display: 'none',
+              opacity: 0,
+            }, {
+              display: 'block',
+              opacity: 1,
+              duration: duration - 0.2,
+            })
             .play()
         }
       }
@@ -258,6 +271,7 @@ export default {
 
     return {
       // element
+      examModeInfoModalMainBlockElement,
       examModeInfoModalContainerElement,
       examModeInfoModalElement,
       examModeInfoModalBackgroundElement,
@@ -322,7 +336,7 @@ body.using-mouse .exam-mode-info-modal-content-block__close-button:focus {
   outline: none;
 }
 
-.exam-mode-info-modal-content-block__title-block {
+.exam-mode-info-modal-main-block__title-block {
   text-align: center;
   border-bottom: 3px solid var(--text-color);
   width: 80%;
@@ -336,12 +350,12 @@ body.using-mouse .exam-mode-info-modal-content-block__close-button:focus {
   margin: 0;
 }
 
-.exam-mode-info-modal-content-block__description-block {
+.exam-mode-info-modal-main-block__description-block {
   position: relative;
   margin: 10px 10% 10px;
 }
 
-.exam-mode-info-modal-content-block__description-block--gesture {
+.exam-mode-info-modal-main-block__description-block--gesture {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   grid-template-rows: 1fr 1fr 1fr 1fr;
