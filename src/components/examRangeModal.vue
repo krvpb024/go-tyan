@@ -14,137 +14,141 @@
       @click="service.send('HIDE_EXAM_RANGE_MODAL')"
     ></div>
 
-    <form
-      class="exam-range-modal__form"
+    <div
+      class="exam-range-modal__form-block"
       ref="examRangeModalElement"
-      @submit.prevent="service.send('SET_EXAM_RANGE')"
-    >
-
-      <top-bar :withBorder="false">
-        <template #leftContainer>
-          <button
-            type="button"
-            aria-labelledby="exam-range-modal-title"
-            @click="service.send('HIDE_EXAM_RANGE_MODAL')"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="14.729"
-              height="14.727"
-              viewBox="0 0 16 16"
-              aria-labelledby="exam-range-modal-title"
-              role="img"
-            >
-              <title id="exam-range-modal-title">關閉</title>
-
-              <filter id="shadow">
-                <feDropShadow
-                  dx="2.2"
-                  dy="2.2"
-                  stdDeviation="0"
-                  flood-color="#ffffff"
-                />
-              </filter>
-
-              <g
-                id="Group_101"
-                data-name="Group 101"
-                transform="translate(-.414 -.415)"
-              >
-                <path
-                  id="Union_10"
-                  d="M-11781.959-9448.151l-5.657-5.657-5.656 5.657a1 1 0 0 1-1.415 0 1 1 0 0 1 0-1.415l5.657-5.656-5.657-5.657a1 1 0 0 1 0-1.412 1 1 0 0 1 1.415 0l5.656 5.656 5.657-5.656a1 1 0 0 1 1.415 0 1 1 0 0 1 0 1.412l-5.658 5.658 5.655 5.655a1 1 0 0 1 0 1.415.991.991 0 0 1-.705.293 1 1 0 0 1-.707-.293z"
-                  class="cls-1"
-                  fill="#313131"
-                  filter="url(#shadow)"
-                  data-name="Union 10"
-                  transform="translate(11795.395 9463)"
-                />
-              </g>
-            </svg>
-          </button>
-        </template>
-
-        <h1 id="exam-range-modal-title">設定</h1>
-
-        <template #rightContainer>
-          <button
-            class="exam-range-modal__save-button"
-            @click="setExamRange"
-            type="submit"
-          >
-            儲存
-          </button>
-
-          <div class="exam-range-modal-save-button__tooltips">
-            <tooltips
-              v-show="current.matches('examRangeModal.show.error')"
-              :service="service"
-              :current="current"
-              showState="examRangeModal.show.error"
-              showAnimationState="examRangeModal.show.error.showTooltipsAnimation"
-              idleState="examRangeModal.show.error.showTooltips"
-              hideAnimationState="examRangeModal.show.error.hideTooltipsAnimation"
-              :anglePosition="{ right: 0, top: 0 }"
-              angleTransformX="-20px"
-              angleTransformY="-50%"
-            >
-              {{ current.meta['examRangeView.examRangeModal.show.error']
-                ? current.meta['examRangeView.examRangeModal.show.error'].message
-                : null }}
-            </tooltips>
-          </div>
-        </template>
-      </top-bar>
-
-      <div
-        tabindex="0"
-        class="exam-range-modal-form__scroll-content"
-        ref="examRangeModalScrollContentElement"
-        aria-labelledby="exam-range-modal-scroll-content__subtitle"
+     >
+      <form
+        class="exam-range-modal-form-block__form"
+        @submit.prevent="service.send('SET_EXAM_RANGE')"
       >
-
-        <h2
-          id="exam-range-modal-scroll-content__subtitle"
-          class="exam-range-modal-scroll-content__subtitle"
-        >
-          設定測驗範圍
-        </h2>
-
-        <section
-          class="exam-range-modal-scroll-content__group"
-          v-for="([groupName, rows]) in Object.entries(current.context.gojuon)"
-          :key="groupName"
-        >
-          <gojuon-title>
-            <h3>{{generateTitle(groupName)}}</h3>
-          </gojuon-title>
-
-          <div
-            class="exam-range-modal-group__group-content"
-            v-for="(row, rowIndex) in rows"
-            :key="rowIndex"
-          >
-            <input
-              class="app-visual-hidden"
-              type="checkbox"
-              :id="`${groupName}-row-${rowIndex}-select-all`"
-              :checked="current.context.selectedGojuon.includes(`${groupName}-${rowIndex}`)"
-              @input="updateSelectedGojuon({ groupName, rowIndex }, $event)"
+        <top-bar :withBorder="false">
+          <template #leftContainer>
+            <button
+              type="button"
+              aria-labelledby="exam-range-modal-title"
+              @click="service.send('HIDE_EXAM_RANGE_MODAL')"
             >
-            <checkbox-label :forId="`${groupName}-row-${rowIndex}-select-all`">
-              <span
-                v-for="hiragana in getRowString(row)"
-                :key="hiragana"
-                class="exam-range-modal-group-content__label-text"
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="14.729"
+                height="14.727"
+                viewBox="0 0 16 16"
+                aria-labelledby="exam-range-modal-title"
+                role="img"
               >
-                {{ hiragana }}
-              </span>
-            </checkbox-label>
-          </div>
-        </section>
-      </div>
-    </form>
+                <title id="exam-range-modal-title">關閉</title>
+
+                <filter id="shadow">
+                  <feDropShadow
+                    dx="2.2"
+                    dy="2.2"
+                    stdDeviation="0"
+                    flood-color="#ffffff"
+                  />
+                </filter>
+
+                <g
+                  id="Group_101"
+                  data-name="Group 101"
+                  transform="translate(-.414 -.415)"
+                >
+                  <path
+                    id="Union_10"
+                    d="M-11781.959-9448.151l-5.657-5.657-5.656 5.657a1 1 0 0 1-1.415 0 1 1 0 0 1 0-1.415l5.657-5.656-5.657-5.657a1 1 0 0 1 0-1.412 1 1 0 0 1 1.415 0l5.656 5.656 5.657-5.656a1 1 0 0 1 1.415 0 1 1 0 0 1 0 1.412l-5.658 5.658 5.655 5.655a1 1 0 0 1 0 1.415.991.991 0 0 1-.705.293 1 1 0 0 1-.707-.293z"
+                    class="cls-1"
+                    fill="#313131"
+                    filter="url(#shadow)"
+                    data-name="Union 10"
+                    transform="translate(11795.395 9463)"
+                  />
+                </g>
+              </svg>
+            </button>
+          </template>
+
+          <h1 id="exam-range-modal-title">設定</h1>
+
+          <template #rightContainer>
+            <button
+              class="exam-range-modal__save-button"
+              @click="setExamRange"
+              type="submit"
+            >
+              儲存
+            </button>
+
+            <div class="exam-range-modal-save-button__tooltips">
+              <tooltips
+                v-show="current.matches('examRangeModal.show.error')"
+                :service="service"
+                :current="current"
+                showState="examRangeModal.show.error"
+                showAnimationState="examRangeModal.show.error.showTooltipsAnimation"
+                idleState="examRangeModal.show.error.showTooltips"
+                hideAnimationState="examRangeModal.show.error.hideTooltipsAnimation"
+                :anglePosition="{ right: 0, top: 0 }"
+                angleTransformX="-20px"
+                angleTransformY="-50%"
+              >
+                {{ current.meta['examRangeView.examRangeModal.show.error']
+                  ? current.meta['examRangeView.examRangeModal.show.error'].message
+                  : null }}
+              </tooltips>
+            </div>
+          </template>
+        </top-bar>
+
+        <div
+          tabindex="0"
+          class="exam-range-modal-form__scroll-content"
+          ref="examRangeModalScrollContentElement"
+          aria-labelledby="exam-range-modal-scroll-content__subtitle"
+        >
+
+          <h2
+            id="exam-range-modal-scroll-content__subtitle"
+            class="exam-range-modal-scroll-content__subtitle"
+          >
+            設定測驗範圍
+          </h2>
+
+          <section
+            class="exam-range-modal-scroll-content__group"
+            v-for="([groupName, rows]) in Object.entries(current.context.gojuon)"
+            :key="groupName"
+          >
+            <gojuon-title>
+              <h3>{{generateTitle(groupName)}}</h3>
+            </gojuon-title>
+
+            <div
+              class="exam-range-modal-group__group-content"
+              v-for="(row, rowIndex) in rows"
+              :key="rowIndex"
+            >
+              <input
+                class="app-visual-hidden"
+                type="checkbox"
+                :id="`${groupName}-row-${rowIndex}-select-all`"
+                :checked="current.context.selectedGojuon.includes(`${groupName}-${rowIndex}`)"
+                @focus="checkboxFocus"
+                @input="updateSelectedGojuon({ groupName, rowIndex }, $event)"
+              >
+              <checkbox-label :forId="`${groupName}-row-${rowIndex}-select-all`">
+                <span
+                  v-for="hiragana in getRowString(row)"
+                  :key="hiragana"
+                  class="exam-range-modal-group-content__label-text"
+                >
+                  {{ hiragana }}
+                </span>
+              </checkbox-label>
+            </div>
+          </section>
+        </div>
+      </form>
+    </div>
   </section>
 </template>
 
@@ -266,6 +270,7 @@ export default {
       getRowString,
       updateSelectedGojuon,
       setExamRange,
+      checkboxFocus,
     }
 
     function getRowString (row) {
@@ -295,6 +300,12 @@ export default {
 
       props.service.send('SET_EXAM_RANGE')
     }
+
+    function checkboxFocus (e) {
+      console.log(e.target.offsetTop)
+      // add header height
+      examRangeModalScrollContentElement.value.scrollTop = e.target.offsetTop - 50
+    }
   },
 }
 </script>
@@ -320,7 +331,7 @@ export default {
   will-change: auto;
 }
 
-.exam-range-modal__form {
+.exam-range-modal__form-block {
   position: fixed;
   top: 50%;
   left: 50%;
@@ -328,15 +339,19 @@ export default {
   width: 80%;
   height: 80%;
   max-width: calc(var(--app-max-width) * 0.8);
+  border: solid 2px var(--text-color);
+  border-radius: 4px;
+  will-change: auto;
+}
+
+.exam-range-modal-form-block__form {
+  width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   text-align: left;
   background-color: #fff;
-  border: solid 2px var(--text-color);
-  border-radius: 4px;
-  overflow: hidden;
-  will-change: auto;
 }
 
 .exam-range-modal__save-button {
@@ -352,12 +367,14 @@ export default {
 }
 
 .exam-range-modal-form__scroll-content {
+  position: relative;
   flex: 1;
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
   padding: 10px;
   display: none;
   opacity: 0;
+  scroll-behavior: smooth;
 }
 
 .exam-range-modal-form__scroll-content:focus {
