@@ -1,14 +1,45 @@
 <template>
-  <button class="two-layer-button" :class="{ 'two-layer-button--invert': invert }" @click="$emit('buttonClick')">
-    <span class="two-layer-button__content" :class="{ 'two-layer-button__content--invert': invert }">
+  <button
+    v-if="tagType == 'button'"
+    class="two-layer-button"
+    :class="{ 'two-layer-button--invert': invert }"
+    @click="$emit('buttonClick')"
+  >
+    <span
+      class="two-layer-button__content"
+      :class="{ 'two-layer-button__content--invert': invert }"
+    >
       <slot></slot>
     </span>
   </button>
+
+  <a
+    v-else-if="tagType == 'a'"
+    :href="hrefValue"
+    @click.prevent="$emit('buttonClick')"
+    class="two-layer-button"
+    :class="{ 'two-layer-button--invert': invert }"
+  >
+    <span
+      class="two-layer-button__content"
+      :class="{ 'two-layer-button__content--invert': invert }"
+    >
+      <slot></slot>
+    </span>
+  </a>
 </template>
 
 <script>
 export default {
   props: {
+    tagType: {
+      type: String,
+      default: 'button',
+    },
+    hrefValue: {
+      type: String,
+      default: '/',
+    },
     invert: {
       type: Boolean,
       default: false,
@@ -24,6 +55,7 @@ export default {
   padding: 0;
   position: relative;
   background-color: transparent;
+  display: block;
 }
 
 .two-layer-button:focus {

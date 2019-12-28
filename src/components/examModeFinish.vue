@@ -32,8 +32,10 @@
 
     <div class="exam-mode-finish__leave-block">
       <two-layer-button
+        tagType="a"
         :invert="true"
-        @buttonClick="$router.push('/exam')"
+        @buttonClick="$router.go(-1)"
+        hrefValue="/exam"
       >
         <span class="exam-mode-finish-block__two-layer-button-icon">
           <img
