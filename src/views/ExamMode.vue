@@ -87,40 +87,6 @@
               :service="service"
               :current="current"
             ></exam-mode-block>
-
-            <div
-              v-if="!current.context.isNotFirstTime && current.context.cursor == 0"
-              class="exam-mode-normal-exam__intro-block"
-            >
-              <img
-                class="exam-mode-intro-block__go-tyan"
-                src="@/assets/go-tyan.svg"
-                alt=""
-                aria-hidden="true"
-              >
-
-              <home-stream-item
-                v-if="!current.context.isNotFirstTime && current.matches('idle.exam.examing.normalExam.idle')"
-                class="exam-mode-intro-block__intro-description"
-                anglePosition="left"
-              >
-                <p class="exam-mode-intro-description__text">
-                  這個{{ title[0] }}的{{ title[1] }}是什麼？點擊卡片可以看解答喔！<br>
-                  打開手寫板可以練習手寫，但目前還沒有辨識功能。
-                </p>
-              </home-stream-item>
-
-              <home-stream-item
-                v-if="!current.context.isNotFirstTime && current.matches('idle.exam.examing.normalExam.answerShowed')"
-                class="exam-mode-intro-block__intro-description"
-                anglePosition="left"
-              >
-                <p class="exam-mode-intro-description__text">
-                  你答對了嗎？如果答對了就把卡片往右滑消除。<br>
-                  答錯了也沒關係，把卡片往左滑。測驗結束之後我會再幫你進行一次錯誤補強喔！
-                </p>
-              </home-stream-item>
-            </div>
           </div>
 
           <div
@@ -137,28 +103,6 @@
               :service="service"
               :current="current"
             ></exam-mode-block>
-
-            <div
-              v-if="!current.context.isNotFirstTime && current.context.enhancementCursor == 0"
-              class="exam-mode-normal-exam__intro-block"
-            >
-              <img
-                class="exam-mode-intro-block__go-tyan"
-                src="@/assets/go-tyan.svg"
-                alt=""
-                aria-hidden="true"
-              >
-
-              <home-stream-item
-                v-if="!current.context.isNotFirstTime && current.matches('idle.exam.examing.enhancementExam')"
-                class="exam-mode-intro-block__intro-description"
-                anglePosition="left"
-              >
-                <p class="exam-mode-intro-description__text">
-                  補強測驗只能參加一次喔！所以即使又答錯了，還是請你往右滑。
-                </p>
-              </home-stream-item>
-            </div>
           </div>
         </div>
 
@@ -198,7 +142,6 @@ import examModeBlock from '@/components/examModeBlock.vue'
 import examModeInfoModal from '@/components/examModeInfoModal.vue'
 import drawingBoard from '@/components/drawingBoard.vue'
 import examModeFinish from '@/components/examModeFinish.vue'
-import homeStreamItem from '@/components/homeStreamItem.vue'
 
 export default {
   name: 'ExamMode',
@@ -208,7 +151,6 @@ export default {
     examModeInfoModal,
     drawingBoard,
     examModeFinish,
-    homeStreamItem,
   },
   setup (props, context) {
     // element
