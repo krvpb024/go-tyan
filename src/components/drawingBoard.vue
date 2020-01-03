@@ -371,16 +371,15 @@ export default {
 
 <style scoped>
 .drawing-board {
+  will-change: width, height;
   width: 90px;
   height: 40px;
-  will-change: auto;
   pointer-events: auto;
 }
 
 .drawing-board__content-block {
   position: relative;
   transition: width 0.3s ease-in-out, height 0.3s ease-in-out;
-  will-change: auto;
   box-shadow: 0 2px 20px 0 rgba(0, 0, 0, 0.13);
   border: solid 2px var(--text-color);
   background-color: #fff;
@@ -392,7 +391,6 @@ export default {
   flex-direction: column;
   justify-content: center;
   align-items: stretch;
-  will-change: auto;
 }
 
 .drawing-board-content-block__title-button {
@@ -427,7 +425,7 @@ body.using-mouse .drawing-board-content-block__title-button:focus {
   display: none;
   width: 100%;
   height: 100%;
-  will-change: auto;
+  will-change: opacity;
   display: none;
   flex-direction: column;
   grid-template-columns: auto auto auto 1fr auto;

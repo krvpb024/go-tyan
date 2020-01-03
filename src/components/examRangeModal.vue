@@ -323,10 +323,10 @@ export default {
   width: 100%;
   top: 0;
   left: 0;
-  will-change: auto;
 }
 
 .exam-range-modal__form-block {
+  will-change: width, height, transform, top, left;
   position: fixed;
   top: 50%;
   left: 50%;
@@ -336,7 +336,6 @@ export default {
   max-width: calc(var(--app-max-width) * 0.8);
   border: solid 2px var(--text-color);
   border-radius: 4px;
-  will-change: auto;
   overflow: hidden;
 }
 

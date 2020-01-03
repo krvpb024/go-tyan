@@ -1,4 +1,4 @@
-import { Machine, assign, send } from 'xstate'
+import { Machine, assign } from 'xstate'
 import { gojuon } from '@/states/gojuon.js'
 
 const machine = Machine({

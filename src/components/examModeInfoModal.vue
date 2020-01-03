@@ -291,7 +291,7 @@ export default {
   z-index: 100;
   display: none;
   overflow: hidden;
-  will-change: auto;
+  will-change: transform, opacity, width, height;
 }
 
 .exam-mode-info-modal-content-block__close-button {

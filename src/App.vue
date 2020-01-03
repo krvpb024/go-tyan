@@ -129,7 +129,7 @@ ul {
   position: sticky;
   padding: var(--root-padding-size);
   bottom: 0;
-  pointer-events:none
+  pointer-events:none;
 }
 
 .app-top-bar-link-icon {

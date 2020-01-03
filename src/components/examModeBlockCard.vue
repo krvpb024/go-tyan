@@ -424,6 +424,7 @@ export default {
     "answer  " 1fr / 1fr;
   align-items: center;
   justify-items: center;
+  will-change: opacity, transform;
 }
 
 .exam-mode-block-card__card--background {
@@ -432,16 +433,17 @@ export default {
 }
 
 .exam-mode-block-card__card--first {
-  will-change: auto;
   position: relative;
   user-select: none;
   z-index: 10;
   background-color: #fff;
+  will-change: opacity, transform;
 }
 
 .exam-mode-block-card__card--second {
   z-index: 9;
   transform: translate(var(--card-transform), var(--card-transform));
+  will-change: opacity, transform;
 }
 
 .exam-mode-block-card__card--third {
@@ -450,6 +452,7 @@ export default {
     var(--card-second-transform),
     var(--card-second-transform)
   );
+  will-change: opacity, transform;
 }
 
 .exam-mode-block-card__card--new {
@@ -459,6 +462,7 @@ export default {
     var(--card-third-transform),
     var(--card-third-transform)
   );
+  will-change: opacity, transform;
 }
 
 .exam-mode-block-card__question {
