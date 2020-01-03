@@ -125,6 +125,13 @@ ul {
   z-index: 11;
 }
 
+.app-sticky-bottom {
+  position: sticky;
+  padding: var(--root-padding-size);
+  bottom: 0;
+  pointer-events:none
+}
+
 .app-top-bar-link-icon {
   display: flex;
   align-items: center;

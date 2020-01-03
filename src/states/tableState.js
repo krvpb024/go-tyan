@@ -124,11 +124,11 @@ const machine = Machine({
             UPDATE_ACTIVE_CURSOR: [
               {
                 cond: 'isNotChange',
-                target: ['.idle', '#tableView.drawingBoard.clearCanvasBeforeAnimation'],
+                target: ['.idle', '#drawingBoard.show.clearCanvas'],
               },
               {
                 actions: 'updateActiveCursor',
-                target: '#tableView.drawingBoard.openDrawingBoardAnimation',
+                target: ['#drawingBoard.show', '.scrollToActiveCursor'],
               },
             ],
             CLEAR_ACTIVE_CURSOR: {
@@ -142,11 +142,11 @@ const machine = Machine({
               on: {
                 ACTIVE_CURSOR_TO_PREVIOUS: {
                   actions: 'activeCursorToPrevious',
-                  target: ['#tableView.drawingBoard.show.clearCanvas', 'scrollToActiveCursor'],
+                  target: ['#drawingBoard.show.clearCanvas', 'scrollToActiveCursor'],
                 },
                 ACTIVE_CURSOR_TO_NEXT: {
                   actions: 'activeCursorToNext',
-                  target: ['#tableView.drawingBoard.show.clearCanvas', 'scrollToActiveCursor'],
+                  target: ['#drawingBoard.show.clearCanvas', 'scrollToActiveCursor'],
                 },
               },
             },
@@ -163,39 +163,26 @@ const machine = Machine({
       id: 'drawingBoard',
       initial: 'hide',
       states: {
-        openDrawingBoardAnimation: {
-          on: {
-            OPEN_DRAWING_BOARD_ANIMATION_END: {
-              target: ['show', '#tableView.table.cellActive.scrollToActiveCursor'],
-            },
-          },
-        },
         show: {
           initial: 'idle',
-          on: {
-            HIDE_DRAWING_BOARD: 'clearCanvasBeforeAnimation',
-          },
           states: {
             idle: {
               on: {
+                SCROLL_TO_ACTIVE_CURSOR: '#tableView.table.cellActive.scrollToActiveCursor',
                 CLEAR_CANVAS: 'clearCanvas',
+                HIDE_DRAWING_BOARD: '#drawingBoard.clearCanvas',
               },
             },
             clearCanvas: {
               on: {
-                CANVAS_CLREAR_FINISHED: 'idle',
+                CANVAS_CLEAR_FINISHED: 'idle',
               },
             },
           },
         },
-        clearCanvasBeforeAnimation: {
+        clearCanvas: {
           on: {
-            CANVAS_CLREAR_FINISHED: 'closeDrawingBoardAnimation',
-          },
-        },
-        closeDrawingBoardAnimation: {
-          on: {
-            CLOSE_DRAWING_BOARD_ANIMATION_END: 'hide',
+            CANVAS_CLEAR_FINISHED: 'hide',
           },
         },
         hide: {
@@ -225,10 +212,15 @@ const machine = Machine({
   },
 }, {
   guards: {
+    hideDrawingBoard (context, { data: {
+      hideDrawingBoard = false,
+    } = {} }) {
+      return Boolean(hideDrawingBoard)
+    },
     toggleOn (context, { data }) {
       return Boolean(data)
     },
-    isNotChange (context, { data }) {
+    isNotChange (context, { data = {} }) {
       return context.activeGroupName == data.activeGroupName &&
       context.activeRow == data.activeRow &&
       context.activeColumn == data.activeColumn

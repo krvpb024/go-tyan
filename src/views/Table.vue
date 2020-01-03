@@ -188,18 +188,31 @@
         </table>
       </section>
     </main>
+
+    <div class="app-sticky-bottom">
       <drawing-board
         :service="service"
         :current="current"
-        :activeGroupName="current.context.activeGroupName"
-        :activeRow="current.context.activeRow"
-        :activeColumn="current.context.activeColumn"
-        openState="drawingBoard.show"
-        clearCanvasState="drawingBoard.show.clearCanvas"
-        clearCanvasBeforeCloseState="drawingBoard.clearCanvasBeforeAnimation"
-        openAnimationState="drawingBoard.openDrawingBoardAnimation"
-        closeAnimationState="drawingBoard.closeDrawingBoardAnimation"
+        :open="current.matches('drawingBoard.show')"
+        :clearCanvas="current.matches('drawingBoard.show.clearCanvas') ||
+          current.matches('drawingBoard.clearCanvas')"
+        @buttonClick="service.send('TOOLTIPS_SHOW')"
       ></drawing-board>
+
+      <div class="drawing-board-content-block__tooltips">
+        <tooltips
+          @click="service.send('TOOLTIPS_HIDE')"
+          :show="current.matches('drawingBoard.hide.tooltipsShow')"
+          :service="service"
+          :current="current"
+          :anglePosition="{ left: 0, bottom: 0 }"
+          angleTransformX="20px"
+          angleTransformY="50%"
+        >
+          請先點選五十音
+        </tooltips>
+      </div>
+    </div>
 
   </section>
 </template>
@@ -213,6 +226,7 @@ import tableDisplayControl from '@/components/tableDisplayControl.vue'
 import drawingBoard from '@/components/drawingBoard.vue'
 import topBar from '@/components/topBar.vue'
 import gojuonTitle from '@/components/gojuonTitle.vue'
+import tooltips from '@/components/tooltips.vue'
 
 export default {
   name: 'Table',
@@ -221,6 +235,7 @@ export default {
     drawingBoard,
     topBar,
     gojuonTitle,
+    tooltips,
   },
   setup () {
     // element
@@ -394,5 +409,13 @@ export default {
 
 .table-view-button-content__romanization {
   grid-area: romanization;
+}
+
+.drawing-board-content-block__tooltips {
+  position: absolute;
+  top: 0;
+  left: var(--root-padding-size);
+  transform: translateY(-100%);
+  pointer-events: auto;
 }
 </style>

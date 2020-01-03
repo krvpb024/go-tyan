@@ -117,17 +117,18 @@
         </div>
       </main>
 
-      <drawing-board
-        opacity="0.8"
-        :service="service"
-        :current="current"
-        :style="{ zIndex: 99 }"
-        openState="idle.drawingBoard.show"
-        clearCanvasState="idle.drawingBoard.show.clearCanvas"
-        clearCanvasBeforeCloseState="idle.drawingBoard.clearCanvasBeforeAnimation"
-        openAnimationState="idle.drawingBoard.openDrawingBoardAnimation"
-        closeAnimationState="idle.drawingBoard.closeDrawingBoardAnimation"
-      ></drawing-board>
+      <div class="app-sticky-bottom">
+        <drawing-board
+          opacity="0.8"
+          :service="service"
+          :current="current"
+          :style="{ zIndex: 99 }"
+          :open="current.matches('idle.drawingBoard.show')"
+          :clearCanvas="current.matches('idle.drawingBoard.show.clearCanvas') ||
+            current.matches('idle.drawingBoard.clearCanvas')"
+          @buttonClick="service.send('SHOW_DRAWING_BOARD')"
+        ></drawing-board>
+      </div>
     </div>
   </section>
 </template>
