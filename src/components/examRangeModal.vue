@@ -17,7 +17,7 @@
     <div
       class="exam-range-modal__form-block"
       ref="examRangeModalElement"
-     >
+    >
       <form
         class="exam-range-modal-form-block__form"
         @submit.prevent="service.send('SET_EXAM_RANGE')"
@@ -78,22 +78,22 @@
               儲存
             </button>
 
-            <div class="exam-range-modal-save-button__tooltips">
+            <div
+              class="exam-range-modal-save-button__tooltips"
+              :class="{
+                'exam-range-modal-save-button__tooltips--show': current.matches('examRangeModal.show.tooltipsShow')
+              }"
+            >
               <tooltips
-                v-show="current.matches('examRangeModal.show.error')"
+                @click="service.send('TOOLTIPS_HIDE')"
+                :show="current.matches('examRangeModal.show.tooltipsShow')"
                 :service="service"
                 :current="current"
-                showState="examRangeModal.show.error"
-                showAnimationState="examRangeModal.show.error.showTooltipsAnimation"
-                idleState="examRangeModal.show.error.showTooltips"
-                hideAnimationState="examRangeModal.show.error.hideTooltipsAnimation"
                 :anglePosition="{ right: 0, top: 0 }"
                 angleTransformX="-20px"
                 angleTransformY="-50%"
               >
-                {{ current.meta['examRangeView.examRangeModal.show.error']
-                  ? current.meta['examRangeView.examRangeModal.show.error'].message
-                  : null }}
+                請至少選擇一項
               </tooltips>
             </div>
           </template>
@@ -363,8 +363,14 @@ export default {
   position: absolute;
   bottom: 0;
   right: 0;
-  transform: translate(0, 125%);
+  transform: scale(0) translate(0, 125%);
   z-index: 10;
+  transition: var(--tooltips-container-transition);
+}
+
+.exam-range-modal-save-button__tooltips--show {
+  transform: scale(1) translate(0, 125%);
+  transition: var(--tooltips-container-transition-show);
 }
 
 .exam-range-modal-form__scroll-content {

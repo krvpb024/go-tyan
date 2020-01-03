@@ -199,32 +199,23 @@ const machine = Machine({
           },
         },
         hide: {
-          initial: 'idle',
-          entry: [send('FOCUS_CURRENT_ACTIVE_CURSOR'), send('CLEAR_ACTIVE_CURSOR')],
+          initial: 'tooltipsHide',
+          entry: [
+            send('FOCUS_CURRENT_ACTIVE_CURSOR'),
+            send('CLEAR_ACTIVE_CURSOR'),
+          ],
           states: {
-            idle: {
+            tooltipsShow: {
+              after: {
+                3000: 'tooltipsHide',
+              },
               on: {
-                SHOW_TOOLTIPS: 'tooltips.showTooltipsAnimation',
+                TOOLTIPS_HIDE: 'tooltipsHide',
               },
             },
-            tooltips: {
-              initial: 'showTooltipsAnimation',
-              states: {
-                showTooltipsAnimation: {
-                  on: {
-                    SHOW_TOOLTIPS_ANIMATION_END: 'showTooltips',
-                  },
-                },
-                showTooltips: {
-                  on: {
-                    HIDE_TOOLTIPS: 'hideTooltipsAnimation',
-                  },
-                },
-                hideTooltipsAnimation: {
-                  on: {
-                    HIDE_TOOLTIPS_ANIMATION_END: '#drawingBoard.hide.idle',
-                  },
-                },
+            tooltipsHide: {
+              on: {
+                TOOLTIPS_SHOW: 'tooltipsShow',
               },
             },
           },
@@ -237,16 +228,10 @@ const machine = Machine({
     toggleOn (context, { data }) {
       return Boolean(data)
     },
-    isNotChange (context, {
-      data: {
-        activeGroupName,
-        activeRow,
-        activeColumn,
-      } = {},
-    }) {
-      return context.activeGroupName == activeGroupName &&
-      context.activeRow == activeRow &&
-      context.activeColumn == activeColumn
+    isNotChange (context, { data }) {
+      return context.activeGroupName == data.activeGroupName &&
+      context.activeRow == data.activeRow &&
+      context.activeColumn == data.activeColumn
     },
   },
   actions: {
@@ -265,14 +250,14 @@ const machine = Machine({
       focusColumn: null,
     }),
     focusCurrentActiveCursor: assign(function focusCurrentActiveCursor ({
-      activeGroupName,
-      activeRow,
-      activeColumn,
+      activeGroupName: focusGroupName,
+      activeRow: focusRow,
+      activeColumn: focusColumn,
     }) {
       return {
-        focusGroupName: activeGroupName,
-        focusRow: activeRow,
-        focusColumn: activeColumn,
+        focusGroupName,
+        focusRow,
+        focusColumn,
       }
     }),
     focusCursorUp: assign(getTargetRowByAdd(-1)),

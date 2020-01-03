@@ -44,7 +44,7 @@ const machine = Machine({
           },
         },
         show: {
-          initial: 'idle',
+          initial: 'tooltipsHide',
           on: {
             HIDE_EXAM_RANGE_MODAL: {
               actions: ['clearNavTarget', 'undoMutateSelectedGojuon'],
@@ -56,7 +56,7 @@ const machine = Machine({
             SET_EXAM_RANGE: [
               {
                 cond: 'selectedGojuonIsEmpty',
-                target: '.error',
+                target: '.tooltipsShow',
               },
               {
                 actions: ['updateSubmittedGojuon', 'setExamRange'],
@@ -65,28 +65,17 @@ const machine = Machine({
             ],
           },
           states: {
-            idle: {},
-            error: {
-              initial: 'showTooltipsAnimation',
-              meta: {
-                message: '請至少選擇一項',
+            tooltipsShow: {
+              after: {
+                3000: 'tooltipsHide',
               },
-              states: {
-                showTooltipsAnimation: {
-                  on: {
-                    SHOW_TOOLTIPS_ANIMATION_END: 'showTooltips',
-                  },
-                },
-                showTooltips: {
-                  on: {
-                    HIDE_TOOLTIPS: 'hideTooltipsAnimation',
-                  },
-                },
-                hideTooltipsAnimation: {
-                  on: {
-                    HIDE_TOOLTIPS_ANIMATION_END: '#examRangeModal.show.idle',
-                  },
-                },
+              on: {
+                TOOLTIPS_HIDE: 'tooltipsHide',
+              },
+            },
+            tooltipsHide: {
+              on: {
+                TOOLTIPS_SHOW: 'tooltipsShow',
               },
             },
           },

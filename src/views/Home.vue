@@ -128,22 +128,19 @@
     </nav>
 
     <div
-      class="home__tooltips-container"
+      class="home__tooltips-container home__tooltips-container--ios-safari"
+      :class="{ 'home__tooltips-container--ios-safari--show': current.matches('idle.tooltipsShow') }"
       v-if="showWhenIosSafari"
-      :class="{ 'home__tooltips-container--ios-safari': showWhenIosSafari }"
     >
       <tooltips
+        @click="service.send('TOOLTIPS_HIDE')"
+        :show="current.matches('idle.tooltipsShow')"
         class="home__tooltips"
         :service="service"
         :current="current"
-        showState="tooltips"
-        showAnimationState="tooltips.showTooltipsAnimation"
-        idleState="tooltips.showTooltips"
-        hideAnimationState="tooltips.hideTooltipsAnimation"
         :anglePosition="{ left: '50%', bottom: '0' }"
         angleTransformX="-50%"
         angleTransformY="50%"
-        :showDuration="5000"
       >
         <span class="home-tooltips__text">
           點擊
@@ -161,21 +158,18 @@
     </div>
 
     <div
-      class="home__tooltips-container"
+      class="home__tooltips-container home__tooltips-container--android-firefox"
+      :class="{ 'home__tooltips-container--show': current.matches('idle.tooltipsShow') }"
       v-if="showWhenAndroidFirefox"
-      :class="{ 'home__tooltips-container--android-firefox': showWhenAndroidFirefox }"
     >
       <tooltips
+        @click="service.send('TOOLTIPS_HIDE')"
+        :show="current.matches('idle.tooltipsShow')"
         class="home__tooltips"
         :service="service"
         :current="current"
-        showState="tooltips"
-        showAnimationState="tooltips.showTooltipsAnimation"
-        idleState="tooltips.showTooltips"
-        hideAnimationState="tooltips.hideTooltipsAnimation"
         :anglePosition="{ right: '70px', top: '0' }"
         angleTransformY="-50%"
-        :showDuration="5000"
       >
         <span class="home-tooltips__text">
           點擊
@@ -189,21 +183,19 @@
     </div>
 
     <div
-      class="home__tooltips-container"
-      :class="{ 'home__tooltips-container--is-inapp': showWhenIsInapp }"
+      class="home__tooltips-container home__tooltips-container--is-inapp"
+      :class="{ 'home__tooltips-container--is-inapp--show': current.matches('idle.tooltipsShow') }"
+      v-if="showWhenIsInapp"
     >
       <tooltips
+        @click="service.send('TOOLTIPS_HIDE')"
+        :show="current.matches('idle.tooltipsShow')"
         class="home__tooltips"
         :service="service"
         :current="current"
-        showState="tooltips"
-        showAnimationState="tooltips.showTooltipsAnimation"
-        idleState="tooltips.showTooltips"
-        hideAnimationState="tooltips.hideTooltipsAnimation"
         :anglePosition="{ left: '0', top: '0' }"
         angleTransformX="100%"
         angleTransformY="50%"
-        :showDuration="5000"
       >
         <span class="home-tooltips__text">
           「加入主畫面」功能目前不支援於您目前使用的瀏覽器，建議您切換至 {{ recommendedBrowser }} 瀏覽器。
@@ -305,7 +297,7 @@ export default {
           }
         })
       } else {
-        service.value.send('SHOW_TOOLTIPS')
+        service.value.send('TOOLTIPS_SHOW')
       }
     }
   },
@@ -442,12 +434,24 @@ export default {
 .home__tooltips-container {
   position: fixed;
   z-index: 100;
+  transform: var(--tooltips-container-tramsform);
+  transition: var(--tooltips-container-transition);
+}
+
+.home__tooltips-container--show {
+  transform: var(--tooltips-container-tramsform-show);
+  transition: var(--tooltips-container-transition-show);
 }
 
 .home__tooltips-container--ios-safari, .home__tooltips-container--is-inapp {
   bottom: 20px;
   left: 50%;
-  transform: translateX(-50%);
+  transform: var(--tooltips-container-tramsform) translateX(-50%);
+}
+
+.home__tooltips-container--ios-safari--show, .home__tooltips-container--is-inapp--show {
+  transform: var(--tooltips-container-tramsform-show) translateX(-50%);
+  transition: var(--tooltips-container-transition-show);
 }
 
 .home__tooltips-container--is-inapp {

@@ -21,7 +21,7 @@
         @click="service.send(
           service.id == 'examMode'
             ? 'OPEN_DRAWING_BOARD'
-            : 'SHOW_TOOLTIPS')"
+            : 'TOOLTIPS_SHOW')"
       >
 
         <h1
@@ -32,14 +32,17 @@
         </h1>
       </button>
 
-      <div class="drawing-board-content-block__tooltips">
+      <div
+        class="drawing-board-content-block__tooltips"
+        :class="{
+          'drawing-board-content-block__tooltips--show': current.matches('drawingBoard.hide.tooltipsShow')
+        }"
+      >
         <tooltips
+          @click="service.send('TOOLTIPS_HIDE')"
+          :show="current.matches('drawingBoard.hide.tooltipsShow')"
           :service="service"
           :current="current"
-          showState="drawingBoard.hide.tooltips"
-          showAnimationState="drawingBoard.hide.tooltips.showTooltipsAnimation"
-          idleState="drawingBoard.hide.tooltips.showTooltips"
-          hideAnimationState="drawingBoard.hide.tooltips.hideTooltipsAnimation"
           :anglePosition="{ left: 0, bottom: 0 }"
           angleTransformX="20px"
           angleTransformY="50%"
@@ -189,7 +192,7 @@ import { useModalNavigation } from '@/utils/useModalNavigation.js'
 import tooltips from '@/components/tooltips.vue'
 
 export default {
-  name: 'tableDrawingBoard',
+  name: 'drawingBoard',
   components: { tooltips },
   props: {
     service: {
@@ -262,18 +265,6 @@ export default {
 
     // effect
     watch(
-      () => props.current.matches(props.clearCanvasState) ||
-        props.current.matches(props.clearCanvasBeforeCloseState),
-      function clearCanvas (value) {
-        if (value) {
-          ctx.value.clearRect(0, 0, canvasElement.value.width, canvasElement.value.height)
-          props.service.send('CANVAS_CLREAR_FINISHED')
-        }
-      },
-      { lazy: true }
-    )
-
-    watch(
       () => props.current.matches(props.openAnimationState),
       function startOpenDrawingBoardAnimation (value) {
         if (!value) return
@@ -304,20 +295,32 @@ export default {
             }, '-=0.3')
             .play()
         }
-
-        function canvasInitialSettings () {
-          // this api will round floating points, it will cause canvas keep growing
-          canvasElement.value.width = canvasContainerElement.value.clientWidth - 10
-          canvasElement.value.height = canvasContainerElement.value.clientHeight - 10
-          ctx.value = canvasElement.value.getContext('2d')
-          ctx.value.lineWidth = 10
-          ctx.value.strokeStyle = '#313131'
-          ctx.value.lineJoin = 'round'
-          ctx.value.lineCap = 'round'
-        }
       },
       { lazy: true }
     )
+
+    watch(
+      () => props.current.matches(props.clearCanvasState) ||
+        props.current.matches(props.clearCanvasBeforeCloseState),
+      function clearCanvas (value) {
+        if (!value) return
+        canvasInitialSettings()
+        ctx.value.clearRect(0, 0, canvasElement.value.width, canvasElement.value.height)
+        props.service.send('CANVAS_CLREAR_FINISHED')
+      },
+      { lazy: true }
+    )
+
+    function canvasInitialSettings () {
+      // this api will round floating points, it will cause canvas keep growing
+      canvasElement.value.width = canvasContainerElement.value.clientWidth - 10
+      canvasElement.value.height = canvasContainerElement.value.clientHeight - 10
+      ctx.value = canvasElement.value.getContext('2d')
+      ctx.value.lineWidth = 10
+      ctx.value.strokeStyle = '#313131'
+      ctx.value.lineJoin = 'round'
+      ctx.value.lineCap = 'round'
+    }
 
     watch(
       () => props.current.matches(props.closeAnimationState),
@@ -473,10 +476,11 @@ export default {
   height: 100%;
   top: 0;
   left: 0;
+  z-index: 10;
 }
 
 .drawing-board-content-block__title-button:focus {
-  outline: var(--focus-default-outline)
+  outline: var(--focus-default-outline);
 }
 
 body.using-mouse .drawing-board-content-block__title-button:focus {
@@ -493,7 +497,14 @@ body.using-mouse .drawing-board-content-block__title-button:focus {
   position: absolute;
   top: 0;
   left: 0;
-  transform: translateY(-120%);
+  transform: scale(0) translateY(-120%);
+  z-index: 9;
+  transition: var(--tooltips-container-transition);
+}
+
+.drawing-board-content-block__tooltips--show {
+  transform: scale(1) translateY(-120%);
+  transition: var(--tooltips-container-transition-show);
 }
 
 .drawing-board-content-block__tool-block {

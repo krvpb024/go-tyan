@@ -1,11 +1,12 @@
 <template>
   <div
-    v-if="current.matches(showState)"
     class="tooltips"
+    :class="{ 'tooltips--show': show }"
+    :aria-hidden="(!show).toString()"
     aria-live="assertive"
     role="alert"
     ref="tooltipsElement"
-    @click="clickToHide"
+    @click="$emit('click')"
   >
     <p class="tooltips__text">
       <slot></slot>
@@ -15,40 +16,25 @@
       class="tooltips__angle"
       :style="{
         ...anglePosition,
-        transform: `translate(${angleTransformX}, ${angleTransformY}) rotate(45deg)`
+        transform: `translate(${angleTransformX}, ${angleTransformY}) rotate(45deg)`,
       }"
     ></div>
   </div>
 </template>
 
 <script>
-import { ref, watch } from '@vue/composition-api'
-import { gsap } from 'gsap'
-
 export default {
   props: {
+    show: {
+      type: Boolean,
+      default: false,
+    },
     service: {
       type: Object,
       required: true,
     },
     current: {
       type: Object,
-      required: true,
-    },
-    showState: {
-      type: String,
-      required: true,
-    },
-    showAnimationState: {
-      type: String,
-      required: true,
-    },
-    idleState: {
-      type: String,
-      required: true,
-    },
-    hideAnimationState: {
-      type: String,
       required: true,
     },
     anglePosition: {
@@ -63,86 +49,19 @@ export default {
       type: String,
       default: '0',
     },
-    showDuration: {
-      type: Number,
-      default: 1500,
-    },
-  },
-  setup (props) {
-    // element
-    const tooltipsElement = ref(null)
-    // data
-    const tooltipsElementAnimationTimeline = ref(null)
-    const tooltipsTimeout = ref(null)
-
-    watch(
-      () => props.current.matches(props.showAnimationState),
-      function startShowTooltipsAnimation (value) {
-        if (!value) return
-
-        clearTimeout(tooltipsTimeout.value)
-        showTooltips().then(function animationEnd () {
-          props.service.send('SHOW_TOOLTIPS_ANIMATION_END')
-        })
-
-        function showTooltips () {
-          gsap.set(tooltipsElement.value, { clearProps: 'all' })
-
-          tooltipsElementAnimationTimeline.value = gsap.timeline({ paused: true })
-          return tooltipsElementAnimationTimeline.value
-            .to(tooltipsElement.value, {
-              display: 'flex',
-              duration: 0,
-            })
-            .to(tooltipsElement.value, {
-              opacity: 1,
-              duration: 0.3,
-            })
-            .play()
-        }
-      },
-      { lazy: true }
-    )
-
-    watch(
-      () => props.current.matches(props.idleState),
-      function startHideTooltipsAnimation (value) {
-        if (!value) return
-        if (tooltipsTimeout.value) return
-        tooltipsTimeout.value = setTimeout(function closeTooltipsTimeout () {
-          props.service.send('HIDE_TOOLTIPS')
-        }, props.showDuration)
-      },
-      { lazy: true }
-    )
-
-    watch(
-      () => props.current.matches(props.hideAnimationState),
-      function startHideTooltipsAnimation (value) {
-        if (!value) return
-
-        tooltipsElementAnimationTimeline.value.reverse()
-          .then(function animationEnd () {
-            props.service.send('HIDE_TOOLTIPS_ANIMATION_END')
-          })
-      },
-      { lazy: true }
-    )
-
-    return {
-      tooltipsElement,
-      // methods
-      clickToHide,
-    }
-
-    function clickToHide () {
-      clearTimeout(tooltipsTimeout.value)
-      tooltipsTimeout.value = null
-      props.service.send('HIDE_TOOLTIPS')
-    }
   },
 }
 </script>
+
+<style>
+:root {
+  --tooltips-opacity-duration: 400ms;
+  --tooltips-container-transition: transform 0ms var(--tooltips-opacity-duration);
+  --tooltips-container-transition-show: transform 0ms 0ms;
+  --tooltips-container-tramsform: scale(0);
+  --tooltips-container-tramsform-show: scale(1);
+}
+</style>
 
 <style scoped>
 .tooltips {
@@ -151,11 +70,15 @@ export default {
   border-radius: 8px;
   width: auto;
   white-space: nowrap;
-  display: none;
   align-items: center;
   justify-content: center;
   padding: 27px 16px;
   opacity: 0;
+  transition: opacity var(--tooltips-opacity-duration) 0ms;
+}
+
+.tooltips--show {
+  opacity: 1;
 }
 
 .tooltips__angle {
@@ -165,6 +88,7 @@ export default {
   width: 10px;
   height: 10px;
   background-color: var(--main-color);
+  transition: inherit;
 }
 
 .tooltips__text {

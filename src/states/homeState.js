@@ -5,26 +5,19 @@ const machine = Machine({
   initial: 'idle',
   states: {
     idle: {
-      on: {
-        SHOW_TOOLTIPS: 'tooltips.showTooltipsAnimation',
-      },
-    },
-    tooltips: {
-      initial: 'showTooltipsAnimation',
+      initial: 'tooltipsHide',
       states: {
-        showTooltipsAnimation: {
+        tooltipsShow: {
+          after: {
+            10000: 'tooltipsHide',
+          },
           on: {
-            SHOW_TOOLTIPS_ANIMATION_END: 'showTooltips',
+            TOOLTIPS_HIDE: 'tooltipsHide',
           },
         },
-        showTooltips: {
+        tooltipsHide: {
           on: {
-            HIDE_TOOLTIPS: 'hideTooltipsAnimation',
-          },
-        },
-        hideTooltipsAnimation: {
-          on: {
-            HIDE_TOOLTIPS_ANIMATION_END: '#home.idle',
+            TOOLTIPS_SHOW: 'tooltipsShow',
           },
         },
       },
