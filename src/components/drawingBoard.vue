@@ -34,9 +34,6 @@
 
       <div
         class="drawing-board-content-block__tooltips"
-        :class="{
-          'drawing-board-content-block__tooltips--show': current.matches('drawingBoard.hide.tooltipsShow')
-        }"
       >
         <tooltips
           @click="service.send('TOOLTIPS_HIDE')"
@@ -497,14 +494,7 @@ body.using-mouse .drawing-board-content-block__title-button:focus {
   position: absolute;
   top: 0;
   left: 0;
-  transform: scale(0) translateY(-120%);
-  z-index: 9;
-  transition: var(--tooltips-container-transition);
-}
-
-.drawing-board-content-block__tooltips--show {
-  transform: scale(1) translateY(-120%);
-  transition: var(--tooltips-container-transition-show);
+  transform: translateY(-120%);
 }
 
 .drawing-board-content-block__tool-block {

@@ -129,7 +129,6 @@
 
     <div
       class="home__tooltips-container home__tooltips-container--ios-safari"
-      :class="{ 'home__tooltips-container--ios-safari--show': current.matches('idle.tooltipsShow') }"
       v-if="showWhenIosSafari"
     >
       <tooltips
@@ -159,7 +158,6 @@
 
     <div
       class="home__tooltips-container home__tooltips-container--android-firefox"
-      :class="{ 'home__tooltips-container--show': current.matches('idle.tooltipsShow') }"
       v-if="showWhenAndroidFirefox"
     >
       <tooltips
@@ -184,7 +182,6 @@
 
     <div
       class="home__tooltips-container home__tooltips-container--is-inapp"
-      :class="{ 'home__tooltips-container--is-inapp--show': current.matches('idle.tooltipsShow') }"
       v-if="showWhenIsInapp"
     >
       <tooltips
@@ -434,24 +431,12 @@ export default {
 .home__tooltips-container {
   position: fixed;
   z-index: 100;
-  transform: var(--tooltips-container-tramsform);
-  transition: var(--tooltips-container-transition);
-}
-
-.home__tooltips-container--show {
-  transform: var(--tooltips-container-tramsform-show);
-  transition: var(--tooltips-container-transition-show);
 }
 
 .home__tooltips-container--ios-safari, .home__tooltips-container--is-inapp {
   bottom: 20px;
   left: 50%;
-  transform: var(--tooltips-container-tramsform) translateX(-50%);
-}
-
-.home__tooltips-container--ios-safari--show, .home__tooltips-container--is-inapp--show {
-  transform: var(--tooltips-container-tramsform-show) translateX(-50%);
-  transition: var(--tooltips-container-transition-show);
+  transform: translateX(-50%);
 }
 
 .home__tooltips-container--is-inapp {

@@ -1,7 +1,6 @@
 <template>
   <div
     class="tooltips"
-    :class="{ 'tooltips--show': show }"
     :aria-hidden="(!show).toString()"
     aria-live="assertive"
     role="alert"
@@ -23,6 +22,9 @@
 </template>
 
 <script>
+import { ref, watch, onMounted } from '@vue/composition-api'
+import { gsap } from 'gsap'
+
 export default {
   props: {
     show: {
@@ -50,18 +52,43 @@ export default {
       default: '0',
     },
   },
+  setup (props) {
+    // element
+    const tooltipsElement = ref(null)
+
+    // data
+    const tooltipsShowTimeLine = ref(null)
+
+    // effect
+    watch(
+      () => props.show,
+      function showWatcher (value) {
+        if (value) {
+          tooltipsShowTimeLine.value.play()
+        } else {
+          tooltipsShowTimeLine.value.reverse()
+        }
+      },
+      { lazy: true }
+    )
+
+    onMounted(function tooltipsOnMounted () {
+      tooltipsShowTimeLine.value = gsap.timeline({ paused: true })
+        .set(tooltipsElement.value, { display: 'block' })
+        .fromTo(tooltipsElement.value, {
+          opacity: 0,
+        }, {
+          opacity: 1,
+          duration: 0.3,
+        })
+    })
+
+    return {
+      tooltipsElement,
+    }
+  },
 }
 </script>
-
-<style>
-:root {
-  --tooltips-opacity-duration: 400ms;
-  --tooltips-container-transition: transform 0ms var(--tooltips-opacity-duration);
-  --tooltips-container-transition-show: transform 0ms 0ms;
-  --tooltips-container-tramsform: scale(0);
-  --tooltips-container-tramsform-show: scale(1);
-}
-</style>
 
 <style scoped>
 .tooltips {
@@ -74,11 +101,7 @@ export default {
   justify-content: center;
   padding: 27px 16px;
   opacity: 0;
-  transition: opacity var(--tooltips-opacity-duration) 0ms;
-}
-
-.tooltips--show {
-  opacity: 1;
+  display: none;
 }
 
 .tooltips__angle {

@@ -78,12 +78,7 @@
               儲存
             </button>
 
-            <div
-              class="exam-range-modal-save-button__tooltips"
-              :class="{
-                'exam-range-modal-save-button__tooltips--show': current.matches('examRangeModal.show.tooltipsShow')
-              }"
-            >
+            <div class="exam-range-modal-save-button__tooltips">
               <tooltips
                 @click="service.send('TOOLTIPS_HIDE')"
                 :show="current.matches('examRangeModal.show.tooltipsShow')"
@@ -363,14 +358,8 @@ export default {
   position: absolute;
   bottom: 0;
   right: 0;
-  transform: scale(0) translate(0, 125%);
+  transform: translate(0, 125%);
   z-index: 10;
-  transition: var(--tooltips-container-transition);
-}
-
-.exam-range-modal-save-button__tooltips--show {
-  transform: scale(1) translate(0, 125%);
-  transition: var(--tooltips-container-transition-show);
 }
 
 .exam-range-modal-form__scroll-content {
