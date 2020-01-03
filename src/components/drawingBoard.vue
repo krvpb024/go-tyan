@@ -261,6 +261,8 @@ export default {
             .then(function animationEnd () {
               drawingBoardTitleElement.value.classList.remove('app-visual-hidden')
               drawingBoardTitleElement.value.focus()
+              props.service.send('FOCUS_CURRENT_ACTIVE_CURSOR')
+              props.service.send('CLEAR_ACTIVE_CURSOR')
             })
         }
       },

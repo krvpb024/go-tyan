@@ -128,7 +128,7 @@ const machine = Machine({
               },
               {
                 actions: 'updateActiveCursor',
-                target: ['#drawingBoard.show', '.scrollToActiveCursor'],
+                target: ['#drawingBoard.show'],
               },
             ],
             CLEAR_ACTIVE_CURSOR: {
@@ -187,10 +187,6 @@ const machine = Machine({
         },
         hide: {
           initial: 'tooltipsHide',
-          entry: [
-            send('FOCUS_CURRENT_ACTIVE_CURSOR'),
-            send('CLEAR_ACTIVE_CURSOR'),
-          ],
           states: {
             tooltipsShow: {
               after: {
