@@ -371,7 +371,7 @@ export default {
 
 <style scoped>
 .drawing-board {
-  will-change: width, height;
+  will-change: scroll-position, width, height;
   width: 90px;
   height: 40px;
   pointer-events: auto;

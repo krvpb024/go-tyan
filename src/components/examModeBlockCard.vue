@@ -9,9 +9,7 @@
     @touchleave="cardMoveEnd"
   >
     <h2 class="app-visual-hidden">
-      {{ examType == 'normalExam'
-          ? '測驗'
-          : '補強測驗' }}
+      測驗
     </h2>
 
     <div
@@ -91,11 +89,23 @@ export default {
       type: Object,
       required: true,
     },
-    examType: {
-      type: String,
+    showAnswer: {
+      type: Boolean,
       required: true,
     },
-    isCurrentExamMode: {
+    cardBackToPosition: {
+      type: Boolean,
+      required: true,
+    },
+    swipeRight: {
+      type: Boolean,
+      required: true,
+    },
+    swipeLeft: {
+      type: Boolean,
+      required: true,
+    },
+    newExam: {
       type: Boolean,
       required: true,
     },
@@ -176,8 +186,15 @@ export default {
     })
 
     watch(
-      () => props.current.matches('idle.exam.examing.normalExam.answerShowed.idle') ||
-        props.current.matches('idle.exam.examing.enhancementExam.answerShowed.idle'),
+      () => props.newExam,
+      function prepareNewExamWatcher (value, previousValue) {
+        if (value && !previousValue) clearAnimationProps()
+      },
+      { lazy: true }
+    )
+
+    watch(
+      () => props.showAnswer,
       function answerShowedAnimationWatcher (value) {
         if (!value) return
         gsap
@@ -190,8 +207,7 @@ export default {
     )
 
     watch(
-      () => props.current.matches('idle.exam.examing.normalExam.answerShowed.cardSwipeRightAnimation') ||
-        props.current.matches('idle.exam.examing.enhancementExam.answerShowed.cardSwipeRightAnimation'),
+      () => props.swipeRight,
       function cardSwipeRightAnimationWatcher (value) {
         if (!value) return
         dragEnd()
@@ -203,8 +219,7 @@ export default {
     )
 
     watch(
-      () => props.current.matches('idle.exam.examing.normalExam.answerShowed.cardSwipeLeftAnimation') ||
-        props.current.matches('idle.exam.examing.enhancementExam.answerShowed.cardSwipeLeftAnimation'),
+      () => props.swipeLeft,
       function cardSwipeLeftAnimationWatcher (value) {
         if (!value) return
         dragEnd()
@@ -216,17 +231,11 @@ export default {
     )
 
     function animationTimelineSwipe (direction) {
-      const tl = gsap.timeline({ paused: true })
       const duration = 0.5
-      return tl
-        .to(cardQuestionElement.value, {
-          opacity: 0,
-          duration: 0,
-        })
-        .to(cardAnswerElement.value, {
-          opacity: 0,
-          duration: 0,
-        })
+
+      return gsap.timeline({ paused: true })
+        .set(cardQuestionElement.value, { opacity: 0 })
+        .set(cardAnswerElement.value, { opacity: 0 })
         .to(cardElement.value, {
           x: `${direction == 'left' ? '-' : '+'}=${document.getElementById('app').offsetWidth}`,
           duration: duration,
@@ -259,20 +268,13 @@ export default {
 
     function clearAnimationPropsAndSendEvent (tl) {
       props.service.send('CARD_SWIPE_ANIMATION_END')
-
-      animationElements.value.forEach(function clearAllAnimationProps (element) {
-        gsap.set(element, { clearProps: 'all' })
-      })
-      if (!props.cards[0]) gsap.set(cardElement.value, { opacity: 0 })
-      if (!props.cards[1]) gsap.set(cardSecondElement.value, { opacity: 0 })
-      if (!props.cards[2]) gsap.set(cardThirdElement.value, { opacity: 0 })
+      clearAnimationProps()
       xMovement.value = 0
       accelerator.value = 1
     }
 
     watch(
-      () => props.current.matches('idle.exam.examing.normalExam.answerShowed.cardBackToPositionAnimation') ||
-        props.current.matches('idle.exam.examing.enhancementExam.answerShowed.cardBackToPositionAnimation'),
+      () => props.cardBackToPosition,
       function cardBackToPositionAnimationWatcher (value) {
         if (!value) return
         dragEnd()
@@ -292,37 +294,21 @@ export default {
       { layz: true }
     )
 
-    watch(
-      () => props.current.matches('idle.exam.examing.enhancementExam.answerShowed.cardShakeAnimation'),
-      function cardShakeAnimationWatcher (value) {
-        if (!value) return
-        const shakeTimeline = gsap
-          .timeline({ paused: true })
-          .to(cardElement.value, {
-            x: 10,
-            duration: 0.05,
-          })
-          .to(cardElement.value, {
-            x: 0,
-            duration: 0.05,
-          })
-
-        shakeTimeline
-          .repeat(2).play()
-          .then(function cardShakeAnimationEnd () {
-            props.service.send('CARD_SHAKE_ANIMATION_END')
-          })
-      },
-      { layz: true }
-    )
-
     onMounted(function examModeBlockCard () {
       swipeCheckPoint.value = document.getElementById('app').offsetWidth / 4
+      clearAnimationProps()
+    })
+
+    function clearAnimationProps () {
+      animationElements.value
+        .forEach(function clearAllAnimationProps (element) {
+          gsap.set(element, { clearProps: 'all' })
+        })
 
       if (!props.cards[0]) gsap.set(cardElement.value, { opacity: 0 })
       if (!props.cards[1]) gsap.set(cardSecondElement.value, { opacity: 0 })
       if (!props.cards[2]) gsap.set(cardThirdElement.value, { opacity: 0 })
-    })
+    }
 
     return {
       // element

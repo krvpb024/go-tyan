@@ -57,7 +57,7 @@
           aria-label="測驗說明"
           aria-haspopup="true"
         >
-          ！
+          ?
         </button>
 
         <exam-mode-info-modal
@@ -196,9 +196,11 @@ export default {
     // effect
     watch(
       () => current.value.matches('idle.exam.examing.changeExamModeAnimation'),
-      function changeExamAnimationWatcher () {
+      function changeExamAnimationWatcher (value) {
+        if (!value) return
+        const tl = gsap.timeline()
         const duration = 0.5
-        gsap.timeline()
+        return tl
           .to(normalExamElement.value, {
             position: 'absolute',
             x: '100%',
@@ -212,7 +214,7 @@ export default {
           }, '-=0.5')
           .then(function changeExamAnimationEnd () {
             service.value.send('CHANGE_EXAM_MODE_ANIMATION_END')
-            enhancementExamElement.value.focus()
+            tl.pause(0)
           })
       },
       { lazy: true }

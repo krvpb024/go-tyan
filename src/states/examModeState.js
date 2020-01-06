@@ -118,80 +118,9 @@ const machine = Machine({
                   },
                 },
                 changeExamModeAnimation: {
+                  exit: ['prepareNewExam'],
                   on: {
-                    CHANGE_EXAM_MODE_ANIMATION_END: 'enhancementExam',
-                  },
-                },
-                enhancementExam: {
-                  initial: 'idle',
-                  on: {
-                    '': {
-                      cond: 'noEnhancementCards',
-                      target: '#examMode.idle.exam.examFinish.examFinishAnimation',
-                    },
-                  },
-                  states: {
-                    idle: {
-                      on: {
-                        SHOW_ANSWER: 'answerShowed',
-                      },
-                    },
-                    answerShowed: {
-                      initial: 'idle',
-                      states: {
-                        idle: {
-                          on: {
-                            CARD_BACK_TO_POSITION: 'cardBackToPositionAnimation',
-                            NEXT_CARD: [
-                              {
-                                cond: 'addToEnhancement',
-                                target: 'cardShakeAnimation',
-                              },
-                              {
-                                actions: ['nextEnhancementCard', send('CLEAR_CANVAS')],
-                                target: 'cardSwipeRightAnimation',
-                              },
-                            ],
-                          },
-                        },
-                        cardBackToPositionAnimation: {
-                          on: {
-                            CARD_BACK_TO_POSITION_ANIMATION_END: 'idle',
-                          },
-                        },
-                        cardShakeAnimation: {
-                          on: {
-                            CARD_SHAKE_ANIMATION_END: 'idle',
-                          },
-                        },
-                        cardSwipeRightAnimation: {
-                          on: {
-                            CARD_SWIPE_ANIMATION_END: [
-                              {
-                                cond: 'noMoreEnhancementCards',
-                                target: '#examMode.idle.exam.examFinish.examFinishAnimation',
-                              },
-                              {
-                                target: '#examing.enhancementExam.idle',
-                              },
-                            ],
-                          },
-                        },
-                        cardSwipeLeftAnimation: {
-                          on: {
-                            CARD_SWIPE_ANIMATION_END: [
-                              {
-                                cond: 'noMoreEnhancementCards',
-                                target: '#examMode.idle.exam.examFinish.examFinishAnimation',
-                              },
-                              {
-                                target: '#examing.enhancementExam.idle',
-                              },
-                            ],
-                          },
-                        },
-                      },
-                    },
+                    CHANGE_EXAM_MODE_ANIMATION_END: 'normalExam',
                   },
                 },
               },
@@ -327,6 +256,13 @@ const machine = Machine({
     nextCard: assign(function cursorToNext ({ cursor }) {
       return {
         cursor: cursor + 1,
+      }
+    }),
+    prepareNewExam: assign(function mutateExam ({ enhancementCards }) {
+      return {
+        cursor: 0,
+        cards: enhancementCards,
+        enhancementCards: [],
       }
     }),
     nextEnhancementCard: assign(function cursorToNext ({ enhancementCursor }) {

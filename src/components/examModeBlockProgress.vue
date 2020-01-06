@@ -24,6 +24,14 @@ import { ref, watch } from '@vue/composition-api'
 
 export default {
   props: {
+    service: {
+      type: Object,
+      required: true,
+    },
+    current: {
+      type: Object,
+      required: true,
+    },
     value: {
       type: Number,
       default: 0,
@@ -40,9 +48,12 @@ export default {
     // effect
     watch(
       () => props.value,
-      function valueWatcher () {
+      function valueWatcher (value) {
         gsap.to(valueBarElement.value, {
           width: `${props.value / props.max * 100}%`,
+          duration: value == 0 // if start a new exam cursor will be 0, won't need transition for that
+            ? 0
+            : 0.3,
         })
       },
       { lazy: true }

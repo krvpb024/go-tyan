@@ -5,13 +5,18 @@
         :service="service"
         :current="current"
         :cards="cards"
-        :examType="examType"
-        :isCurrentExamMode="Boolean(current.matches(`idle.exam.${examType}`))"
+        :showAnswer="current.matches('idle.exam.examing.normalExam.answerShowed.idle')"
+        :swipeRight="current.matches('idle.exam.examing.normalExam.answerShowed.cardSwipeRightAnimation')"
+        :swipeLeft="current.matches('idle.exam.examing.normalExam.answerShowed.cardSwipeLeftAnimation')"
+        :cardBackToPosition="current.matches('idle.exam.examing.normalExam.answerShowed.cardBackToPositionAnimation')"
+        :newExam="current.matches('idle.exam.examing.normalExam')"
       ></exam-mode-block-card>
     </div>
 
     <div class="exam-mode-block__progress">
       <exam-mode-block-progress
+        :service="service"
+        :current="current"
         :value="progressValue"
         :max="progressMax"
       ></exam-mode-block-progress>
