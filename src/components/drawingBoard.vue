@@ -31,18 +31,14 @@
           class="drawing-board-second-column__canvas-container"
           ref="canvasContainerElement"
         >
-          <canvas
+          <whiteBoard
             tabindex="-1"
-            class="drawing-board-canvas-container__canvas-element"
             id="canvas"
-            ref="canvasElement"
-            @mousedown="startDrawing"
-            @touchstart.prevent="startDrawing"
-            @mouseup="stopDrawing"
-            @touchend.prevent="stopDrawing"
-            @mousemove="drawLine"
-            @touchmove.prevent="drawLine"
-          ></canvas>
+            :init="init"
+            :clear="clear"
+            @clearFinish="clearFinish"
+            @initFinish="initFinish"
+          ></whiteBoard>
         </div>
 
         <button
@@ -161,8 +157,10 @@
 import { ref, watch, onMounted, onUpdated } from '@vue/composition-api'
 import { gsap } from 'gsap'
 import { useModalNavigation } from '@/utils/useModalNavigation.js'
+import whiteBoard from '@/components/whiteBoard.vue'
 
 export default {
+  components: { whiteBoard },
   name: 'drawingBoard',
   props: {
     service: {
@@ -193,18 +191,14 @@ export default {
     const activeShowElement = ref(null)
     const drawingBoardTitleElement = ref(null)
     const canvasContainerElement = ref(null)
-    const canvasElement = ref(null)
     const modalButtonsElement = ref(null)
 
-    // data
-    const ctx = ref(null)
-    const lastX = ref(0)
-    const lastY = ref(0)
-
-    const canDraw = ref(false)
-    const keypressed = ref(false)
-
+    // composition
     useModalNavigation(modalButtonsElement, props.current)
+
+    // data
+    const init = ref(false)
+    const clear = ref(false)
 
     // effect
     watch(
@@ -212,7 +206,7 @@ export default {
       function startOpenDrawingBoardAnimation (value) {
         if (value) {
           openModalAnimation().then(function animationEnd () {
-            canvasInitialSettings()
+            init.value = true
             props.service.send('SCROLL_TO_ACTIVE_CURSOR')
             autoFoucusButtonElement.value && autoFoucusButtonElement.value.focus()
           })
@@ -271,24 +265,12 @@ export default {
 
     watch(
       () => props.clearCanvas,
-      function clearCanvasWatcher (value) {
+      function clearWatcher (value) {
         if (!value) return
-        ctx.value.clearRect(0, 0, canvasElement.value.width, canvasElement.value.height)
-        props.service.send('CANVAS_CLEAR_FINISHED')
+        clear.value = true
       },
       { lazy: true }
     )
-
-    function canvasInitialSettings () {
-      // this api will round floating points, it will cause canvas keep growing
-      canvasElement.value.width = canvasContainerElement.value.clientWidth - 10
-      canvasElement.value.height = canvasContainerElement.value.clientHeight - 10
-      ctx.value = canvasElement.value.getContext('2d')
-      ctx.value.lineWidth = 10
-      ctx.value.strokeStyle = '#313131'
-      ctx.value.lineJoin = 'round'
-      ctx.value.lineCap = 'round'
-    }
 
     onMounted(function tableDrawingBoardOnMounted () {
       modalButtonsElement.value = document.querySelectorAll(
@@ -309,61 +291,25 @@ export default {
       canvasContainerElement,
       activeShowElement,
       autoFoucusButtonElement,
-      canvasElement,
       // data
-      ctx,
-      lastX,
-      lastY,
-      keypressed,
+      init,
+      clear,
       // methods
+      initFinish,
+      clearFinish,
       hideDrawingBoard,
-      startDrawing,
-      drawLine,
-      stopDrawing,
+    }
+    function initFinish () {
+      init.value = false
+    }
+
+    function clearFinish () {
+      props.service.send('CANVAS_CLEAR_FINISHED')
+      clear.value = false
     }
 
     function hideDrawingBoard () {
       props.service.send('HIDE_DRAWING_BOARD')
-    }
-
-    function startDrawing ({ type, clientX, clientY, target, touches }) {
-      canDraw.value = true
-      const resultClientX = type == 'touchstart' ? touches[0].clientX : clientX
-      const resultClientY = type == 'touchstart' ? touches[0].clientY : clientY
-      const [x, y] = getMousePosition(resultClientX, resultClientY)
-      lastX.value = x
-      lastY.value = y
-
-      ctx.value.beginPath()
-      ctx.value.moveTo(x, y)
-      ctx.value.lineTo(x, y)
-      ctx.value.stroke()
-    }
-
-    function drawLine ({ type, clientX, clientY, touches }) {
-      if (!canDraw.value) return
-      const resultClientX = type == 'touchmove' ? touches[0].clientX : clientX
-      const resultClientY = type == 'touchmove' ? touches[0].clientY : clientY
-      const [x, y] = getMousePosition(resultClientX, resultClientY)
-
-      ctx.value.beginPath()
-      ctx.value.moveTo(lastX.value, lastY.value)
-      ctx.value.lineTo(x, y)
-      ctx.value.stroke()
-
-      lastX.value = x
-      lastY.value = y
-    }
-
-    function stopDrawing () {
-      canDraw.value = false
-    }
-
-    function getMousePosition (clientX, clientY) {
-      const { left, top } = canvasElement.value.getBoundingClientRect()
-      const x = clientX - left
-      const y = clientY - top
-      return [x, y]
     }
   },
 }
@@ -496,11 +442,5 @@ body.using-mouse .drawing-board-first-column__tool-button:focus {
   justify-content: center;
   grid-row: 1 / -1;
   grid-column: 1 / -1;
-}
-
-.drawing-board-canvas-container__canvas-element {
-  margin: 0;
-  padding: 0;
-  border: solid var(--focus-border-width) transparent;
 }
 </style>
