@@ -51,9 +51,11 @@
         <button
           class="exam-mode-info-modal__modal-trigger-button"
           ref="modalTriggerButtonElement"
-          @click="current.matches('idle.infoModal.hide')
-            ? service.send('SHOW_INFO_MODAL')
-            : service.send('HIDE_INFO_MODAL')"
+          @click="
+            current.matches('idle.infoModal.hide')
+              ? service.send('SHOW_INFO_MODAL')
+              : service.send('HIDE_INFO_MODAL')
+          "
           aria-label="測驗說明"
           aria-haspopup="true"
         >
@@ -68,8 +70,10 @@
 
       <main class="exam-mode-content__main-block">
         <div
-          v-if="current.matches('idle.exam.examing') ||
-            current.matches('idle.exam.examFinish.examFinishAnimation')"
+          v-if="
+            current.matches('idle.exam.examing') ||
+              current.matches('idle.exam.examFinish.examFinishAnimation')
+          "
           class="exam-mode-main-block__exam-block"
           ref="examBlockElement"
         >
@@ -77,9 +81,13 @@
             class="exam-mode-exam-block__normal-exam"
             ref="normalExamElement"
             :tabindex="current.matches('idle.exam.examing.normalExam') ? 0 : -1"
-            :aria-hidden="current.matches('idle.exam.examing.normalExam') ? false : 'true'"
+            :aria-hidden="
+              current.matches('idle.exam.examing.normalExam') ? false : 'true'
+            "
             @keydown.down="service.send('SHOW_ANSWER')"
-            @keydown.left="service.send('NEXT_CARD', { addToEnhancement: true })"
+            @keydown.left="
+              service.send('NEXT_CARD', { addToEnhancement: true })
+            "
             @keydown.right="service.send('NEXT_CARD')"
           >
             <exam-mode-block
@@ -87,15 +95,25 @@
               :service="service"
               :current="current"
             ></exam-mode-block>
+
+            <button @click="service.send('SHOW_ANSWER')">Ans</button>
           </div>
 
           <div
             class="exam-mode-exam-block__enhancement-exam"
             ref="enhancementExamElement"
-            :tabindex="current.matches('idle.exam.examing.enhancementExam') ? 0 : -1"
-            :aria-hidden="current.matches('idle.exam.examing.enhancementExam') ? false : 'true'"
+            :tabindex="
+              current.matches('idle.exam.examing.enhancementExam') ? 0 : -1
+            "
+            :aria-hidden="
+              current.matches('idle.exam.examing.enhancementExam')
+                ? false
+                : 'true'
+            "
             @keydown.down="service.send('SHOW_ANSWER')"
-            @keydown.left="service.send('NEXT_CARD', { addToEnhancement: true })"
+            @keydown.left="
+              service.send('NEXT_CARD', { addToEnhancement: true })
+            "
             @keydown.right="service.send('NEXT_CARD')"
           >
             <exam-mode-block
@@ -106,42 +124,31 @@
           </div>
         </div>
 
-        <div
-          class="exam-mode-main-block__finish-block"
-          ref="finishExamElement"
-        >
+        <div class="exam-mode-main-block__finish-block" ref="finishExamElement">
           <exam-mode-finish
             :service="service"
             :current="current"
           ></exam-mode-finish>
         </div>
       </main>
-
-      <div class="app-sticky-bottom">
-        <drawing-board
-          opacity="0.8"
-          :service="service"
-          :current="current"
-          :style="{ zIndex: 99 }"
-          :open="current.matches('idle.drawingBoard.show')"
-          :clearCanvas="current.matches('idle.drawingBoard.show.clearCanvas') ||
-            current.matches('idle.drawingBoard.clearCanvas')"
-          @buttonClick="service.send('SHOW_DRAWING_BOARD')"
-        ></drawing-board>
-      </div>
     </div>
   </section>
 </template>
 
 <script>
-import { ref, watch, computed, onMounted, onUnmounted } from '@vue/composition-api'
+import {
+  ref,
+  watch,
+  computed,
+  onMounted,
+  onUnmounted,
+} from '@vue/composition-api'
 import { machine } from '@/states/examModeState.js'
 import { useMachine } from '@/utils/useMachine.js'
 import { gsap } from 'gsap'
 import topBar from '@/components/topBar.vue'
 import examModeBlock from '@/components/examModeBlock.vue'
 import examModeInfoModal from '@/components/examModeInfoModal.vue'
-import drawingBoard from '@/components/drawingBoard.vue'
 import examModeFinish from '@/components/examModeFinish.vue'
 
 export default {
@@ -150,7 +157,6 @@ export default {
     topBar,
     examModeBlock,
     examModeInfoModal,
-    drawingBoard,
     examModeFinish,
   },
   setup (props, context) {
@@ -164,15 +170,19 @@ export default {
 
     // data
     const localExamRange = JSON.parse(window.localStorage.getItem('examRange'))
-    const isNotFirstTime = JSON.parse(window.localStorage.getItem('isNotFirstTime'))
+    const isNotFirstTime = JSON.parse(
+      window.localStorage.getItem('isNotFirstTime')
+    )
 
     if (!isNotFirstTime) window.localStorage.setItem('isNotFirstTime', true)
 
-    const { service, current } = useMachine(machine.withContext({
-      ...machine.context,
-      examRange: localExamRange || machine.context.examRange,
-      isNotFirstTime,
-    }))
+    const { service, current } = useMachine(
+      machine.withContext({
+        ...machine.context,
+        examRange: localExamRange || machine.context.examRange,
+        isNotFirstTime,
+      })
+    )
 
     const title = computed(function getTitle () {
       switch (context.root.$route.name) {
@@ -207,11 +217,15 @@ export default {
             delay: 0.1,
             duration,
           })
-          .to(enhancementExamElement.value, {
-            position: 'relative',
-            x: '0%',
-            duration,
-          }, '-=0.5')
+          .to(
+            enhancementExamElement.value,
+            {
+              position: 'relative',
+              x: '0%',
+              duration,
+            },
+            '-=0.5'
+          )
           .then(function changeExamAnimationEnd () {
             service.value.send('CHANGE_EXAM_MODE_ANIMATION_END')
             tl.pause(0)
@@ -241,18 +255,26 @@ export default {
       function examFinishAnimationWatcher (value) {
         if (!value) return
 
-        gsap.set(finishExamElement.value, { display: 'grid', position: 'absolute' })
+        gsap.set(finishExamElement.value, {
+          display: 'grid',
+          position: 'absolute',
+        })
         const duration = 0.3
-        gsap.timeline()
+        gsap
+          .timeline()
           .to(finishExamElement.value, {
             opacity: 1,
             delay: 0.1,
             duration,
           })
-          .to(examBlockElement.value, {
-            opacity: 0,
-            duration,
-          }, `-=${duration}`)
+          .to(
+            examBlockElement.value,
+            {
+              opacity: 0,
+              duration,
+            },
+            `-=${duration}`
+          )
           .then(function finishExamAnimationEnd () {
             service.value.send('EXAM_FINISH_ANIMATION_END')
           })
@@ -266,7 +288,8 @@ export default {
         if (!value) return
 
         const duration = 0.3
-        gsap.timeline()
+        gsap
+          .timeline()
           .to(finishExamElement.value, {
             opacity: 0,
             duration,
@@ -378,8 +401,8 @@ body.using-mouse .exam-mode-info-modal__modal-trigger-button:focus {
   margin-top: 5%;
   display: grid;
   grid-template:
-    "go-tyan intro-text" var(--logo-size)
-    ".       intro-text" auto / var(--logo-size) 1fr;
+    'go-tyan intro-text' var(--logo-size)
+    '.       intro-text' auto / var(--logo-size) 1fr;
   grid-column-gap: var(--column-gap);
   column-gap: var(--column-gap);
 }

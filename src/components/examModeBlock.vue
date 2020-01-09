@@ -5,10 +5,24 @@
         :service="service"
         :current="current"
         :cards="cards"
-        :showAnswer="current.matches('idle.exam.examing.normalExam.answerShowed.idle')"
-        :swipeRight="current.matches('idle.exam.examing.normalExam.answerShowed.cardSwipeRightAnimation')"
-        :swipeLeft="current.matches('idle.exam.examing.normalExam.answerShowed.cardSwipeLeftAnimation')"
-        :cardBackToPosition="current.matches('idle.exam.examing.normalExam.answerShowed.cardBackToPositionAnimation')"
+        :showAnswer="
+          current.matches('idle.exam.examing.normalExam.answerShowed')
+        "
+        :swipeRight="
+          current.matches(
+            'idle.exam.examing.normalExam.answerShowed.cardSwipeRightAnimation'
+          )
+        "
+        :swipeLeft="
+          current.matches(
+            'idle.exam.examing.normalExam.answerShowed.cardSwipeLeftAnimation'
+          )
+        "
+        :cardBackToPosition="
+          current.matches(
+            'idle.exam.examing.normalExam.answerShowed.cardBackToPositionAnimation'
+          )
+        "
         :newExam="current.matches('idle.exam.examing.normalExam')"
       ></exam-mode-block-card>
     </div>

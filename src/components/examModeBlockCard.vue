@@ -1,5 +1,5 @@
 <template>
-  <div
+  <section
     class="exam-mode-block-card"
     @mousemove="cardMoving"
     @touchmove.prevent="cardMoving"
@@ -13,71 +13,111 @@
     </h2>
 
     <div
-      class="exam-mode-block-card__card
-        exam-mode-block-card__card--first"
+      class="exam-mode-block-card__card-item
+        exam-mode-block-card__card-item--first"
+      :class="{
+        'exam-mode-block-card__card-item--first-show-answer': showAnswer,
+      }"
       ref="cardElement"
       @mousedown="cardMoveStart"
       @touchstart="cardMoveStart"
       @mouseup="cardMoveEnd"
       @touchend="cardMoveEnd"
     >
-      <span
-        class="exam-mode-block-card__question"
-        ref="cardQuestionElement"
-        :aria-hidden="
-          ['romanizationToHiragana', 'romanizationToKatakana'].includes(
-            examMode
-          )
-            ? false
-            : 'true'
-        "
+      <div class="exam-mode-block-card-item__question-block">
+        <button
+          class="exam-mode-block-card-item-question-block__question"
+          @click="service.send('SHOW_ANSWER')"
+          ref="cardQuestionElement"
+          :aria-hidden="
+            ['romanizationToHiragana', 'romanizationToKatakana'].includes(
+              examMode
+            )
+              ? false
+              : 'true'
+          "
+        >
+          {{ question }}
+        </button>
+
+        <div class="exam-mode-block-card-item-question-block__arrow">
+          <img src="@/assets/transform-arrow.svg" alt="轉" />
+        </div>
+
+        <span
+          id="exam-mode-block-card-item-question-block__answer"
+          class="exam-mode-block-card-item-question-block__answer"
+          ref="cardAnswerElement"
+        >
+          {{ answer }}
+        </span>
+      </div>
+
+      <button
+        v-show="!showAnswer"
+        @click="service.send('CLEAR_CANVAS')"
+        class="exam-mode-block-card-item__clear-button"
       >
-        {{ question }}
-      </span>
-      <span
-        id="exam-mode-block-card__answer"
-        class="exam-mode-block-card__answer"
-        ref="cardAnswerElement"
-      >
-        {{ answer }}
-      </span>
+        重寫
+      </button>
+
+      <div class="exam-mode-block-card-item__white-board">
+        <white-board
+          :clear="current.matches('idle.whiteBoard.clear')"
+          :lock="current.matches('idle.exam.examing.normalExam.answerShowed')"
+          @clearFinish="service.send('CANVAS_CLEAR_FINISHED')"
+        ></white-board>
+      </div>
     </div>
 
     <div
-      class="exam-mode-block-card__card
-        exam-mode-block-card__card--second
-        exam-mode-block-card__card--background"
+      class="exam-mode-block-card__card-item
+        exam-mode-block-card__card-item--second
+        exam-mode-block-card__card-item--background"
       ref="cardSecondElement"
     >
-      <span
-        class="exam-mode-block-card__question
-          exam-mode-block-card__question--second"
-        ref="cardSecondQuestionElement"
+      <div class="exam-mode-block-card-item__question-block">
+        <span
+          class="exam-mode-block-card-item-question-block__question
+      exam-mode-block-card-item-question-block__question--second"
+          ref="cardSecondQuestionElement"
+        >
+          {{ question }}
+        </span>
+      </div>
+
+      <button
+        class="exam-mode-block-card-item__clear-button
+          exam-mode-block-card-item__clear-button--second"
+        ref="cardSecondClearButtonElement"
       >
-        {{ question }}
-      </span>
+        重寫
+      </button>
     </div>
+
     <div
-      class="exam-mode-block-card__card
-        exam-mode-block-card__card--third
-        exam-mode-block-card__card--background"
+      class="exam-mode-block-card__card-item
+        exam-mode-block-card__card-item--third
+        exam-mode-block-card__card-item--background"
       ref="cardThirdElement"
     ></div>
     <div
-      class="exam-mode-block-card__card
-        exam-mode-block-card__card--new
-        exam-mode-block-card__card--background"
+      class="exam-mode-block-card__card-item
+        exam-mode-block-card__card-item--new
+        exam-mode-block-card__card-item--background"
       ref="cardNewElement"
     ></div>
-  </div>
+  </section>
 </template>
 
 <script>
 import { ref, computed, watch, onMounted } from '@vue/composition-api'
 import { gsap } from 'gsap'
 import { useDragToMove } from '@/utils/useDragToMove.js'
+import whiteBoard from '@/components/whiteBoard.vue'
 
 export default {
+  components: { whiteBoard },
   props: {
     cards: {
       type: Array,
@@ -121,12 +161,14 @@ export default {
       getDraggingMovement,
       dragEnd,
     } = useDragToMove()
+
     // element
     const cardElement = ref(null)
     const cardQuestionElement = ref(null)
     const cardAnswerElement = ref(null)
     const cardSecondElement = ref(null)
     const cardSecondQuestionElement = ref(null)
+    const cardSecondClearButtonElement = ref(null)
     const cardThirdElement = ref(null)
     const cardNewElement = ref(null)
 
@@ -139,8 +181,13 @@ export default {
         cardAnswerElement.value,
         cardQuestionElement.value,
         cardSecondQuestionElement.value,
+        cardSecondClearButtonElement.value,
       ]
     })
+
+    // data
+    const clearWhiteBoard = ref(false)
+
     const swipeCheckPoint = ref(null)
     const accelerator = ref(1)
 
@@ -199,18 +246,6 @@ export default {
         if (value && !previousValue) clearAnimationProps()
       },
       { lazy: true }
-    )
-
-    watch(
-      () => props.showAnswer,
-      function answerShowedAnimationWatcher (value) {
-        if (!value) return
-        gsap.to(cardAnswerElement.value, {
-          opacity: 1,
-          duration: 0.3,
-        })
-      },
-      { layz: true }
     )
 
     watch(
@@ -287,6 +322,14 @@ export default {
           `-=${duration}`
         )
         .to(
+          cardSecondClearButtonElement.value,
+          {
+            opacity: 1,
+            duration,
+          },
+          `-=${duration}`
+        )
+        .to(
           cardElement.value,
           {
             opacity: direction == 'left' ? 1 : 0,
@@ -348,8 +391,10 @@ export default {
       cardSecondQuestionElement,
       cardThirdElement,
       cardNewElement,
+      cardSecondClearButtonElement,
       // data
       animationElements,
+      clearWhiteBoard,
       examMode,
       question,
       answer,
@@ -362,20 +407,23 @@ export default {
     }
 
     function cardMoveStart (e) {
-      props.service.send('SHOW_ANSWER')
+      // props.service.send('SHOW_ANSWER')
       dragStart(e)
     }
 
     function cardMoving (e) {
       if (!canDrag.value) return
-      const movement = getDraggingMovement(e)
-      xMovement.value += movement
 
-      window.requestAnimationFrame(function transformCardElement () {
-        cardElement.value.style.transform = `translate(${xMovement.value}px, 0)`
-        cardElement.value.style.opacity =
-          1 - (xMovement.value / swipeCheckPoint.value) * 0.3
-      })
+      if (props.current.matches('idle.exam.examing.normalExam.answerShowed')) {
+        const movement = getDraggingMovement(e)
+        xMovement.value += movement
+
+        window.requestAnimationFrame(function transformCardElement () {
+          cardElement.value.style.transform = `translate(${xMovement.value}px, 0)`
+          cardElement.value.style.opacity =
+            1 - (xMovement.value / swipeCheckPoint.value) * 0.3
+        })
+      }
     }
 
     function cardMoveEnd () {
@@ -383,7 +431,7 @@ export default {
         props.service.send('NEXT_CARD', {
           addToEnhancement: !(xMovement.value > 0),
         })
-      } else {
+      } else if (canDrag.value && xMovement.value) {
         props.service.send('CARD_BACK_TO_POSITION')
       }
 
@@ -398,9 +446,8 @@ export default {
   --card-transform: 10px;
   --card-second-transform: 20px;
   --card-third-transform: 30px;
-  --card-width: 30vw;
-  --card-min-size: 200px;
-  --card-max-size: 230px;
+  --card-width: 260px;
+  --card-height: 332px;
 }
 </style>
 
@@ -413,48 +460,48 @@ export default {
   align-items: center;
   justify-content: center;
   transform: translateX(-10px); /* center cards because cards transition */
+  padding: 10px;
 }
 
-.exam-mode-block-card__card {
+.exam-mode-block-card__card-item {
   width: var(--card-width);
-  height: var(--card-width);
-  min-height: var(--card-min-size);
-  min-width: var(--card-min-size);
-  max-height: var(--card-max-size);
-  max-width: var(--card-max-size);
+  height: var(--card-height);
   border-radius: 6px;
   border: solid 2px var(--card-border-color);
   font-size: 4rem;
   transform-origin: center;
-  display: grid;
-  grid-template:
-    'question' 1fr
-    'answer  ' 1fr / 1fr;
-  align-items: center;
-  justify-items: center;
   will-change: opacity, transform;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
 }
 
-.exam-mode-block-card__card--background {
+.exam-mode-block-card__card-item--background {
   background-color: var(--main-color);
   position: absolute;
 }
 
-.exam-mode-block-card__card--first {
+.exam-mode-block-card__card-item--first {
   position: relative;
   user-select: none;
   z-index: 10;
   background-color: #fff;
   will-change: opacity, transform;
+  transition: box-shadow 0;
 }
 
-.exam-mode-block-card__card--second {
+.exam-mode-block-card__card-item--first-show-answer {
+  box-shadow: 3px 3px 5px 5px rgba(0, 0, 0, 0.3);
+  transition: box-shadow 0.3s;
+}
+
+.exam-mode-block-card__card-item--second {
   z-index: 9;
   transform: translate(var(--card-transform), var(--card-transform));
   will-change: opacity, transform;
 }
 
-.exam-mode-block-card__card--third {
+.exam-mode-block-card__card-item--third {
   z-index: 8;
   transform: translate(
     var(--card-second-transform),
@@ -463,7 +510,7 @@ export default {
   will-change: opacity, transform;
 }
 
-.exam-mode-block-card__card--new {
+.exam-mode-block-card__card-item--new {
   z-index: 7;
   opacity: 0;
   transform: translate(
@@ -473,19 +520,103 @@ export default {
   will-change: opacity, transform;
 }
 
-.exam-mode-block-card__question {
-  grid-area: question;
-  align-self: end;
-  margin-bottom: 10px;
+.exam-mode-block-card-item__question-block {
+  position: relative;
+  width: 80%;
+  display: grid;
+  grid-template-columns: calc(100% / 3) calc(100% / 3) 0 calc(100% / 3);
+  grid-template-rows: auto;
+  align-items: center;
+  justify-items: center;
+  z-index: 10;
+  pointer-events: none;
+  margin-top: 27px;
+  transition: grid-template-columns 0;
+  will-change: grid-template-columns;
 }
 
-.exam-mode-block-card__question--second {
+.exam-mode-block-card__card-item--first-show-answer
+  .exam-mode-block-card-item__question-block {
+  grid-template-columns: 0 calc(100% / 3) calc(100% / 3) calc(100% / 3);
+  transition: grid-template-columns 0.15s;
+}
+
+.exam-mode-block-card-item__white-board {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9;
+}
+
+.exam-mode-block-card-item__clear-button {
+  position: absolute;
+  right: 16px;
+  bottom: 13px;
+  background-color: transparent;
+  border: none;
+  padding: 5px;
+  z-index: 10;
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.exam-mode-block-card-item-question-block__question {
+  grid-column: 2 / 3;
+  align-self: end;
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  pointer-events: auto;
+  justify-self: stretch;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.exam-mode-block-card-item-question-block__question--second {
   opacity: 0;
 }
 
-.exam-mode-block-card__answer {
-  grid-area: answer;
+.exam-mode-block-card-item__clear-button--second {
+  opacity: 0;
+}
+
+.exam-mode-block-card-item-question-block__arrow {
+  grid-column: 3 / 4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0;
+}
+
+.exam-mode-block-card-item-question-block__arrow img {
+  width: 27px;
+  height: auto;
+  object-fit: contain;
+}
+
+.exam-mode-block-card__card-item--first-show-answer
+  .exam-mode-block-card-item-question-block__arrow {
+  opacity: 1;
+  transition: opacity 0.15s 0.15s;
+}
+
+.exam-mode-block-card-item-question-block__answer {
+  grid-column: 4 / 5;
   opacity: 0;
   align-self: start;
+  transition: opacity 0;
+}
+
+.exam-mode-block-card__card-item--first-show-answer
+  .exam-mode-block-card-item-question-block__answer {
+  opacity: 1;
+  transition: opacity 0.15s 0.15s;
 }
 </style>

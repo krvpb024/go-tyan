@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import { ref, watch } from '@vue/composition-api'
+import { ref, watch, onMounted } from '@vue/composition-api'
 
 export default {
   props: {
@@ -21,6 +21,14 @@ export default {
       default: false,
     },
     clear: {
+      type: Boolean,
+      default: false,
+    },
+    canDraw: {
+      type: Boolean,
+      default: true,
+    },
+    lock: {
       type: Boolean,
       default: false,
     },
@@ -40,15 +48,7 @@ export default {
       () => props.init,
       function initWatcher (value) {
         if (!value) return
-        // this api will round floating points, it will cause canvas keep growing
-        whiteBoardElement.value.width = whiteBoardElement.value.parentElement.clientWidth - 10
-        whiteBoardElement.value.height = whiteBoardElement.value.parentElement.clientHeight - 10
-        ctx.value = whiteBoardElement.value.getContext('2d')
-        ctx.value.lineWidth = 10
-        ctx.value.strokeStyle = '#313131'
-        ctx.value.lineJoin = 'round'
-        ctx.value.lineCap = 'round'
-        context.emit('initFinish')
+        resizeCanvas()
       }
     )
 
@@ -56,10 +56,19 @@ export default {
       () => props.clear,
       function clearWatcher (value) {
         if (!value) return
-        ctx.value.clearRect(0, 0, whiteBoardElement.value.width, whiteBoardElement.value.height)
+        ctx.value.clearRect(
+          0,
+          0,
+          whiteBoardElement.value.width,
+          whiteBoardElement.value.height
+        )
         context.emit('clearFinish')
       }
     )
+
+    onMounted(function whiteBoardOnMounted () {
+      resizeCanvas()
+    })
 
     return {
       // element
@@ -72,6 +81,8 @@ export default {
     }
 
     function startDrawing ({ type, clientX, clientY, target, touches }) {
+      if (props.lock) return
+
       canDraw.value = true
       const resultClientX = type == 'touchstart' ? touches[0].clientX : clientX
       const resultClientY = type == 'touchstart' ? touches[0].clientY : clientY
@@ -104,11 +115,26 @@ export default {
       canDraw.value = false
     }
 
+    // function
     function getMousePosition (clientX, clientY) {
       const { left, top } = whiteBoardElement.value.getBoundingClientRect()
       const x = clientX - left
       const y = clientY - top
       return [x, y]
+    }
+
+    function resizeCanvas () {
+      // this api will round floating points, it will cause canvas keep growing
+      whiteBoardElement.value.width =
+        whiteBoardElement.value.parentElement.clientWidth - 1
+      whiteBoardElement.value.height =
+        whiteBoardElement.value.parentElement.clientHeight - 1
+      ctx.value = whiteBoardElement.value.getContext('2d')
+      ctx.value.lineWidth = 5
+      ctx.value.strokeStyle = '#707070'
+      ctx.value.lineJoin = 'round'
+      ctx.value.lineCap = 'round'
+      context.emit('initFinish')
     }
   },
 }

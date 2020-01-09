@@ -1,8 +1,5 @@
 <template>
-  <div
-    id="app"
-    class="app-container"
-  >
+  <div id="app" class="app-container">
     <router-view></router-view>
   </div>
 </template>
@@ -37,12 +34,12 @@ export default {
 :root {
   --main-color: #ffe65a;
   --text-color: #313131;
-  --card-border-color: #1d1d1d;
   --title-bg-color: #f5f5f5;
   --focus-border-width: 2.5px;
   --focus-border: solid var(--focus-border-width) var(--main-color);
   --app-max-width: 768px;
   --root-padding-size: 8px;
+  --card-border-color: #1d1d1d;
 
   --focus-default-outline: 4px solid var(--text-color);
 }
@@ -58,8 +55,8 @@ body.using-mouse :focus {
 
 html {
   box-sizing: border-box;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-    Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
 a {
@@ -129,7 +126,7 @@ ul {
   position: sticky;
   padding: var(--root-padding-size);
   bottom: 0;
-  pointer-events:none;
+  pointer-events: none;
 }
 
 .app-top-bar-link-icon {
