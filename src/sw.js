@@ -1,9 +1,10 @@
-const CACHE_NAME = 'gojuon-alpha-4.1'
+const CACHE_NAME = 'gojuon-alpha-4.2'
 
 const { assets } = global.serviceWorkerOption
 const assetsToCache = [...assets, './']
 
 self.addEventListener('install', function (event) {
+  self.skipWaiting()
   event.waitUntil(preCacheAssets(assetsToCache))
 })
 
@@ -16,14 +17,9 @@ self.addEventListener('activate', function (event) {
 })
 
 function preCacheAssets (assets) {
-  return caches
-    .open(CACHE_NAME)
-    .then(function addAssetsToCache (cache) {
-      return cache.addAll(assets)
-    })
-    .then(function skipWaiting () {
-      return self.skipWaiting()
-    })
+  return caches.open(CACHE_NAME).then(function addAssetsToCache (cache) {
+    return cache.addAll(assets)
+  })
 }
 
 function returnCacheFirstThenFetch (request) {
