@@ -1,4 +1,4 @@
-const CACHE_NAME = 'gojuon-alpha-3'
+const CACHE_NAME = 'gojuon-alpha-4'
 
 const { assets } = global.serviceWorkerOption
 const assetsToCache = [...assets, './']
@@ -16,7 +16,8 @@ self.addEventListener('activate', function (event) {
 })
 
 function preCacheAssets (assets) {
-  return caches.open(CACHE_NAME)
+  return caches
+    .open(CACHE_NAME)
     .then(function addAssetsToCache (cache) {
       return cache.addAll(assets)
     })
@@ -26,15 +27,15 @@ function preCacheAssets (assets) {
 }
 
 function returnCacheFirstThenFetch (request) {
-  return caches.match(request)
-    .then(function returnMatchOrFetch (matching) {
-      if (matching) return matching
-      return fetch(request)
-    })
+  return caches.match(request).then(function returnMatchOrFetch (matching) {
+    if (matching) return matching
+    return fetch(request)
+  })
 }
 
 function clearCacheExcept (currentCache) {
-  return caches.keys()
+  return caches
+    .keys()
     .then(function clearOldCache (cacheNames) {
       return Promise.all(
         cacheNames.map(function (cacheName) {
