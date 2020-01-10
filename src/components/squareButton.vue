@@ -1,21 +1,44 @@
 <template>
-  <button class="square-button" @click="$emit('click')">
-    <slot></slot>
+  <div class="square-button-container">
+    <button
+      class="square-button"
+      @click="$emit('click')"
+      :disabled="disabledValue"
+    >
+      <slot></slot>
+    </button>
 
-    <p class="square-button__label"><slot name="label"></slot></p>
-  </button>
+    <div class="square-button__label">
+      <p
+        class="square-button-label__text"
+        :class="{ 'square-button-label__text--disabled': disabledValue }"
+      >
+        <slot name="label"></slot>
+      </p>
+    </div>
+  </div>
 </template>
 
 <script>
-export default {}
+export default {
+  props: {
+    disabledValue: {
+      type: Boolean,
+      default: false,
+    },
+  },
+}
 </script>
 
 <style scoped>
-.square-button {
+.square-button-container {
   position: relative;
-  width: 100%;
-  height: 100%;
+}
+
+.square-button {
   border-radius: 15px;
+  width: 56px;
+  height: 56px;
   border: solid 2px var(--card-border-color);
   background-color: var(--main-color);
   font-weight: bold;
@@ -23,14 +46,19 @@ export default {}
   padding: 0;
   box-shadow: inset -1px -1px 0 1px #fff;
 }
-.square-button__label {
-  padding-top: 4px;
-  position: absolute;
-  bottom: 0;
-  left: 0;
+
+.square-button:disabled,
+.square-button-label__text--disabled {
+  color: inherit;
+  opacity: 0.5;
+}
+
+.square-button-label__text {
+  margin-top: 5px;
+  white-space: nowrap;
   display: inline-block;
   width: 100%;
   text-align: center;
-  transform: translateY(100%);
+  overflow: visible;
 }
 </style>

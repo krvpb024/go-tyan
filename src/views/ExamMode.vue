@@ -82,7 +82,7 @@
             ref="normalExamElement"
             :tabindex="current.matches('idle.exam.examing.normalExam') ? 0 : -1"
             :aria-hidden="
-              current.matches('idle.exam.examing.normalExam') ? false : 'true'
+              current.matches('idle.exam.examing.normalExam') ? false : true
             "
             @keydown.down="service.send('SHOW_ANSWER')"
             @keydown.left="
@@ -99,12 +99,12 @@
             <div class="exam-mode-normal-exam__control-button-group">
               <squareButton
                 tabindex="-1"
-                :disabled="
+                :disabledValue="
                   current.matches(
                     'idle.exam.examing.normalExam.answerShowed.idle'
                   )
                     ? false
-                    : 'true'
+                    : true
                 "
                 class="exam-mode-control-button-group__cross-button"
                 @click="service.send('NEXT_CARD', { addToEnhancement: true })"
@@ -122,12 +122,12 @@
 
               <squareButton
                 tabindex="-1"
-                :disabled="
+                :disabledValue="
                   current.matches(
                     'idle.exam.examing.normalExam.answerShowed.idle'
                   )
                     ? false
-                    : 'true'
+                    : true
                 "
                 class="exam-mode-control-button-group__circle-button"
                 @click="service.send('NEXT_CARD')"
@@ -145,11 +145,11 @@
 
               <squareButton
                 tabindex="-1"
-                :disabled="
+                :disabledValue="
                   current.matches(
                     'idle.exam.examing.normalExam.answerShowed.idle'
                   )
-                    ? 'true'
+                    ? true
                     : false
                 "
                 class="exam-mode-control-button-group__ans-button"
@@ -174,12 +174,12 @@
             <div class="exam-mode-normal-exam__control-button-group">
               <squareButton
                 tabindex="-1"
-                :disabled="
+                :disabledValue="
                   current.matches(
                     'idle.exam.examing.normalExam.answerShowed.idle'
                   )
                     ? false
-                    : 'true'
+                    : true
                 "
                 class="exam-mode-control-button-group__cross-button"
                 @click="service.send('NEXT_CARD', { addToEnhancement: true })"
@@ -196,12 +196,12 @@
 
               <squareButton
                 tabindex="-1"
-                :disabled="
+                :disabledValue="
                   current.matches(
                     'idle.exam.examing.normalExam.answerShowed.idle'
                   )
                     ? false
-                    : 'true'
+                    : true
                 "
                 class="exam-mode-control-button-group__circle-button"
                 @click="service.send('NEXT_CARD')"
@@ -218,11 +218,11 @@
 
               <squareButton
                 tabindex="-1"
-                :disabled="
+                :disabledValue="
                   current.matches(
                     'idle.exam.examing.normalExam.answerShowed.idle'
                   )
-                    ? 'true'
+                    ? true
                     : false
                 "
                 class="exam-mode-control-button-group__ans-button"
@@ -504,11 +504,9 @@ body.using-mouse .exam-mode-info-modal__modal-trigger-button:focus {
 }
 
 .exam-mode-normal-exam__control-button-group {
-  --button-size: 56px;
-
   display: grid;
-  grid-template-columns: repeat(3, var(--button-size));
-  grid-template-rows: var(--button-size);
+  grid-template-columns: repeat(3, auto);
+  grid-template-rows: auto;
   margin-top: 19px;
   position: relative;
   align-content: center;

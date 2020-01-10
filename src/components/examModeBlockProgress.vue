@@ -14,7 +14,9 @@
       ></div>
     </div>
 
-    <p class="exam-mode-block-bar-container__status" aria-hidden="true">{{ value }} / {{ max }}</p>
+    <p class="exam-mode-block-bar-container__status" aria-hidden="true">
+      {{ value }} / {{ max }}
+    </p>
   </div>
 </template>
 
@@ -50,10 +52,11 @@ export default {
       () => props.value,
       function valueWatcher (value) {
         gsap.to(valueBarElement.value, {
-          width: `${props.value / props.max * 100}%`,
-          duration: value == 0 // if start a new exam cursor will be 0, won't need transition for that
-            ? 0
-            : 0.3,
+          width: `${(props.value / props.max) * 100}%`,
+          duration:
+            value == 0 // if start a new exam cursor will be 0, won't need transition for that
+              ? 0
+              : 0.3,
         })
       },
       { lazy: true }

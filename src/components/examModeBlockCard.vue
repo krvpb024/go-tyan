@@ -495,7 +495,7 @@ export default {
   height: var(--card-height);
   border-radius: 6px;
   border: solid 2px var(--card-border-color);
-  font-size: 3.5rem;
+  font-size: 2.3rem;
   transform-origin: center;
   will-change: opacity, transform;
   position: relative;
@@ -599,6 +599,7 @@ export default {
   align-items: center;
   transform: translateX(100%);
   will-change: transform;
+  overflow: visible;
 }
 
 .exam-mode-block-card__card-item--first-show-answer
