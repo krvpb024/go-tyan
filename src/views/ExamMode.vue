@@ -96,31 +96,141 @@
               :current="current"
             ></exam-mode-block>
 
-            <button @click="service.send('SHOW_ANSWER')">Ans</button>
+            <div class="exam-mode-normal-exam__control-button-group">
+              <squareButton
+                tabindex="-1"
+                :disabled="
+                  current.matches(
+                    'idle.exam.examing.normalExam.answerShowed.idle'
+                  )
+                    ? false
+                    : 'true'
+                "
+                class="exam-mode-control-button-group__cross-button"
+                @click="service.send('NEXT_CARD', { addToEnhancement: true })"
+              >
+                <img
+                  width="35"
+                  height="35"
+                  src="@/assets/cross.svg"
+                  alt="還不熟"
+                  aria-hidden="true"
+                />
+
+                <template #label>還不熟</template>
+              </squareButton>
+
+              <squareButton
+                tabindex="-1"
+                :disabled="
+                  current.matches(
+                    'idle.exam.examing.normalExam.answerShowed.idle'
+                  )
+                    ? false
+                    : 'true'
+                "
+                class="exam-mode-control-button-group__circle-button"
+                @click="service.send('NEXT_CARD')"
+              >
+                <img
+                  width="35"
+                  height="35"
+                  src="@/assets/circle.svg"
+                  alt="記得了"
+                  aria-hidden="true"
+                />
+
+                <template #label>記得了</template>
+              </squareButton>
+
+              <squareButton
+                tabindex="-1"
+                :disabled="
+                  current.matches(
+                    'idle.exam.examing.normalExam.answerShowed.idle'
+                  )
+                    ? 'true'
+                    : false
+                "
+                class="exam-mode-control-button-group__ans-button"
+                @click="service.send('SHOW_ANSWER')"
+              >
+                Ans
+              </squareButton>
+            </div>
           </div>
 
           <div
             class="exam-mode-exam-block__enhancement-exam"
             ref="enhancementExamElement"
-            :tabindex="
-              current.matches('idle.exam.examing.enhancementExam') ? 0 : -1
-            "
-            :aria-hidden="
-              current.matches('idle.exam.examing.enhancementExam')
-                ? false
-                : 'true'
-            "
-            @keydown.down="service.send('SHOW_ANSWER')"
-            @keydown.left="
-              service.send('NEXT_CARD', { addToEnhancement: true })
-            "
-            @keydown.right="service.send('NEXT_CARD')"
+            aria-hidden="true"
           >
             <exam-mode-block
               examType="enhancementExam"
               :service="service"
               :current="current"
             ></exam-mode-block>
+
+            <div class="exam-mode-normal-exam__control-button-group">
+              <squareButton
+                tabindex="-1"
+                :disabled="
+                  current.matches(
+                    'idle.exam.examing.normalExam.answerShowed.idle'
+                  )
+                    ? false
+                    : 'true'
+                "
+                class="exam-mode-control-button-group__cross-button"
+                @click="service.send('NEXT_CARD', { addToEnhancement: true })"
+              >
+                <img
+                  width="35"
+                  height="35"
+                  src="@/assets/cross.svg"
+                  aria-hidden="true"
+                />
+
+                <template #label>還不熟</template>
+              </squareButton>
+
+              <squareButton
+                tabindex="-1"
+                :disabled="
+                  current.matches(
+                    'idle.exam.examing.normalExam.answerShowed.idle'
+                  )
+                    ? false
+                    : 'true'
+                "
+                class="exam-mode-control-button-group__circle-button"
+                @click="service.send('NEXT_CARD')"
+              >
+                <img
+                  width="35"
+                  height="35"
+                  src="@/assets/circle.svg"
+                  aria-hidden="true"
+                />
+
+                <template #label>記得了</template>
+              </squareButton>
+
+              <squareButton
+                tabindex="-1"
+                :disabled="
+                  current.matches(
+                    'idle.exam.examing.normalExam.answerShowed.idle'
+                  )
+                    ? 'true'
+                    : false
+                "
+                class="exam-mode-control-button-group__ans-button"
+                @click="service.send('SHOW_ANSWER')"
+              >
+                Ans
+              </squareButton>
+            </div>
           </div>
         </div>
 
@@ -150,6 +260,7 @@ import topBar from '@/components/topBar.vue'
 import examModeBlock from '@/components/examModeBlock.vue'
 import examModeInfoModal from '@/components/examModeInfoModal.vue'
 import examModeFinish from '@/components/examModeFinish.vue'
+import squareButton from '@/components/squareButton.vue'
 
 export default {
   name: 'ExamMode',
@@ -158,6 +269,7 @@ export default {
     examModeBlock,
     examModeInfoModal,
     examModeFinish,
+    squareButton,
   },
   setup (props, context) {
     // element
@@ -383,12 +495,51 @@ body.using-mouse .exam-mode-info-modal__modal-trigger-button:focus {
   position: relative;
   width: 100%;
   overflow: hidden;
-  padding-top: 5vh;
+  padding-top: 20px;
   height: 150vh;
 }
 
 .exam-mode-exam-block__normal-exam {
   width: 100%;
+}
+
+.exam-mode-normal-exam__control-button-group {
+  --button-size: 56px;
+
+  display: grid;
+  grid-template-columns: repeat(3, var(--button-size));
+  grid-template-rows: var(--button-size);
+  margin-top: 19px;
+  position: relative;
+  align-content: center;
+  justify-content: center;
+  grid-column-gap: 15px;
+  column-gap: 15px;
+}
+
+.exam-mode-control-button-group__cross-button {
+  grid-column: 1 / 2;
+}
+
+.exam-mode-control-button-group__circle-button {
+  grid-column: 3 / 4;
+}
+
+.exam-mode-control-button-group__cross-button,
+.exam-mode-control-button-group__circle-button {
+  grid-row: 1;
+}
+.exam-mode-control-button-group__ans-button {
+  position: relative;
+  grid-column: 2 / 3;
+  grid-row: 1;
+}
+
+.exam-mode-control-button-group__ans-button:disabled,
+.exam-mode-control-button-group__cross-button:disabled,
+.exam-mode-control-button-group__circle-button:disabled {
+  color: inherit;
+  opacity: 0.5;
 }
 
 .exam-mode-normal-exam__intro-block {

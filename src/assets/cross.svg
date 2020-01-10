@@ -1,0 +1,14 @@
+<svg viewBox="0 0 35 35" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter id="shadow">
+      <feDropShadow
+        dx="2"
+        dy="2"
+        stdDeviation="0"
+        flood-color="#ffffff"
+      />
+    </filter>
+  </defs>
+      <line x1="80%" y1="20%" x2="20%" y2="80%" stroke="#313131" stroke-width="2.8" filter="url(#shadow)" stroke-linecap="round"/>
+      <line x1="80%" y1="80%" x2="20%" y2="20%" stroke="#313131" stroke-width="2.8" filter="url(#shadow)" stroke-linecap="round"/>
+</svg>

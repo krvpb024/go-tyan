@@ -123,7 +123,7 @@ export default {
   width: 100%;
   height: 100%;
   /* add card-second card-third transfromY */
-  margin-bottom: calc(var(--card-second-transform) + 15px);
+  margin-bottom: calc(var(--card-second-transform) + 8px);
 }
 
 .exam-mode-block__progress {

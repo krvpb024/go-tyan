@@ -24,8 +24,12 @@
       @mouseup="cardMoveEnd"
       @touchend="cardMoveEnd"
     >
-      <div class="exam-mode-block-card-item__question-block">
+      <div
+        class="exam-mode-block-card-item__question-block"
+        ref="cardQuestionBlockElement"
+      >
         <button
+          tabindex="-1"
           class="exam-mode-block-card-item-question-block__question"
           @click="service.send('SHOW_ANSWER')"
           ref="cardQuestionElement"
@@ -64,10 +68,18 @@
       <div class="exam-mode-block-card-item__white-board">
         <white-board
           :clear="current.matches('idle.whiteBoard.clear')"
-          :lock="current.matches('idle.exam.examing.normalExam.answerShowed')"
+          :lock="showAnswer"
           @clearFinish="service.send('CANVAS_CLEAR_FINISHED')"
         ></white-board>
       </div>
+
+      <p
+        v-show="showAnswer"
+        class="exam-mode-block-card-item__card-state"
+        ref="cardStateElement"
+      >
+        {{ cardState }}
+      </p>
     </div>
 
     <div
@@ -164,6 +176,7 @@ export default {
 
     // element
     const cardElement = ref(null)
+    const cardQuestionBlockElement = ref(null)
     const cardQuestionElement = ref(null)
     const cardAnswerElement = ref(null)
     const cardSecondElement = ref(null)
@@ -171,10 +184,12 @@ export default {
     const cardSecondClearButtonElement = ref(null)
     const cardThirdElement = ref(null)
     const cardNewElement = ref(null)
+    const cardStateElement = ref(null)
 
     const animationElements = computed(function getAnimationElements () {
       return [
         cardElement.value,
+        cardQuestionBlockElement.value,
         cardSecondElement.value,
         cardThirdElement.value,
         cardNewElement.value,
@@ -182,6 +197,7 @@ export default {
         cardQuestionElement.value,
         cardSecondQuestionElement.value,
         cardSecondClearButtonElement.value,
+        cardStateElement.value,
       ]
     })
 
@@ -190,6 +206,12 @@ export default {
 
     const swipeCheckPoint = ref(null)
     const accelerator = ref(1)
+
+    const cardState = computed(function getCardState () {
+      if (xMovement.value == 0) return ''
+      else if (xMovement.value > 0) return '記得了'
+      return '還不熟'
+    })
 
     const examMode = computed(function getExamMode () {
       return context.root.$route.name
@@ -277,8 +299,7 @@ export default {
 
       return gsap
         .timeline({ paused: true })
-        .set(cardQuestionElement.value, { opacity: 0 })
-        .set(cardAnswerElement.value, { opacity: 0 })
+        .set(cardQuestionBlockElement.value, { opacity: 0 })
         .to(cardElement.value, {
           x: `${direction == 'left' ? '-' : '+'}=${
             document.getElementById('app').offsetWidth
@@ -385,6 +406,7 @@ export default {
     return {
       // element
       cardElement,
+      cardQuestionBlockElement,
       cardQuestionElement,
       cardAnswerElement,
       cardSecondElement,
@@ -392,7 +414,9 @@ export default {
       cardThirdElement,
       cardNewElement,
       cardSecondClearButtonElement,
+      cardStateElement,
       // data
+      cardState,
       animationElements,
       clearWhiteBoard,
       examMode,
@@ -414,14 +438,15 @@ export default {
     function cardMoving (e) {
       if (!canDrag.value) return
 
-      if (props.current.matches('idle.exam.examing.normalExam.answerShowed')) {
+      if (props.showAnswer) {
         const movement = getDraggingMovement(e)
         xMovement.value += movement
 
         window.requestAnimationFrame(function transformCardElement () {
           cardElement.value.style.transform = `translate(${xMovement.value}px, 0)`
-          cardElement.value.style.opacity =
-            1 - (xMovement.value / swipeCheckPoint.value) * 0.3
+          cardStateElement.value.style.opacity = Math.abs(
+            xMovement.value / swipeCheckPoint.value
+          )
         })
       }
     }
@@ -446,8 +471,10 @@ export default {
   --card-transform: 10px;
   --card-second-transform: 20px;
   --card-third-transform: 30px;
-  --card-width: 260px;
-  --card-height: 332px;
+  --card-width: 220px;
+  --card-height: 220px;
+
+  --card-animation-time: 0.15s;
 }
 </style>
 
@@ -468,12 +495,14 @@ export default {
   height: var(--card-height);
   border-radius: 6px;
   border: solid 2px var(--card-border-color);
-  font-size: 4rem;
+  font-size: 3.5rem;
   transform-origin: center;
   will-change: opacity, transform;
+  position: relative;
   display: flex;
-  justify-content: center;
-  align-items: flex-start;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .exam-mode-block-card__card-item--background {
@@ -524,21 +553,13 @@ export default {
   position: relative;
   width: 80%;
   display: grid;
-  grid-template-columns: calc(100% / 3) calc(100% / 3) 0 calc(100% / 3);
+  grid-template-columns: calc(100% / 3) calc(100% / 3) calc(100% / 3);
   grid-template-rows: auto;
   align-items: center;
   justify-items: center;
   z-index: 10;
   pointer-events: none;
-  margin-top: 27px;
-  transition: grid-template-columns 0;
-  will-change: grid-template-columns;
-}
-
-.exam-mode-block-card__card-item--first-show-answer
-  .exam-mode-block-card-item__question-block {
-  grid-template-columns: 0 calc(100% / 3) calc(100% / 3) calc(100% / 3);
-  transition: grid-template-columns 0.15s;
+  margin-top: 15px;
 }
 
 .exam-mode-block-card-item__white-board {
@@ -555,8 +576,8 @@ export default {
 
 .exam-mode-block-card-item__clear-button {
   position: absolute;
-  right: 16px;
-  bottom: 13px;
+  right: 11px;
+  bottom: 8px;
   background-color: transparent;
   border: none;
   padding: 5px;
@@ -566,7 +587,7 @@ export default {
 }
 
 .exam-mode-block-card-item-question-block__question {
-  grid-column: 2 / 3;
+  grid-column: 1 / 2;
   align-self: end;
   background-color: transparent;
   border: none;
@@ -576,6 +597,14 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+  transform: translateX(100%);
+  will-change: transform;
+}
+
+.exam-mode-block-card__card-item--first-show-answer
+  .exam-mode-block-card-item-question-block__question {
+  transform: translateX(0);
+  transition: transform var(--card-animation-time);
 }
 
 .exam-mode-block-card-item-question-block__question--second {
@@ -587,7 +616,7 @@ export default {
 }
 
 .exam-mode-block-card-item-question-block__arrow {
-  grid-column: 3 / 4;
+  grid-column: 2 / 3;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -601,22 +630,25 @@ export default {
   object-fit: contain;
 }
 
-.exam-mode-block-card__card-item--first-show-answer
-  .exam-mode-block-card-item-question-block__arrow {
-  opacity: 1;
-  transition: opacity 0.15s 0.15s;
-}
-
 .exam-mode-block-card-item-question-block__answer {
-  grid-column: 4 / 5;
+  grid-column: 3 / 4;
   opacity: 0;
   align-self: start;
   transition: opacity 0;
 }
 
 .exam-mode-block-card__card-item--first-show-answer
+  .exam-mode-block-card-item-question-block__arrow,
+.exam-mode-block-card__card-item--first-show-answer
   .exam-mode-block-card-item-question-block__answer {
   opacity: 1;
-  transition: opacity 0.15s 0.15s;
+  transition: opacity var(--card-animation-time) var(--card-animation-time);
+}
+
+.exam-mode-block-card-item__card-state {
+  font-size: 1rem;
+  font-weight: bold;
+  margin-bottom: 12px;
+  opacity: 0;
 }
 </style>
