@@ -295,11 +295,11 @@ export default {
     )
 
     function animationTimelineSwipe (direction) {
+      gsap.set(cardQuestionBlockElement.value, { opacity: 0 })
       const duration = 0.5
 
       return gsap
         .timeline({ paused: true })
-        .set(cardQuestionBlockElement.value, { opacity: 0 })
         .to(cardElement.value, {
           x: `${direction == 'left' ? '-' : '+'}=${
             document.getElementById('app').offsetWidth
