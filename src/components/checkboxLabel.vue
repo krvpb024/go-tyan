@@ -2,8 +2,8 @@
   <label :for="forId" class="checkbox-label">
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="17.215"
-      height="14.787"
+      width="18"
+      height="15"
       viewBox="0 0 17.215 14.787"
     >
       <g
