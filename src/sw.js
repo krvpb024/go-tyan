@@ -4,7 +4,6 @@ const { assets } = global.serviceWorkerOption
 const assetsToCache = [...assets, './']
 
 self.addEventListener('install', function (event) {
-  self.skipWaiting()
   event.waitUntil(preCacheAssets(assetsToCache))
 })
 
