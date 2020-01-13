@@ -17,47 +17,57 @@
       role="dialog"
       aria-modal="true"
     >
+      <button
+        class="exam-mode-info-modal-content-block__close-button"
+        ref="closeButtonElement"
+        aria-labelledby="info-modal-close-icon-title"
+        @click="service.send('HIDE_INFO_MODAL')"
+      >
+        <img src="@/assets/close.svg" alt="關閉" />
+      </button>
 
       <div
         class="exam-mode-info-modal-content-block__main-block"
         ref="examModeInfoModalMainBlockElement"
       >
-        <button
-          class="exam-mode-info-modal-content-block__close-button"
-          ref="closeButtonElement"
-          aria-labelledby="info-modal-close-icon-title"
-          @click="service.send('HIDE_INFO_MODAL')"
-        >
-          <img
-            src="@/assets/close.svg"
-            alt="關閉"
-          >
-        </button>
-
         <div class="exam-mode-info-modal-main-block__title-block">
           <h2 class="exam-mode-info-modal-title-block__title">操作方式</h2>
         </div>
 
-        <p
-          class="app-visual-hidden"
-          id="exam-mode-info-modal-describe"
+        <div
+          class="exam-mode-info-modal-main-block__description-block exam-mode-info-modal-main-block__description-block--border-show"
         >
-          使用點擊卡片或是鍵盤方向鍵「下」，來顯示解答；如果回答錯誤，可以左滑卡片或是使用鍵盤方向鍵「左」；如果回答正確，可以右滑卡片或使用鍵盤方向鍵「右」。
-        </p>
+          <p
+            class="exam-mode-info-modal-description__text"
+            id="exam-mode-info-modal-describe"
+          >
+            作答時，可將答案寫在字卡上，或直接在心中默想。<br />
+            點擊字卡上的題目來顯示答案，如果覺得記熟了，將卡片右滑；覺得還沒背熟，將卡片左滑。<br />
+            還不熟的字卡，會在測驗結束後再次練習。
+          </p>
+        </div>
 
         <div
           class="exam-mode-info-modal-main-block__description-block exam-mode-info-modal-main-block__description-block--gesture"
           aria-hidden="true"
         >
-          <div class="exam-mode-info-modal-description-block__description"></div>
+          <div
+            class="exam-mode-info-modal-description-block__description"
+          ></div>
 
-          <div class="exam-mode-info-modal-description-block__description exam-mode-info-modal-description-block__description--head">
+          <div
+            class="exam-mode-info-modal-description-block__description exam-mode-info-modal-description-block__description--head"
+            aria-hidden="true"
+          >
             <p class="exam-mode-info-modal-description__text">
               觸控/滑鼠
             </p>
           </div>
 
-          <div class="exam-mode-info-modal-description-block__description exam-mode-info-modal-description-block__description--head">
+          <div
+            class="exam-mode-info-modal-description-block__description exam-mode-info-modal-description-block__description--head"
+            aria-hidden="true"
+          >
             <p class="exam-mode-info-modal-description__text">
               鍵盤
             </p>
@@ -68,63 +78,38 @@
           </div>
 
           <div class="exam-mode-info-modal-description-block__description">
-            <img
-              src="@/assets/show-answer.svg"
-              alt=""
-              aria-hidden="true"
-            >
+            <img src="@/assets/show-answer.svg" alt="點擊字卡上的題目" />
           </div>
 
           <div class="exam-mode-info-modal-description-block__description">
-            <img
-              src="@/assets/keyboard-down.svg"
-              alt=""
-              aria-hidden="true"
-            >
+            <img src="@/assets/keyboard-down.svg" alt="鍵盤方向鍵向下" />
           </div>
 
           <div class="exam-mode-info-modal-description-block__description">
-            <p class="exam-mode-info-modal-description__text">答錯</p>
+            <p class="exam-mode-info-modal-description__text">還不熟</p>
           </div>
 
           <div class="exam-mode-info-modal-description-block__description">
-            <img
-              src="@/assets/left-swipe.svg"
-              alt=""
-              aria-hidden="true"
-            >
+            <img src="@/assets/left-swipe.svg" alt="字卡往左滑" />
           </div>
 
           <div class="exam-mode-info-modal-description-block__description">
-            <img
-              src="@/assets/keyboard-left.svg"
-              alt=""
-              aria-hidden="true"
-            >
+            <img src="@/assets/keyboard-left.svg" alt="鍵盤方向鍵向下左" />
           </div>
 
           <div class="exam-mode-info-modal-description-block__description">
-            <span class="exam-mode-info-modal-description__text">答對</span>
+            <span class="exam-mode-info-modal-description__text">記得了</span>
           </div>
 
           <div class="exam-mode-info-modal-description-block__description">
-            <img
-              src="@/assets/right-swipe.svg"
-              alt=""
-              aria-hidden="true"
-            >
+            <img src="@/assets/right-swipe.svg" alt="字卡往右滑" />
           </div>
 
           <div class="exam-mode-info-modal-description-block__description">
-            <img
-              src="@/assets/keyboard-right.svg"
-              alt=""
-              aria-hidden="true"
-            >
+            <img src="@/assets/keyboard-right.svg" alt="鍵盤方向鍵向下右" />
           </div>
         </div>
       </div>
-
     </section>
   </div>
 </template>
@@ -169,13 +154,14 @@ export default {
       () => props.current.matches('idle.infoModal.showInfoModalAnimation'),
       function showInfoModalAnimationWatcher (value) {
         if (!value) return
-        const { top, left, width, height } = getOffset(examModeInfoModalContainerElement.value)
+        const { top, left, width, height } = getOffset(
+          examModeInfoModalContainerElement.value
+        )
 
-        showInfoModalAnimation()
-          .then(function showAnimationEnd () {
-            props.service.send('SHOW_INFO_MODAL_ANIMATION_END')
-            closeButtonElement.value.focus()
-          })
+        showInfoModalAnimation().then(function showAnimationEnd () {
+          props.service.send('SHOW_INFO_MODAL_ANIMATION_END')
+          closeButtonElement.value.focus()
+        })
 
         function getOffset (el) {
           const { top, left, width, height } = el.getBoundingClientRect()
@@ -189,12 +175,18 @@ export default {
         }
 
         function showInfoModalAnimation () {
-          gsap.set(examModeInfoModalMainBlockElement.value, { clearProps: 'all' })
+          gsap.set(examModeInfoModalMainBlockElement.value, {
+            clearProps: 'all',
+          })
           gsap.set(examModeInfoModalElement.value, { clearProps: 'all' })
           gsap.set(examModeInfoModalElement.value, { display: 'block' })
-          gsap.set(examModeInfoModalBackgroundElement.value, { display: 'block' })
+          gsap.set(examModeInfoModalBackgroundElement.value, {
+            display: 'block',
+          })
 
-          examModeInfoModalAnimationTimeline.value = gsap.timeline({ paused: true })
+          examModeInfoModalAnimationTimeline.value = gsap.timeline({
+            paused: true,
+          })
 
           const duration = 0.3
           return examModeInfoModalAnimationTimeline.value
@@ -206,19 +198,27 @@ export default {
               duration,
               ease: 'circ.inOut',
             })
-            .from(examModeInfoModalElement.value, {
-              x: '+=50%',
-              y: '+=50%',
-              duration: duration - 0.1,
-            }, `-=${duration}`)
-            .fromTo(examModeInfoModalMainBlockElement.value, {
-              display: 'none',
-              opacity: 0,
-            }, {
-              display: 'block',
-              opacity: 1,
-              duration: duration - 0.2,
-            })
+            .from(
+              examModeInfoModalElement.value,
+              {
+                x: '+=50%',
+                y: '+=50%',
+                duration: duration - 0.1,
+              },
+              `-=${duration}`
+            )
+            .fromTo(
+              examModeInfoModalMainBlockElement.value,
+              {
+                display: 'none',
+                opacity: 0,
+              },
+              {
+                display: 'block',
+                opacity: 1,
+                duration: duration - 0.2,
+              }
+            )
             .play()
         }
       }
@@ -228,23 +228,27 @@ export default {
       () => props.current.matches('idle.infoModal.hideInfoModalAnimation'),
       function hideInfoModalAnimationWatcher (value) {
         if (!value) return
-        hideInfoModalAnimation()
-          .then(function hideAnimationEnd () {
-            props.service.send('HIDE_INFO_MODAL_ANIMATION_END')
-          })
+        hideInfoModalAnimation().then(function hideAnimationEnd () {
+          props.service.send('HIDE_INFO_MODAL_ANIMATION_END')
+        })
 
         function hideInfoModalAnimation () {
-          return examModeInfoModalAnimationTimeline.value.reverse()
+          return examModeInfoModalAnimationTimeline.value
+            .reverse()
             .then(function hideModal () {
               gsap.set(examModeInfoModalElement.value, { display: 'none' })
-              gsap.set(examModeInfoModalBackgroundElement.value, { display: 'none' })
+              gsap.set(examModeInfoModalBackgroundElement.value, {
+                display: 'none',
+              })
             })
         }
       }
     )
 
     onMounted(function examModeInfoModalOnMounted () {
-      modalFocusables.value = examModeInfoModalContainerElement.value.querySelectorAll('button')
+      modalFocusables.value = examModeInfoModalContainerElement.value.querySelectorAll(
+        'button'
+      )
     })
 
     return {
@@ -279,7 +283,8 @@ export default {
 
 .exam-mode-info-modal__content-block {
   position: fixed;
-  width: 70%;
+  width: 75%;
+  max-height: 70vh;
   max-width: calc(var(--app-max-width) * 0.5);
   border-radius: 6px;
   box-shadow: 0 3px 20px 0 rgba(0, 0, 0, 0.16);
@@ -290,7 +295,6 @@ export default {
   transform: translate(-50%, -50%);
   z-index: 100;
   display: none;
-  overflow: hidden;
   will-change: transform, opacity, width, height;
 }
 
@@ -304,6 +308,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 10;
 }
 
 .exam-mode-info-modal-content-block__close-button:focus {
@@ -314,13 +319,23 @@ body.using-mouse .exam-mode-info-modal-content-block__close-button:focus {
   outline: none;
 }
 
+.exam-mode-info-modal-content-block__main-block {
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
 .exam-mode-info-modal-main-block__title-block {
   text-align: center;
-  border-bottom: 3px solid var(--text-color);
   width: 80%;
   margin: 0 auto;
   padding-top: 31px;
   padding-bottom: 22px;
+}
+
+.exam-mode-info-modal-main-block__description-block--border-show {
+  border-bottom: 3px solid var(--text-color);
 }
 
 .exam-mode-info-modal-title-block__title {
@@ -330,7 +345,8 @@ body.using-mouse .exam-mode-info-modal-content-block__close-button:focus {
 
 .exam-mode-info-modal-main-block__description-block {
   position: relative;
-  margin: 10px 10% 30px;
+  margin: 10px 35px 0;
+  padding-bottom: 30px;
 }
 
 .exam-mode-info-modal-main-block__description-block--gesture {
@@ -339,7 +355,8 @@ body.using-mouse .exam-mode-info-modal-content-block__close-button:focus {
   grid-template-rows: 1fr 1fr 1fr 1fr;
   grid-row-gap: 40px;
   row-gap: 40px;
-  margin: 25px 20px 45px;
+  margin-top: 25px;
+  padding-bottom: 45px;
 }
 
 .exam-mode-info-modal-description-block__description {
@@ -355,7 +372,7 @@ body.using-mouse .exam-mode-info-modal-content-block__close-button:focus {
 .exam-mode-info-modal-description__text {
   font-size: 1rem;
   font-weight: bold;
-  white-space: nowrap;
+  line-height: 1.5rem;
 }
 
 .exam-mode-info-modal-description__list-group {

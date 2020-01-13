@@ -1,9 +1,6 @@
 <template>
   <section class="exam-container">
-    <div
-      class="app-sticky-top"
-      ref="topStickyElement"
-    >
+    <div class="app-sticky-top" ref="topStickyElement">
       <top-bar>
         <template #leftContainer>
           <a
@@ -42,14 +39,16 @@
           </a>
         </template>
 
-        <h1>五十音測驗</h1>
+        <h1>字卡練習</h1>
 
         <template #rightContainer>
           <button
             @click="service.send('SHOW_EXAM_RANGE_MODAL')"
             ref="settingButtonElement"
             aria-haspopup="true"
-          >設定</button>
+          >
+            設定
+          </button>
 
           <exam-range-modal
             :service="service"
@@ -226,14 +225,19 @@ export default {
 
     // data
     const localExamRange = JSON.parse(window.localStorage.getItem('examRange'))
-    const localSubmittedGojuon = JSON.parse(window.localStorage.getItem('submittedGojuon'))
+    const localSubmittedGojuon = JSON.parse(
+      window.localStorage.getItem('submittedGojuon')
+    )
 
-    const { service, current } = useMachine(machine.withContext({
-      ...machine.context,
-      examRange: localExamRange || machine.context.examRange,
-      submittedGojuon: localSubmittedGojuon || machine.context.submittedGojuon,
-      selectedGojuon: localSubmittedGojuon || machine.context.selectedGojuon,
-    }))
+    const { service, current } = useMachine(
+      machine.withContext({
+        ...machine.context,
+        examRange: localExamRange || machine.context.examRange,
+        submittedGojuon:
+          localSubmittedGojuon || machine.context.submittedGojuon,
+        selectedGojuon: localSubmittedGojuon || machine.context.selectedGojuon,
+      })
+    )
 
     const settingButtonBoundingClientRect = ref(null)
 
@@ -248,7 +252,12 @@ export default {
     )
 
     onMounted(function examOnMounted () {
-      const { top, left, width, height } = settingButtonElement.value.getBoundingClientRect()
+      const {
+        top,
+        left,
+        width,
+        height,
+      } = settingButtonElement.value.getBoundingClientRect()
       settingButtonBoundingClientRect.value = { top, left, width, height }
     })
 
@@ -271,10 +280,7 @@ export default {
     function navToExamMode (e) {
       const navTarget = e.currentTarget.getAttribute('href')
 
-      service.value.send(
-        'NAV_TO_EXAM_MODE',
-        { data: navTarget }
-      )
+      service.value.send('NAV_TO_EXAM_MODE', { data: navTarget })
     }
   },
 }

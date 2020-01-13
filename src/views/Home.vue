@@ -2,11 +2,7 @@
   <section class="home">
     <header class="home__header">
       <div class="home-header__logo">
-        <img
-          src="@/assets/go-tyan.svg"
-          alt=""
-          aria-hidden="true"
-        >
+        <img src="@/assets/go-tyan.svg" alt="" aria-hidden="true" />
       </div>
 
       <h1 class="home-header__title">
@@ -25,17 +21,10 @@
     </header>
 
     <nav class="home__nav">
-      <router-link
-        to="/table"
-        class="home-nav__nav-item"
-      >
+      <router-link to="/table" class="home-nav__nav-item">
         <home-card>
           <template #image>
-            <img
-              src="@/assets/table.svg"
-              alt=""
-              aria-hidden="true"
-            >
+            <img src="@/assets/table.svg" alt="" aria-hidden="true" />
           </template>
 
           <template #title>
@@ -50,27 +39,19 @@
         </home-card>
       </router-link>
 
-      <router-link
-        to="/exam"
-        class="home-nav__nav-item"
-      >
+      <router-link to="/exam" class="home-nav__nav-item">
         <home-card>
           <template #image>
-            <img
-              src="@/assets/exam.svg"
-              alt=""
-              aria-hidden="true"
-            >
+            <img src="@/assets/exam.svg" alt="" aria-hidden="true" />
           </template>
 
           <template #title>
-            <h2>五十音測驗</h2>
+            <h2>字卡練習</h2>
           </template>
 
           <template #description>
             <ul class="home-nav-item__list-group">
               <li>平假名、片假名、拼音轉換</li>
-              <li>手寫測驗</li>
             </ul>
           </template>
         </home-card>
@@ -149,7 +130,7 @@
           class="home-tooltips__icon"
           src="@/assets/ios-share.svg"
           alt="加入主畫面按鈕"
-        >
+        />
         <span class="home-tooltips__text">
           加入主畫面
         </span>
@@ -176,7 +157,7 @@
           class="home-tooltips__icon"
           src="@/assets/firefox-home.svg"
           alt="加入主畫面"
-        >
+        />
       </tooltips>
     </div>
 
@@ -195,7 +176,8 @@
         angleTransformY="50%"
       >
         <span class="home-tooltips__text">
-          「加入主畫面」功能目前不支援於您目前使用的瀏覽器，建議您切換至 {{ recommendedBrowser }} 瀏覽器。
+          「加入主畫面」功能目前不支援於您目前使用的瀏覽器，建議您切換至
+          {{ recommendedBrowser }} 瀏覽器。
         </span>
       </tooltips>
     </div>
@@ -228,35 +210,37 @@ export default {
     // data
     const standalone = ref(
       window.navigator.standalone == true ||
-      window.matchMedia('(display-mode: standalone)').matches
+        window.matchMedia('(display-mode: standalone)').matches
     )
     const showWhenAndroidChrome = computed(function getShowWhenAndroidChrome () {
-      return is.android() &&
-        is.chrome() &&
-        !standalone.value &&
-        deferredPrompt.value
+      return (
+        is.android() && is.chrome() && !standalone.value && deferredPrompt.value
+      )
     })
-    const showWhenAndroidFirefox = computed(function getShowWhenAndroidFirefox () {
-      return is.android() &&
-        is.firefox() &&
-        !standalone.value
-    })
+    const showWhenAndroidFirefox = computed(
+      function getShowWhenAndroidFirefox () {
+        return is.android() && is.firefox() && !standalone.value
+      }
+    )
     const showWhenIosSafari = computed(function getShowWhenIosSafari () {
-      return is.ios() &&
-        is.safari() &&
-        !inapp.isInApp &&
-        !standalone.value
+      return is.ios() && is.safari() && !inapp.isInApp && !standalone.value
     })
     const showWhenIsInapp = computed(function getShowWhenIsInapp () {
-      return (is.ios() || is.android()) &&
+      return (
+        (is.ios() || is.android()) &&
         inapp.isInApp &&
-        ['messenger', 'facebook', 'line', 'twitter', 'instagram'].includes(inapp.browser)
+        ['messenger', 'facebook', 'line', 'twitter', 'instagram'].includes(
+          inapp.browser
+        )
+      )
     })
     const showAddToHomeButton = computed(function getShowAddToHomeButton () {
-      return showWhenAndroidChrome.value ||
+      return (
+        showWhenAndroidChrome.value ||
         showWhenAndroidFirefox.value ||
         showWhenIosSafari.value ||
         showWhenIsInapp.value
+      )
     })
 
     const recommendedBrowser = computed(function getRecommendedBrowser () {
@@ -286,7 +270,9 @@ export default {
     function addToHomeScreen () {
       if (deferredPrompt.value) {
         deferredPrompt.value.prompt()
-        deferredPrompt.value.userChoice.then(function responseUserChoice (choiceResult) {
+        deferredPrompt.value.userChoice.then(function responseUserChoice (
+          choiceResult
+        ) {
           if (choiceResult.outcome == 'accepted') {
             console.log('User accepted the A2HS prompt')
           } else {
@@ -313,8 +299,8 @@ export default {
   grid-gap: 10px;
   gap: 10px;
   grid-template:
-    ".      logo   title  .      install-button .     " auto
-    "stream stream stream stream stream         stream" auto / 20px 70px auto 1fr auto 20px;
+    '.      logo   title  .      install-button .     ' auto
+    'stream stream stream stream stream         stream' auto / 20px 70px auto 1fr auto 20px;
 }
 
 .home-header__logo {
@@ -350,7 +336,7 @@ export default {
 .home-header__title::after {
   position: absolute;
   border-radius: 8px;
-  content: "";
+  content: '';
   display: block;
   width: calc(100% + 8px);
   height: 80%;
@@ -370,7 +356,7 @@ export default {
 }
 
 .home-header__install-button::after {
-  content: "";
+  content: '';
   display: block;
   background-color: var(--main-color);
   width: 100%;
@@ -433,7 +419,8 @@ export default {
   z-index: 100;
 }
 
-.home__tooltips-container--ios-safari, .home__tooltips-container--is-inapp {
+.home__tooltips-container--ios-safari,
+.home__tooltips-container--is-inapp {
   bottom: 20px;
   left: 50%;
   transform: translateX(-50%);

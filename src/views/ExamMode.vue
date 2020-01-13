@@ -102,6 +102,9 @@
                 :disabledValue="
                   current.matches(
                     'idle.exam.examing.normalExam.answerShowed.idle'
+                  ) ||
+                  current.matches(
+                    'idle.exam.examing.normalExam.answerShowed.cardBackToPositionAnimation'
                   )
                     ? false
                     : true
@@ -125,6 +128,9 @@
                 :disabledValue="
                   current.matches(
                     'idle.exam.examing.normalExam.answerShowed.idle'
+                  ) ||
+                  current.matches(
+                    'idle.exam.examing.normalExam.answerShowed.cardBackToPositionAnimation'
                   )
                     ? false
                     : true
@@ -148,6 +154,9 @@
                 :disabledValue="
                   current.matches(
                     'idle.exam.examing.normalExam.answerShowed.idle'
+                  ) ||
+                  current.matches(
+                    'idle.exam.examing.normalExam.answerShowed.cardBackToPositionAnimation'
                   )
                     ? true
                     : false
@@ -174,13 +183,7 @@
             <div class="exam-mode-normal-exam__control-button-group">
               <squareButton
                 tabindex="-1"
-                :disabledValue="
-                  current.matches(
-                    'idle.exam.examing.normalExam.answerShowed.idle'
-                  )
-                    ? false
-                    : true
-                "
+                :disabledValue="true"
                 class="exam-mode-control-button-group__cross-button"
                 @click="service.send('NEXT_CARD', { addToEnhancement: true })"
               >
@@ -196,13 +199,7 @@
 
               <squareButton
                 tabindex="-1"
-                :disabledValue="
-                  current.matches(
-                    'idle.exam.examing.normalExam.answerShowed.idle'
-                  )
-                    ? false
-                    : true
-                "
+                :disabledValue="true"
                 class="exam-mode-control-button-group__circle-button"
                 @click="service.send('NEXT_CARD')"
               >
@@ -218,13 +215,7 @@
 
               <squareButton
                 tabindex="-1"
-                :disabledValue="
-                  current.matches(
-                    'idle.exam.examing.normalExam.answerShowed.idle'
-                  )
-                    ? true
-                    : false
-                "
+                :disabledValue="false"
                 class="exam-mode-control-button-group__ans-button"
                 @click="service.send('SHOW_ANSWER')"
               >
