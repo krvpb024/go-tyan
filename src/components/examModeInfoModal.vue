@@ -38,7 +38,7 @@
           class="exam-mode-info-modal-main-block__description-block exam-mode-info-modal-main-block__description-block--border-show"
         >
           <p
-            class="exam-mode-info-modal-description__text"
+            class="exam-mode-info-modal-description__text exam-mode-info-modal-description__text--text-description"
             id="exam-mode-info-modal-describe"
           >
             作答時，可將答案寫在字卡上，或直接在心中默想。<br />
@@ -373,6 +373,12 @@ body.using-mouse .exam-mode-info-modal-content-block__close-button:focus {
   font-size: 1rem;
   font-weight: bold;
   line-height: 1.5rem;
+  white-space: nowrap;
+}
+
+.exam-mode-info-modal-description__text--text-description {
+  font-size: 0.875rem;
+  white-space: normal;
 }
 
 .exam-mode-info-modal-description__list-group {
