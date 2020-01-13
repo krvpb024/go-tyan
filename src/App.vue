@@ -1,14 +1,23 @@
 <template>
-  <div id="app" class="app-container">
-    <router-view></router-view>
+  <div id="app" class="app-root">
+    <div
+      class="app-root__container"
+      :class="{ 'app-root__container--home': homeBackgroundColor }"
+    >
+      <router-view></router-view>
+    </div>
   </div>
 </template>
 
 <script>
-import { onMounted, onUnmounted } from '@vue/composition-api'
+import { computed, onMounted, onUnmounted } from '@vue/composition-api'
 
 export default {
-  setup () {
+  setup (props, context) {
+    const homeBackgroundColor = computed(function getHomeBackgroundColor () {
+      return context.root.$route.name == 'home'
+    })
+
     onMounted(function addOnMounted () {
       document.body.addEventListener('mousedown', mouseDownHandler)
       document.body.addEventListener('keydown', keydownHandler)
@@ -25,6 +34,10 @@ export default {
 
     function keydownHandler () {
       document.body.classList.remove('using-mouse')
+    }
+
+    return {
+      homeBackgroundColor,
     }
   },
 }
@@ -47,6 +60,10 @@ export default {
 :focus {
   outline: var(--focus-default-outline);
   outline-offset: 5px;
+}
+
+html {
+  height: 100%;
 }
 
 body.using-mouse :focus {
@@ -77,6 +94,7 @@ button:hover {
 
 body {
   color: var(--text-color);
+  height: 100%;
 }
 
 .app-prevent-scroll {
@@ -135,8 +153,17 @@ ul {
   justify-content: center;
 }
 
-.app-container {
+.app-root {
+  height: 100%;
+}
+
+.app-root__container {
   max-width: var(--app-max-width);
   margin: 0 auto;
+  height: 100%;
+}
+
+.app-root__container--home {
+  background-color: var(--title-bg-color);
 }
 </style>

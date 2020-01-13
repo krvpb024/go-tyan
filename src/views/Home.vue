@@ -290,10 +290,12 @@ export default {
 <style scoped>
 .home {
   position: relative;
+  height: 100%;
+  background-color: var(--title-bg-color);
 }
 
 .home__header {
-  margin-top: 27px;
+  padding-top: 27px;
   display: grid;
   align-items: center;
   grid-gap: 10px;

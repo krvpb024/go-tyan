@@ -35,7 +35,8 @@
         </div>
 
         <div
-          class="exam-mode-info-modal-main-block__description-block exam-mode-info-modal-main-block__description-block--border-show"
+          class="exam-mode-info-modal-main-block__description-block
+            exam-mode-info-modal-main-block__description-block--border-show"
         >
           <p
             class="exam-mode-info-modal-description__text exam-mode-info-modal-description__text--text-description"
@@ -48,7 +49,8 @@
         </div>
 
         <div
-          class="exam-mode-info-modal-main-block__description-block exam-mode-info-modal-main-block__description-block--gesture"
+          class="exam-mode-info-modal-main-block__description-block
+            exam-mode-info-modal-main-block__description-block--gesture"
           aria-hidden="true"
         >
           <div
@@ -56,7 +58,8 @@
           ></div>
 
           <div
-            class="exam-mode-info-modal-description-block__description exam-mode-info-modal-description-block__description--head"
+            class="exam-mode-info-modal-description-block__description
+              exam-mode-info-modal-description-block__description--head"
             aria-hidden="true"
           >
             <p class="exam-mode-info-modal-description__text">
@@ -65,7 +68,8 @@
           </div>
 
           <div
-            class="exam-mode-info-modal-description-block__description exam-mode-info-modal-description-block__description--head"
+            class="exam-mode-info-modal-description-block__description
+              exam-mode-info-modal-description-block__description--head"
             aria-hidden="true"
           >
             <p class="exam-mode-info-modal-description__text">

@@ -15,22 +15,21 @@
 </template>
 
 <script>
-export default {
-
-}
+export default {}
 </script>
 
 <style scoped>
 .home-card {
   display: grid;
   grid-template:
-    "image-block title-block      " auto
-    "image-block description-block" 1fr / auto 1fr;
+    'image-block title-block      ' auto
+    'image-block description-block' 1fr / auto 1fr;
   border: solid 2.5px var(--text-color);
   border-radius: 6px;
   width: 100%;
   height: 100%;
   padding-right: 10px;
+  background-color: #fff;
 }
 
 .home-card__image-block {
@@ -68,5 +67,4 @@ export default {
 .home-card__description-block ul li {
   margin-bottom: 2px;
 }
-
 </style>
