@@ -1,9 +1,6 @@
 <template>
   <div id="app" class="app-root">
-    <div
-      class="app-root__container"
-      :class="{ 'app-root__container--home': homeBackgroundColor }"
-    >
+    <div class="app-root__container">
       <router-view></router-view>
     </div>
   </div>
@@ -62,10 +59,6 @@ export default {
   outline-offset: 5px;
 }
 
-html {
-  height: 100%;
-}
-
 body.using-mouse :focus {
   outline: none;
 }
@@ -74,6 +67,9 @@ html {
   box-sizing: border-box;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
     Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  margin: 0;
+  padding: 0;
+  height: 100%;
 }
 
 a {
@@ -95,6 +91,8 @@ button:hover {
 body {
   color: var(--text-color);
   height: 100%;
+  margin: 0;
+  padding: 0;
 }
 
 .app-prevent-scroll {
@@ -155,15 +153,13 @@ ul {
 
 .app-root {
   height: 100%;
+  margin: 0;
+  padding: 0;
 }
 
 .app-root__container {
   max-width: var(--app-max-width);
   margin: 0 auto;
   height: 100%;
-}
-
-.app-root__container--home {
-  background-color: var(--title-bg-color);
 }
 </style>

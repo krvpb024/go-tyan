@@ -57,17 +57,10 @@
         </home-card>
       </router-link>
 
-      <!-- <router-link
-        to="/"
-        class="home-nav__nav-item"
-      >
+      <!-- <router-link to="/" class="home-nav__nav-item">
         <home-card>
           <template #image>
-            <img
-              src="@/assets/about.svg"
-              alt=""
-              aria-hidden="true"
-            >
+            <img src="@/assets/about.svg" alt="" aria-hidden="true" />
           </template>
 
           <template #title>
@@ -82,17 +75,10 @@
         </home-card>
       </router-link>
 
-      <router-link
-        to="/"
-        class="home-nav__nav-item"
-      >
+      <router-link to="/" class="home-nav__nav-item">
         <home-card>
           <template #image>
-            <img
-              src="@/assets/coffee.svg"
-              alt=""
-              aria-hidden="true"
-            >
+            <img src="@/assets/coffee.svg" alt="" aria-hidden="true" />
           </template>
 
           <template #title>
@@ -290,7 +276,7 @@ export default {
 <style scoped>
 .home {
   position: relative;
-  height: 100%;
+  min-height: 100%;
   background-color: var(--title-bg-color);
 }
 
