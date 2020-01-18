@@ -1,9 +1,10 @@
 <template>
   <label :for="forId" class="checkbox-label">
     <svg
+      class="checkbox-label__box-image"
       xmlns="http://www.w3.org/2000/svg"
-      width="18"
-      height="15"
+      width="19"
+      height="16"
       viewBox="0 0 17.215 14.787"
     >
       <g
@@ -30,7 +31,7 @@
           />
         </g>
         <g
-          class="checkbox-label__check-mark"
+          class="checkbox-label-box-image__check-mark"
           id="Group_498"
           data-name="Group 498"
           transform="translate(-19095 -9776)"
@@ -70,11 +71,15 @@ export default {
   padding: 2px;
 }
 
-.checkbox-label__check-mark {
+.checkbox-label__box-image {
+  margin-right: 5px;
+}
+
+.checkbox-label-box-image__check-mark {
   opacity: 0;
 }
 
-input[type='checkbox']:checked + .checkbox-label .checkbox-label__check-mark {
+input[type='checkbox']:checked + .checkbox-label .checkbox-label-box-image__check-mark {
   opacity: 1;
 }
 

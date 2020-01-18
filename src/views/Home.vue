@@ -57,7 +57,7 @@
         </home-card>
       </router-link>
 
-      <!-- <router-link to="/" class="home-nav__nav-item">
+      <router-link to="/about" class="home-nav__nav-item">
         <home-card>
           <template #image>
             <img src="@/assets/about.svg" alt="" aria-hidden="true" />
@@ -75,7 +75,25 @@
         </home-card>
       </router-link>
 
-      <router-link to="/" class="home-nav__nav-item">
+      <!-- <router-link to="/comment" class="home-nav__nav-item">
+        <home-card>
+          <template #image>
+            <img src="@/assets/feedback.svg" alt="" aria-hidden="true" />
+          </template>
+
+          <template #title>
+            <h2>意見反饋</h2>
+          </template>
+
+          <template #description>
+            <ul class="home-nav-item__list-group">
+              <li>有任何看法、意見都可以留言給我們</li>
+            </ul>
+          </template>
+        </home-card>
+      </router-link> -->
+
+      <!-- <router-link to="/" class="home-nav__nav-item">
         <home-card>
           <template #image>
             <img src="@/assets/coffee.svg" alt="" aria-hidden="true" />
@@ -259,11 +277,11 @@ export default {
         deferredPrompt.value.userChoice.then(function responseUserChoice (
           choiceResult
         ) {
-          if (choiceResult.outcome == 'accepted') {
-            console.log('User accepted the A2HS prompt')
-          } else {
-            console.log('User dismissed the A2HS prompt')
-          }
+          // if (choiceResult.outcome == 'accepted') {
+          //   console.log('User accepted the A2HS prompt')
+          // } else {
+          //   console.log('User dismissed the A2HS prompt')
+          // }
         })
       } else {
         service.value.send('TOOLTIPS_SHOW')

@@ -6,7 +6,11 @@ Vue.use(Router)
 
 const table = () => import(/* webpackChunkName: "table" */ './views/Table.vue')
 const exam = () => import(/* webpackChunkName: "exam" */ './views/Exam.vue')
-const examMode = () => import(/* webpackChunkName: "examMode" */ './views/ExamMode.vue')
+const examMode = () =>
+  import(/* webpackChunkName: "examMode" */ './views/ExamMode.vue')
+// const comment = () =>
+//   import(/* webpackChunkName: "comment" */ './views/Comment.vue')
+const about = () => import(/* webpackChunkName: "about" */ './views/About.vue')
 
 export default new Router({
   mode: 'history',
@@ -24,6 +28,16 @@ export default new Router({
       path: '/table',
       name: 'table',
       component: table,
+    },
+    // {
+    //   path: '/comment',
+    //   name: 'comment',
+    //   component: comment,
+    // },
+    {
+      path: '/about',
+      name: 'about',
+      component: about,
     },
     {
       path: '/exam',
