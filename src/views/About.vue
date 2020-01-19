@@ -145,7 +145,7 @@
 
         <div class="about-member-container__social-media-links">
           <a
-            href="/"
+            href="https://www.facebook.com/profile.php?id=100000216773500"
             class="social-media-links__link"
             rel="noopener"
             target="_blank"
@@ -159,7 +159,7 @@
           </a>
 
           <a
-            href="/"
+            href="mailto:willie70440@gmail.com"
             class="social-media-links__link"
             rel="noopener"
             target="_blank"

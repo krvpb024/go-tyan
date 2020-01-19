@@ -75,7 +75,7 @@
         </home-card>
       </router-link>
 
-      <!-- <router-link to="/comment" class="home-nav__nav-item">
+      <router-link to="/comment" class="home-nav__nav-item">
         <home-card>
           <template #image>
             <img src="@/assets/feedback.svg" alt="" aria-hidden="true" />
@@ -91,7 +91,7 @@
             </ul>
           </template>
         </home-card>
-      </router-link> -->
+      </router-link>
 
       <!-- <router-link to="/" class="home-nav__nav-item">
         <home-card>

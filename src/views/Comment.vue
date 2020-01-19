@@ -82,11 +82,11 @@ export default {
 
 <style scoped>
 .comment__disqus-container {
-  margin: 0 20px;
+  margin: 0 24px;
 }
 
 .comment-disqus-container__text {
   text-align: center;
-  margin: 10px 0;
+  margin: 38px 0;
 }
 </style>
