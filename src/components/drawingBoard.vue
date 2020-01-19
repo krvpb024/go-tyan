@@ -53,7 +53,7 @@
         <button
           class="drawing-board-first-column__tool-button
             drawing-board-first-column__tool-button--peak-hiragana-button"
-          v-if="service.id == 'tableView' && !current.matches('displayPanel.hiragana.show')"
+          v-if="!current.matches('displayPanel.hiragana.show')"
           :aria-controls="`${current.context.activeGroupName}-${current.context.activeRow}-${current.context.activeColumn}`"
           @mousedown="service.send('PEEK_HIRAGANA')"
           @touchstart="service.send('PEEK_HIRAGANA')"
@@ -68,7 +68,7 @@
         <button
           class="drawing-board-first-column__tool-button
             drawing-board-first-column__tool-button--peak-katakana-button"
-          v-if="service.id =='tableView' && !current.matches('displayPanel.katakana.show')"
+          v-if="!current.matches('displayPanel.katakana.show')"
           :aria-controls="
               (current.context.activeGroupName &&
               current.context.activeRow &&
@@ -122,7 +122,6 @@
         </button>
 
         <button
-          v-if="service.id == 'tableView'"
           class="drawing-board-first-column__tool-button
             drawing-board-first-column__tool-button--previous-button"
           @click="service.send('ACTIVE_CURSOR_TO_PREVIOUS')"
@@ -136,7 +135,6 @@
         </button>
 
         <button
-          v-if="service.id == 'tableView'"
           class="drawing-board-first-column__tool-button
             drawing-board-first-column__tool-button--next-button"
           @click="service.send('ACTIVE_CURSOR_TO_NEXT')"
