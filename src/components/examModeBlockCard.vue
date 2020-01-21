@@ -31,7 +31,7 @@
         <button
           tabindex="-1"
           class="exam-mode-block-card-item-question-block__question"
-          @click="service.send('SHOW_ANSWER')"
+          @click="cardshowAnswer"
           ref="cardQuestionElement"
           :aria-hidden="
             ['romanizationToHiragana', 'romanizationToKatakana'].includes(
@@ -429,6 +429,7 @@ export default {
       cardMoveStart,
       cardMoving,
       cardMoveEnd,
+      cardshowAnswer,
     }
 
     function cardMoveStart (e) {
@@ -454,6 +455,18 @@ export default {
 
     function cardMoveEnd () {
       if (Math.abs(xMovement.value) > swipeCheckPoint.value) {
+        if (xMovement.value > 0) {
+          window.gtag('event', 'card_manipulate', {
+            'event_category': 'exam_mode_card',
+            'event_label': 'remember',
+          })
+        } else {
+          window.gtag('event', 'card_manipulate', {
+            'event_category': 'exam_mode_card',
+            'event_label': 'add_to_enhancement',
+          })
+        }
+
         props.service.send('NEXT_CARD', {
           addToEnhancement: !(xMovement.value > 0),
         })
@@ -462,6 +475,15 @@ export default {
       }
 
       dragEnd()
+    }
+
+    function cardshowAnswer () {
+      window.gtag('event', 'card_manipulate', {
+        'event_category': 'exam_mode_card',
+        'event_label': 'show_answer',
+      })
+
+      props.service.send('SHOW_ANSWER')
     }
   },
 }

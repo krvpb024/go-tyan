@@ -51,7 +51,7 @@
 
     <div class="donate__link-block">
       <img class="donate-link-block__image" src="@/assets/donate.png" alt="小額贊助網址 QR code" width="200" height="200">
-      <a target="_blank" rel="noopener" class="donate-link-block__link" href="https://p.ecpay.com.tw/7CCB8">透過綠界科技贊助</a>
+      <a target="_blank" rel="noopener" @click="goToPaymentLink" class="donate-link-block__link" href="https://p.ecpay.com.tw/7CCB8">透過綠界科技贊助</a>
     </div>
   </section>
 </template>
@@ -61,6 +61,18 @@ import topBar from '@/components/topBar.vue'
 
 export default {
   components: { topBar },
+  setup () {
+    return {
+      goToPaymentLink,
+    }
+
+    function goToPaymentLink () {
+      window.gtag('event', 'go_to_payment_link', {
+        'event_category': 'donate',
+        'event_label': 'ecpay',
+      })
+    }
+  },
 }
 </script>
 

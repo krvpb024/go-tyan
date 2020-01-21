@@ -5,7 +5,7 @@
         type="checkbox"
         id="hiragana"
         class="app-visual-hidden"
-        @input="service.send({type: 'HIRAGANA_TOGGLE_DISPLAY', data: $event.target.checked})"
+        @input="toggleHiraganaInput"
         :checked="current.matches('displayPanel.hiragana.show')"
       >
 
@@ -19,7 +19,7 @@
         type="checkbox"
         id="katakana"
         class="app-visual-hidden"
-        @input="service.send({type: 'KATAKANA_TOGGLE_DISPLAY', data: $event.target.checked})"
+        @input="toggleKatakanaInput"
         :checked="current.matches('displayPanel.katakana.show')"
       >
 
@@ -44,6 +44,29 @@ export default {
       type: Object,
       required: true,
     },
+  },
+  setup (props) {
+    return {
+      toggleHiraganaInput,
+      toggleKatakanaInput,
+    }
+    function toggleHiraganaInput (event) {
+      window.gtag('event', 'toggle_table_display_input', {
+        'event_category': 'gojuon_table_display',
+        'event_label': 'hiragana',
+      })
+
+      props.service.send({ type: 'HIRAGANA_TOGGLE_DISPLAY', data: event.target.checked })
+    }
+
+    function toggleKatakanaInput (event) {
+      window.gtag('event', 'toggle_table_display_input', {
+        'event_category': 'gojuon_table_display',
+        'event_label': 'katakana',
+      })
+
+      props.service.send({ type: 'KATAKANA_TOGGLE_DISPLAY', data: event.target.checked })
+    }
   },
 }
 </script>

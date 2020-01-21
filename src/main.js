@@ -7,6 +7,13 @@ import 'normalize.css'
 import App from './App.vue'
 import router from './router'
 
+router.afterEach(function sendGtagsPageTrack (to) {
+  window.gtag('config', 'UA-156576262-1', {
+    'page_title': to.name,
+    'page_path': to.path,
+  })
+})
+
 Vue.use(VueCompositionApi)
 Vue.config.productionTip = false
 

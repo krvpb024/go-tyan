@@ -277,13 +277,23 @@ export default {
         deferredPrompt.value.userChoice.then(function responseUserChoice (
           choiceResult
         ) {
-          // if (choiceResult.outcome == 'accepted') {
-          //   console.log('User accepted the A2HS prompt')
-          // } else {
-          //   console.log('User dismissed the A2HS prompt')
-          // }
+          if (choiceResult.outcome == 'accepted') {
+            window.gtag('event', 'add_to_home_screen', {
+              'event_category': 'browser_prompt',
+              'event_label': 'user_accepted',
+            })
+          } else {
+            window.gtag('event', 'add_to_home_screen', {
+              'event_category': 'browser_prompt',
+              'event_label': 'user_dismissed',
+            })
+          }
         })
       } else {
+        window.gtag('event', 'add_to_home_screen', {
+          'event_category': 'custom_tooltips',
+          'event_label': 'show_tooltips',
+        })
         service.value.send('TOOLTIPS_SHOW')
       }
     }

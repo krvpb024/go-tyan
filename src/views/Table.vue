@@ -140,14 +140,11 @@
                     focusColumn: columnIndex,
                   }}
                 )"
-                @click="service.send({
-                  type: 'UPDATE_ACTIVE_CURSOR',
-                  data: {
-                    activeGroupName: groupName,
-                    activeRow: rowIndex,
-                    activeColumn: columnIndex,
-                  }
-                })"
+                @click="updateActiveCursor({
+                  groupName,
+                  rowIndex,
+                  columnIndex
+                 }, $event)"
               >
                 <div
                   class="table-view-data-button__button-content"
@@ -196,7 +193,7 @@
         :open="current.matches('drawingBoard.show')"
         :clearCanvas="current.matches('drawingBoard.show.clearCanvas') ||
           current.matches('drawingBoard.clearCanvas')"
-        @buttonClick="service.send('TOOLTIPS_SHOW')"
+        @buttonClick="showDrawingBoardTooltips"
       ></drawing-board>
 
       <div class="drawing-board-content-block__tooltips">
@@ -292,6 +289,8 @@ export default {
       generateTitle,
       isCursorPosition,
       checkDisplayAndPeek,
+      showDrawingBoardTooltips,
+      updateActiveCursor,
     }
 
     function isCursorPosition (groupName, rowIndex, columnIndex) {
@@ -308,6 +307,35 @@ export default {
       if (!targetDisplay && isCursorPosition(groupName, rowIndex, columnIndex) && current.value.matches(`displayPanel.${hiraganaOrKatakana}.hide.peek`)) return true
       else if (!targetDisplay) return false
       return true
+    }
+
+    function showDrawingBoardTooltips () {
+      window.gtag('event', 'click_drawing_board', {
+        'event_category': 'table_drawing_board',
+        'event_label': 'show_tooltips',
+      })
+
+      service.value.send('TOOLTIPS_SHOW')
+    }
+
+    function updateActiveCursor ({
+      groupName,
+      rowIndex,
+      columnIndex,
+    }) {
+      window.gtag('event', 'click_gojuon', {
+        'event_category': 'table_drawing_board',
+        'event_label': 'open_drawing_board',
+      })
+
+      service.value.send({
+        type: 'UPDATE_ACTIVE_CURSOR',
+        data: {
+          activeGroupName: groupName,
+          activeRow: rowIndex,
+          activeColumn: columnIndex,
+        },
+      })
     }
   },
 }

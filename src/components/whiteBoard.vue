@@ -41,6 +41,8 @@ export default {
     const lastX = ref(0)
     const lastY = ref(0)
 
+    const writeAnswer = ref(false)
+
     const canDraw = ref(false)
 
     // effect
@@ -56,6 +58,8 @@ export default {
       () => props.clear,
       function clearWatcher (value) {
         if (!value) return
+        writeAnswer.value = false
+
         ctx.value.clearRect(
           0,
           0,
@@ -63,6 +67,20 @@ export default {
           whiteBoardElement.value.height
         )
         context.emit('clearFinish')
+      }
+    )
+
+    watch(
+      writeAnswer,
+      function hasWrittenAnswer (value, previous) {
+        if (value && !previous) {
+          window.gtag('event', 'write_answer', {
+            'event_category': 'drawing_board',
+            'event_label': context.root.$route.name == 'table'
+              ? 'table'
+              : 'exam_mode',
+          })
+        }
       }
     )
 
@@ -82,6 +100,8 @@ export default {
 
     function startDrawing ({ type, clientX, clientY, target, touches }) {
       if (props.lock) return
+
+      if (!writeAnswer.value) writeAnswer.value = true
 
       canDraw.value = true
       const resultClientX = type == 'touchstart' ? touches[0].clientX : clientX

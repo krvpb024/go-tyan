@@ -55,9 +55,9 @@
             drawing-board-first-column__tool-button--peak-hiragana-button"
           v-if="!current.matches('displayPanel.hiragana.show')"
           :aria-controls="`${current.context.activeGroupName}-${current.context.activeRow}-${current.context.activeColumn}`"
-          @mousedown="service.send('PEEK_HIRAGANA')"
-          @touchstart="service.send('PEEK_HIRAGANA')"
-          @keydown.space="service.send('PEEK_HIRAGANA')"
+          @mousedown="peekHiragana"
+          @touchstart="peekHiragana"
+          @keydown.space="peekHiragana"
           @mouseup="service.send('COVER_HIRAGANA')"
           @touchend="service.send('COVER_HIRAGANA')"
           @keyup.space="service.send('COVER_HIRAGANA')"
@@ -76,9 +76,9 @@
                 ? `${current.context.activeGroupName}-${current.context.activeRow}-${current.context.activeColumn}`
                 : false
             "
-          @mousedown="service.send('PEEK_KATAKANA')"
-          @touchstart="service.send('PEEK_KATAKANA')"
-          @keydown.space="service.send('PEEK_KATAKANA')"
+          @mousedown="peekKatakana"
+          @touchstart="peekKatakana"
+          @keydown.space="peekKatakana"
           @mouseup="service.send('COVER_KATAKANA')"
           @touchend="service.send('COVER_KATAKANA')"
           @keyup.space="service.send('COVER_KATAKANA')"
@@ -296,6 +296,8 @@ export default {
       initFinish,
       clearFinish,
       hideDrawingBoard,
+      peekHiragana,
+      peekKatakana,
     }
     function initFinish () {
       init.value = false
@@ -308,6 +310,24 @@ export default {
 
     function hideDrawingBoard () {
       props.service.send('HIDE_DRAWING_BOARD')
+    }
+
+    function peekHiragana () {
+      window.gtag('event', 'peek_gojuon', {
+        'event_category': 'gojuon_table_display',
+        'event_label': 'hiragana',
+      })
+
+      props.service.send('PEEK_HIRAGANA')
+    }
+
+    function peekKatakana () {
+      window.gtag('event', 'peek_gojuon', {
+        'event_category': 'gojuon_table_display',
+        'event_label': 'katakana',
+      })
+
+      props.service.send('PEEK_KATAKANA')
     }
   },
 }

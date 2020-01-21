@@ -51,11 +51,7 @@
         <button
           class="exam-mode-info-modal__modal-trigger-button"
           ref="modalTriggerButtonElement"
-          @click="
-            current.matches('idle.infoModal.hide')
-              ? service.send('SHOW_INFO_MODAL')
-              : service.send('HIDE_INFO_MODAL')
-          "
+          @click="showInfoModal"
           aria-label="測驗說明"
           aria-haspopup="true"
         >
@@ -110,7 +106,7 @@
                     : true
                 "
                 class="exam-mode-control-button-group__cross-button"
-                @click="service.send('NEXT_CARD', { addToEnhancement: true })"
+                @click="addToEnhancement"
               >
                 <img
                   width="35"
@@ -136,7 +132,7 @@
                     : true
                 "
                 class="exam-mode-control-button-group__circle-button"
-                @click="service.send('NEXT_CARD')"
+                @click="nextCard"
               >
                 <img
                   width="35"
@@ -162,7 +158,7 @@
                     : false
                 "
                 class="exam-mode-control-button-group__ans-button"
-                @click="service.send('SHOW_ANSWER')"
+                @click="showAnswer"
               >
                 Ans
               </squareButton>
@@ -185,7 +181,6 @@
                 tabindex="-1"
                 :disabledValue="true"
                 class="exam-mode-control-button-group__cross-button"
-                @click="service.send('NEXT_CARD', { addToEnhancement: true })"
               >
                 <img
                   width="35"
@@ -201,7 +196,6 @@
                 tabindex="-1"
                 :disabledValue="true"
                 class="exam-mode-control-button-group__circle-button"
-                @click="service.send('NEXT_CARD')"
               >
                 <img
                   width="35"
@@ -217,7 +211,6 @@
                 tabindex="-1"
                 :disabledValue="false"
                 class="exam-mode-control-button-group__ans-button"
-                @click="service.send('SHOW_ANSWER')"
               >
                 Ans
               </squareButton>
@@ -430,6 +423,49 @@ export default {
       service,
       current,
       title,
+      // methods
+      showInfoModal,
+      addToEnhancement,
+      nextCard,
+      showAnswer,
+    }
+
+    function showInfoModal () {
+      window.gtag('event', 'toggle_exam_mode_info_modal', {
+        'event_category': 'exam_mode_info_modal',
+        'event_label': 'info_modal',
+      })
+
+      current.value.matches('idle.infoModal.hide')
+        ? service.value.send('SHOW_INFO_MODAL')
+        : service.value.send('HIDE_INFO_MODAL')
+    }
+
+    function addToEnhancement () {
+      window.gtag('event', 'click_square_button', {
+        'event_category': 'exam_mode_card',
+        'event_label': 'add_to_enhancement',
+      })
+
+      service.value.send('NEXT_CARD', { addToEnhancement: true })
+    }
+
+    function nextCard () {
+      window.gtag('event', 'click_square_button', {
+        'event_category': 'exam_mode_card',
+        'event_label': 'remember',
+      })
+
+      service.value.send('NEXT_CARD')
+    }
+
+    function showAnswer () {
+      window.gtag('event', 'click_square_button', {
+        'event_category': 'exam_mode_card',
+        'event_label': 'show_answer',
+      })
+
+      service.value.send('SHOW_ANSWER')
     }
   },
 }
