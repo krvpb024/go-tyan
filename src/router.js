@@ -11,6 +11,7 @@ const examMode = () =>
 const comment = () =>
   import(/* webpackChunkName: "comment" */ './views/Comment.vue')
 const about = () => import(/* webpackChunkName: "about" */ './views/About.vue')
+const donate = () => import(/* webpackChunkName: "donate" */ './views/Donate.vue')
 
 export default new Router({
   mode: 'history',
@@ -38,6 +39,11 @@ export default new Router({
       path: '/about',
       name: 'about',
       component: about,
+    },
+    {
+      path: '/donate',
+      name: 'donate',
+      component: donate,
     },
     {
       path: '/exam',

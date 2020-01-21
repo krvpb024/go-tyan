@@ -93,7 +93,7 @@
         </home-card>
       </router-link>
 
-      <!-- <router-link to="/" class="home-nav__nav-item">
+      <router-link to="/donate" class="home-nav__nav-item">
         <home-card>
           <template #image>
             <img src="@/assets/coffee.svg" alt="" aria-hidden="true" />
@@ -109,7 +109,7 @@
             </ul>
           </template>
         </home-card>
-      </router-link> -->
+      </router-link>
     </nav>
 
     <div
