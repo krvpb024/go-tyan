@@ -1,10 +1,9 @@
-const CACHE_NAME = 'gojuon-alpha-5.2'
+const CACHE_NAME = 'gojuon-alpha-5.3'
 
 const { assets } = global.serviceWorkerOption
-const assetsToCache = [...assets, './']
+const assetsToCache = [...assets, '/']
 
 self.addEventListener('install', function swInstall (event) {
-  self.skipWaiting()
   event.waitUntil(preCacheAssets(assetsToCache))
 })
 
@@ -22,18 +21,12 @@ function preCacheAssets (assets) {
     .then(function addAssetsToCache (cache) {
       return cache.addAll(assets)
     })
-}
-
-function returnCacheFirstThenNetwork (request) {
-  return caches.match(request).then(function returnMatchOrNetwork (matching) {
-    if (matching) return matching
-    return fetch(request)
-  })
+    .then(function skipWaitingToInstall () {
+      return self.skipWaiting()
+    })
 }
 
 function clearCacheExcept (currentCache) {
-  self.clients.claim()
-
   return caches
     .keys()
     .then(function clearOldCache (cacheNames) {
@@ -43,4 +36,14 @@ function clearCacheExcept (currentCache) {
         })
       )
     })
+    .then(function clientClaim () {
+      return self.clients.claim()
+    })
+}
+
+function returnCacheFirstThenNetwork (request) {
+  return caches.match(request).then(function returnMatchOrNetwork (matching) {
+    if (matching) return matching
+    return fetch(request)
+  })
 }
