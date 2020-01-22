@@ -27,7 +27,7 @@
       </home-stream-item>
 
       <home-stream-item class="home-stream-content-block__item--third">
-        <p>這個網站可以離線使用，不用擔心流量不夠。</p>
+        <p>這個網站可以離線使用，不需要擔心流量不夠。</p>
       </home-stream-item>
     </div>
   </section>
