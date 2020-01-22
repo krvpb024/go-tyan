@@ -55,16 +55,17 @@ export default {
   content: "";
   position: absolute;
   display: block;
-  width: 10px;
-  height: 10px;
+  width: 13px;
+  height: 13px;
   border-left: 2.5px solid var(--text-color);
   border-top: 2.5px solid var(--text-color);
+  border-radius: 3.3px 0 0 0;
 }
 
 .home-stream-item__content--top::after {
   top: 0;
   left: 0;
-  transform: translate(10px, calc(-50% - 2px)) rotate(45deg);
+  transform: translate(13px, calc(-50% - 1.7px)) rotate(45deg);
 }
 
 .home-stream-item__content--left::after {

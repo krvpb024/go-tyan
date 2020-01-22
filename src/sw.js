@@ -1,18 +1,19 @@
-const CACHE_NAME = 'gojuon-alpha-5'
+const CACHE_NAME = 'gojuon-alpha-5.1'
 
 const { assets } = global.serviceWorkerOption
 const assetsToCache = [...assets, './']
 
-self.addEventListener('install', function (event) {
+self.addEventListener('install', function swInstall (event) {
+  self.skipWaiting()
   event.waitUntil(preCacheAssets(assetsToCache))
 })
 
-self.addEventListener('fetch', function (event) {
-  event.respondWith(returnCacheFirstThenFetch(event.request))
+self.addEventListener('activate', function swActivate (event) {
+  event.waitUntil(clearCacheExcept(CACHE_NAME))
 })
 
-self.addEventListener('activate', function (event) {
-  event.waitUntil(clearCacheExcept(CACHE_NAME))
+self.addEventListener('fetch', function swFetch (event) {
+  event.respondWith(returnCacheFirstThenNetwork(event.request))
 })
 
 function preCacheAssets (assets) {
@@ -21,19 +22,18 @@ function preCacheAssets (assets) {
     .then(function addAssetsToCache (cache) {
       return cache.addAll(assets)
     })
-    .then(function skipWaiting () {
-      return self.skipWaiting()
-    })
 }
 
-function returnCacheFirstThenFetch (request) {
-  return caches.match(request).then(function returnMatchOrFetch (matching) {
+function returnCacheFirstThenNetwork (request) {
+  return caches.match(request).then(function returnMatchOrNetwork (matching) {
     if (matching) return matching
     return fetch(request)
   })
 }
 
 function clearCacheExcept (currentCache) {
+  self.clients.claim()
+
   return caches
     .keys()
     .then(function clearOldCache (cacheNames) {
@@ -42,8 +42,5 @@ function clearCacheExcept (currentCache) {
           if (cacheName != currentCache) return caches.delete(cacheName)
         })
       )
-    })
-    .then(function skipWaiting () {
-      return self.clients.claim()
     })
 }

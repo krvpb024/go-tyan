@@ -24,7 +24,7 @@
       <router-link to="/table" class="home-nav__nav-item">
         <home-card>
           <template #image>
-            <img src="@/assets/table.svg" alt="" aria-hidden="true" />
+            <img width="50" height="50" src="@/assets/table.svg" alt="" aria-hidden="true" />
           </template>
 
           <template #title>
@@ -42,7 +42,7 @@
       <router-link to="/exam" class="home-nav__nav-item">
         <home-card>
           <template #image>
-            <img src="@/assets/exam.svg" alt="" aria-hidden="true" />
+            <img width="50" height="50" src="@/assets/exam.svg" alt="" aria-hidden="true" />
           </template>
 
           <template #title>
@@ -60,7 +60,7 @@
       <router-link to="/about" class="home-nav__nav-item">
         <home-card>
           <template #image>
-            <img src="@/assets/about.svg" alt="" aria-hidden="true" />
+            <img width="50" height="50" src="@/assets/about.svg" alt="" aria-hidden="true" />
           </template>
 
           <template #title>
@@ -78,7 +78,7 @@
       <router-link to="/comment" class="home-nav__nav-item">
         <home-card>
           <template #image>
-            <img src="@/assets/feedback.svg" alt="" aria-hidden="true" />
+            <img width="50" height="50" src="@/assets/feedback.svg" alt="" aria-hidden="true" />
           </template>
 
           <template #title>
@@ -96,7 +96,7 @@
       <router-link to="/donate" class="home-nav__nav-item">
         <home-card>
           <template #image>
-            <img src="@/assets/coffee.svg" alt="" aria-hidden="true" />
+            <img width="50" height="50" src="@/assets/coffee.svg" alt="" aria-hidden="true" />
           </template>
 
           <template #title>
