@@ -1,4 +1,4 @@
-const CACHE_NAME = 'gojuon-alpha-5.4'
+const CACHE_NAME = 'gojuon-alpha-5.5'
 
 const { assets } = global.serviceWorkerOption
 const assetsToCache = [...assets, '/']
@@ -36,7 +36,7 @@ function clearCacheExcept (currentCache) {
         })
       )
     })
-    .then(function clientClaim () {
+    .then(function clientsClaim () {
       return self.clients.claim()
     })
 }

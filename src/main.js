@@ -24,6 +24,15 @@ if ('serviceWorker' in navigator) {
   }).catch(function (err) {
     console.log('ServiceWorker registration failed: ', err)
   })
+
+  let refreshing
+  navigator.serviceWorker.addEventListener('controllerchange',
+    function () {
+      if (refreshing) return
+      refreshing = true
+      window.location.reload()
+    }
+  )
 }
 
 new Vue({
