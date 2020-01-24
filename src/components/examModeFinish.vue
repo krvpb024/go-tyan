@@ -17,7 +17,7 @@
     <div class="exam-mode-finish__again-block">
       <two-layer-button
         :invert="true"
-        @buttonClick="service.send('TAKE_EXAM_AGAIN')"
+        @buttonClick="takeExamAgain"
       >
         <span class="exam-mode-finish-block__two-layer-button-icon">
           <img
@@ -34,7 +34,7 @@
       <two-layer-button
         tagType="a"
         :invert="true"
-        @buttonClick="$router.go(-1)"
+        @buttonClick="leave"
         hrefValue="/exam"
       >
         <span class="exam-mode-finish-block__two-layer-button-icon">
@@ -66,6 +66,30 @@ export default {
       type: Object,
       required: true,
     },
+  },
+  setup (props, context) {
+    return {
+      takeExamAgain,
+      leave,
+    }
+
+    function takeExamAgain () {
+      window.gtag('event', 'take_exam_again', {
+        'event_category': 'exam_mode',
+        'event_label': 'take_exam_again',
+      })
+
+      props.service.send('TAKE_EXAM_AGAIN')
+    }
+
+    function leave () {
+      window.gtag('event', 'leave_exam', {
+        'event_category': 'exam_mode',
+        'event_label': 'leave_exam',
+      })
+
+      context.root.$router.go(-1)
+    }
   },
 }
 </script>
