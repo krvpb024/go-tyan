@@ -10,8 +10,5 @@
     "priceCurrency": "TWD"
   },
   "mainEntityOfPage": "https://go-tyan.now.sh",
-  "operatingSystem": "All platform with modern browser.",
-  "Author": {
-    "@id": "#Author"
-  }
+  "operatingSystem": "All platform with modern browser."
 }

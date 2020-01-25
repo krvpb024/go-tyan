@@ -1,4 +1,4 @@
-const CACHE_NAME = 'gojuon-2.0.0-2'
+const CACHE_NAME = 'gojuon-2.0.0-3'
 
 const { assets } = global.serviceWorkerOption
 const assetsToCache = [...assets, '/']
