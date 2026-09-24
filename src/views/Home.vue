@@ -75,6 +75,7 @@
         </home-card>
       </router-link>
 
+      <!--
       <router-link to="/comment" class="home-nav__nav-item">
         <home-card>
           <template #image>
@@ -82,7 +83,7 @@
           </template>
 
           <template #title>
-            <h2>意見反饋</h2>
+            <h2>意見回饋</h2>
           </template>
 
           <template #description>
@@ -110,6 +111,8 @@
           </template>
         </home-card>
       </router-link>
+      -->
+
     </nav>
 
     <div
